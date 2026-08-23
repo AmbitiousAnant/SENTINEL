@@ -1,10 +1,30 @@
 "use client"
 import { useState, useRef, useEffect } from 'react'
+import { Loader2, Phone } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts'
 
 const API_BASE = "http://127.0.0.1:8000/api"
+
+const TELEMETRY_DATA = {
+  1: {
+    sleep: [{day: 'Mon', hrs: 7}, {day: 'Tue', hrs: 8}, {day: 'Wed', hrs: 7.5}, {day: 'Thu', hrs: 7}, {day: 'Fri', hrs: 8}],
+    social: [{app: 'WhatsApp', mins: 45}, {app: 'Calls', mins: 30}, {app: 'Insta', mins: 60}],
+    hr: 72, hrVariance: "Normal (±5 bpm)"
+  },
+  2: {
+    sleep: [{day: 'Mon', hrs: 6}, {day: 'Tue', hrs: 5}, {day: 'Wed', hrs: 4.5}, {day: 'Thu', hrs: 5}, {day: 'Fri', hrs: 4}],
+    social: [{app: 'WhatsApp', mins: 15}, {app: 'Calls', mins: 5}, {app: 'Insta', mins: 120}],
+    hr: 88, hrVariance: "Elevated (±12 bpm)"
+  },
+  3: {
+    sleep: [{day: 'Mon', hrs: 4}, {day: 'Tue', hrs: 3}, {day: 'Wed', hrs: 2}, {day: 'Thu', hrs: 2.5}, {day: 'Fri', hrs: 1.5}],
+    social: [{app: 'WhatsApp', mins: 0}, {app: 'Calls', mins: 0}, {app: 'Insta', mins: 15}],
+    hr: 110, hrVariance: "High/Erratic (±18 bpm)"
+  }
+}
 
 type ChatMessage = {
   role: 'system' | 'user' | 'scorer'
@@ -106,125 +126,249 @@ export default function CheckInPage() {
   const currentTier = latestScore >= 75 ? 3 : latestScore >= 40 ? 2 : 1
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col p-4">
-      <div className="max-w-2xl w-full mx-auto flex-1 flex flex-col">
-        <h1 className="text-2xl font-bold mb-2">Victim Check-in (Synthetic Case: case_001)</h1>
+    <div className="min-h-screen bg-gray-50 flex flex-col p-4 md:p-8">
+      <div className="max-w-6xl w-full mx-auto flex flex-col md:flex-row gap-6">
         
-        <div className={`mb-4 p-3 rounded-md border ${
-          currentTier === 3 ? 'bg-red-50 border-red-200 text-red-900' :
-          currentTier === 2 ? 'bg-yellow-50 border-yellow-200 text-yellow-900' :
-          'bg-green-50 border-green-200 text-green-900'
-        }`}>
-          <div className="font-semibold text-sm">Escalation Tier: {currentTier}</div>
-          <div className="text-xs mt-1">
-            {currentTier === 3 && "High / Critical: Immediate Tele MANAS surfacing and contact alert."}
-            {currentTier === 2 && "Medium / Moderate: Prompt for Tele MANAS connection."}
-            {currentTier === 1 && "Low / Good: On-device resilience exercises. No external alert."}
-          </div>
+        {/* LEFT PANEL: Simulation Controls & Fake Input */}
+        <div className="w-full md:w-1/3 flex flex-col gap-4">
+          <h1 className="text-2xl font-bold mb-2">Sentinel Simulator</h1>
+          <p className="text-sm text-gray-600 mb-4">
+            Select a synthetic check-in scenario below to trigger the Sentinel analysis pipeline.
+          </p>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Simulation Controls</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start border-teal-200 hover:bg-teal-50 text-teal-900 whitespace-normal text-left h-auto py-2"
+                onClick={() => sendCheckIn("I'm doing okay today. Slept a bit better. Just trying to stay busy with work.")}
+                disabled={loading}
+              >
+                Phase 1: &quot;I&apos;m doing okay today. Slept a bit better...&quot;
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full justify-start border-purple-200 hover:bg-purple-50 text-purple-900 whitespace-normal text-left h-auto py-2"
+                onClick={() => sendCheckIn("I've been feeling very anxious lately. My sleep is disrupted and I feel exhausted.")}
+                disabled={loading}
+              >
+                Phase 2: &quot;I&apos;ve been feeling very anxious lately...&quot;
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full justify-start border-purple-200 hover:bg-purple-50 text-purple-900 whitespace-normal text-left h-auto py-2"
+                onClick={() => sendCheckIn("The police came to ask questions today. I feel like they are angry with me. I am scared.")}
+                disabled={loading}
+              >
+                Phase 2: &quot;The police came to ask questions today...&quot;
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full justify-start border-indigo-200 hover:bg-indigo-50 text-indigo-900 whitespace-normal text-left h-auto py-2"
+                onClick={() => sendCheckIn("They walked past my house again. I am terrified. I can't take this anymore, I just want it all to end tonight.")}
+                disabled={loading}
+              >
+                Phase 3: &quot;They walked past my house again. I am terrified...&quot;
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Telemetry Dashboard */}
+          <Card className="mt-4 border-indigo-100 shadow-sm bg-white">
+            <CardHeader className="pb-2 bg-indigo-50/50">
+              <CardTitle className="text-sm text-indigo-900 uppercase tracking-wider flex items-center gap-2">
+                Simulated Telemetry
+                <Badge variant="outline" className="ml-auto text-[10px] bg-white text-indigo-600 border-indigo-200">
+                  LIVE STREAM
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 space-y-5">
+              
+              {/* Heart Rate Sparkline */}
+              <div>
+                <div className="flex justify-between items-baseline mb-1">
+                  <span className="text-xs font-semibold text-gray-500 uppercase">Avg Resting Heart Rate</span>
+                  <span className={`text-lg font-bold ${
+                    currentTier === 3 ? 'text-indigo-600' : currentTier === 2 ? 'text-purple-600' : 'text-teal-600'
+                  }`}>{TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].hr} BPM</span>
+                </div>
+                <div className="text-[10px] text-gray-400">{TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].hrVariance}</div>
+              </div>
+
+              {/* Circadian Rhythm (Sleep) */}
+              <div className="h-32">
+                <span className="text-xs font-semibold text-gray-500 uppercase mb-2 block">Circadian Cycle (Sleep Hrs)</span>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].sleep}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                    <XAxis dataKey="day" tick={{fontSize: 10}} axisLine={false} tickLine={false} />
+                    <YAxis tick={{fontSize: 10}} axisLine={false} tickLine={false} domain={[0, 10]} />
+                    <Tooltip contentStyle={{fontSize: '12px'}} />
+                    <Line type="monotone" dataKey="hrs" stroke={currentTier === 3 ? '#4f46e5' : currentTier === 2 ? '#9333ea' : '#0d9488'} strokeWidth={3} dot={{r: 3}} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Social Activity */}
+              <div className="h-32">
+                <span className="text-xs font-semibold text-gray-500 uppercase mb-2 block">Social App Usage (Mins)</span>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].social}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                    <XAxis dataKey="app" tick={{fontSize: 10}} axisLine={false} tickLine={false} />
+                    <YAxis tick={{fontSize: 10}} axisLine={false} tickLine={false} />
+                    <Tooltip contentStyle={{fontSize: '12px'}} />
+                    <Bar dataKey="mins" fill={currentTier === 3 ? '#818cf8' : currentTier === 2 ? '#c084fc' : '#5eead4'} radius={[4,4,0,0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+            </CardContent>
+          </Card>
+
+          {/* Fake Text Input */}
+          <Card className="mt-auto border-dashed">
+            <CardContent className="p-4">
+              <p className="text-xs text-gray-500 mb-2 uppercase font-semibold">User Interface Preview</p>
+              <div className="flex gap-2 opacity-60 pointer-events-none">
+                <input 
+                  type="text" 
+                  disabled 
+                  placeholder="Type your check-in here..." 
+                  className="flex-1 border rounded-md px-3 py-2 text-sm bg-white"
+                />
+                <Button disabled size="sm">Send</Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        <Card className="flex-1 flex flex-col mb-4 overflow-hidden">
-          <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] rounded-lg p-3 ${
-                  msg.role === 'user' ? 'bg-blue-600 text-white' : 
-                  msg.role === 'system' ? 'bg-gray-100 text-gray-900 flex items-start gap-2' : 'bg-orange-50 border border-orange-200 text-gray-800'
-                }`}>
-                  <div className="flex-1">
-                    <p>{msg.content}</p>
-                    {msg.mindguard_class && (
-                      <div className="mt-2 flex justify-end">
-                        <Badge variant={msg.mindguard_class === 'Safe' ? 'secondary' : 'destructive'} className="text-[10px]">
-                          MindGuard: {msg.mindguard_class}
-                        </Badge>
+        {/* RIGHT PANEL: Chat & Backend Analysis */}
+        <div className="w-full md:w-2/3 flex flex-col h-[80vh]">
+          
+          {/* Tier Banner */}
+          <div className={`mb-4 p-4 rounded-lg border shadow-sm transition-colors ${
+            currentTier === 3 ? 'bg-indigo-50 border-indigo-200 text-indigo-900' :
+            currentTier === 2 ? 'bg-purple-50 border-purple-200 text-purple-900' :
+            'bg-teal-50 border-teal-200 text-teal-900'
+          }`}>
+            <div className="flex justify-between items-center">
+              <div className="font-bold text-lg">Active Support Phase: {currentTier}</div>
+              <Badge variant="outline" className={`bg-white ${
+                currentTier === 3 ? 'text-indigo-700 border-indigo-300' : 
+                currentTier === 2 ? 'text-purple-700 border-purple-300' : 
+                'text-teal-700 border-teal-300'
+              }`}>
+                {currentTier === 3 ? "PHASE 3 (INTENSIVE)" : currentTier === 2 ? "PHASE 2 (ELEVATED)" : "PHASE 1 (STABLE)"}
+              </Badge>
+            </div>
+            <div className="text-sm mt-2">
+              {currentTier === 3 && "Connecting you with immediate professional support (Tele MANAS)."}
+              {currentTier === 2 && "We recommend speaking with a counsellor. Tele MANAS is available."}
+              {currentTier === 1 && "Guided resilience and on-device support exercises."}
+            </div>
+          </div>
+
+          <Card className="flex-1 flex flex-col overflow-hidden shadow-md border-gray-200">
+            <CardHeader className="bg-gray-100 border-b py-3">
+              <CardTitle className="text-sm text-gray-600 uppercase tracking-wider flex justify-between items-center">
+                <span>Check-in Interface & Analytics</span>
+                <span className="text-xs font-normal">Case: 001 (Synthetic)</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+              {messages.map((msg, i) => (
+                <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                  <div className={`max-w-[85%] rounded-lg p-3 shadow-sm ${
+                    msg.role === 'user' ? 'bg-blue-600 text-white' : 
+                    msg.role === 'system' ? 'bg-white text-gray-900 border' : 
+                    'bg-white border-l-4 border-slate-400 text-gray-800'
+                  }`}>
+                    <div className="flex-1">
+                      <p className={msg.role === 'scorer' ? 'font-semibold mb-2' : ''}>{msg.content}</p>
+                      {msg.mindguard_class && (
+                        <div className="mt-2 flex justify-end">
+                          <Badge variant={msg.mindguard_class === 'Safe' ? 'secondary' : 'destructive'} className="text-[10px]">
+                            MindGuard: {msg.mindguard_class}
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {msg.role === 'system' && (
+                      <Button size="icon" variant="ghost" className="h-6 w-6 mt-1 text-slate-600 hover:text-slate-700 hover:bg-slate-100" onClick={() => {
+                        const speechText = msg.guidance ? `Guidance: ${msg.guidance}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
+                        playAudio(speechText)
+                      }} title="Play Audio">
+                        🔊
+                      </Button>
+                    )}
+                    
+                    {msg.role === 'scorer' && (
+                      <div className="mt-3 space-y-3 text-sm border-t border-gray-100 pt-3">
+                        <div className="grid grid-cols-2 gap-4 bg-gray-50 p-2 rounded">
+                          <div>
+                            <span className="text-xs text-gray-500 block uppercase">Risk Band</span>
+                            <Badge variant={msg.risk_band === 'High' ? 'destructive' : msg.risk_band === 'Medium' ? 'default' : 'secondary'} className="mt-1">
+                              {msg.risk_band}
+                            </Badge>
+                          </div>
+                          <div>
+                            <span className="text-xs text-gray-500 block uppercase">Calibrated Score</span>
+                            <span className="font-mono mt-1 block">
+                              {Math.max(0, (msg.score || 50) - 4).toFixed(0)} - {Math.min(100, (msg.score || 50) + 4).toFixed(0)} <span className="text-xs text-gray-400">(90% conf)</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <span className="font-semibold text-gray-700">Key Factors:</span>
+                          <ul className="list-disc pl-5 mt-1 text-gray-600">
+                            {msg.factors?.map((f: string, j: number) => <li key={j}>{f}</li>)}
+                          </ul>
+                        </div>
+                        {msg.guidance && (
+                          <div>
+                            <span className="font-semibold text-gray-700">Guidance:</span>
+                            <p className="mt-1 text-gray-600">{msg.guidance}</p>
+                          </div>
+                        )}
+                        {msg.prevention_methods && msg.prevention_methods.length > 0 && (
+                          <div>
+                            <span className="font-semibold text-gray-700">Suggested Remedies:</span>
+                            <ul className="list-disc pl-5 mt-1 text-gray-600">
+                              {msg.prevention_methods.map((pm: string, j: number) => <li key={j}>{pm}</li>)}
+                            </ul>
+                          </div>
+                        )}
+                        <div className="pt-2">
+                          <Button variant="outline" size="sm" onClick={() => {
+                            const speechText = msg.guidance ? `Guidance: ${msg.guidance}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
+                            playAudio(speechText)
+                          }} className="w-full justify-center">
+                            🔊 Play Audio Remedies
+                          </Button>
+                        </div>
                       </div>
                     )}
                   </div>
-                  
-                  {msg.role === 'system' && (
-                    <Button size="icon" variant="ghost" className="h-6 w-6 mt-1 text-orange-600 hover:text-orange-700 hover:bg-orange-100" onClick={() => {
-                  const speechText = msg.guidance ? `Guidance: ${msg.guidance}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
-                  playAudio(speechText)
-                }} title="Play Audio">
-                      🔊
-                    </Button>
-                  )}
-                  
-                  {msg.role === 'scorer' && (
-                    <div className="mt-3 space-y-2 text-sm border-t border-orange-200 pt-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">Risk Band:</span>
-                        <Badge variant={msg.risk_band === 'High' ? 'destructive' : msg.risk_band === 'Medium' ? 'default' : 'secondary'}>
-                          {msg.risk_band}
-                        </Badge>
-                      </div>
-                      <div>
-                        <span className="font-semibold">Calibrated Score:</span>
-                        <span className="text-xs ml-2">{Math.max(0, (msg.score || 50) - 4).toFixed(0)} - {Math.min(100, (msg.score || 50) + 4).toFixed(0)} (90% Confidence)</span>
-                      </div>
-                      <div>
-                        <span className="font-semibold">Key Factors:</span>
-                        <ul className="list-disc pl-4 mt-1 text-xs">
-                          {msg.factors?.map((f: string, j: number) => <li key={j}>{f}</li>)}
-                        </ul>
-                      </div>
-                      {msg.guidance && (
-                        <div>
-                          <span className="font-semibold">Guidance:</span>
-                          <p className="text-xs mt-1">{msg.guidance}</p>
-                        </div>
-                      )}
-                      {msg.prevention_methods && msg.prevention_methods.length > 0 && (
-                        <div>
-                          <span className="font-semibold">Prevention Methods:</span>
-                          <ul className="list-disc pl-4 mt-1 text-xs">
-                            {msg.prevention_methods.map((pm: string, j: number) => <li key={j}>{pm}</li>)}
-                          </ul>
-                        </div>
-                      )}
-                      <div className="pt-2">
-                        <Button variant="outline" size="sm" onClick={() => {
-                          const speechText = msg.guidance ? `Guidance: ${msg.guidance}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
-                          playAudio(speechText)
-                        }}>🔊 Play Audio Remedies</Button>
-                      </div>
-                    </div>
-                  )}
                 </div>
-              </div>
-            ))}
-            {loading && <div className="text-gray-500 text-sm italic">Analyzing distress factors...</div>}
-            <div ref={messagesEndRef} />
-          </CardContent>
-        </Card>
-
-        <div className="grid gap-2">
-          <div className="text-sm font-semibold text-gray-600 mb-1">Pre-scripted Responses:</div>
-          {PRE_SCRIPTED_MESSAGES.map((msg, i) => (
-            <Button 
-              key={i} 
-              variant="outline" 
-              className="justify-start text-left h-auto py-3 whitespace-normal"
-              onClick={() => sendCheckIn(msg)}
-              disabled={loading}
-            >
-              {msg}
-            </Button>
-          ))}
-        </div>
-
-        <div className="mt-8 border-t pt-4">
-          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Future Roadmap — Not active in this build</h3>
-          <div className="bg-gray-100 p-3 rounded-md text-xs text-gray-500 space-y-2">
-            <p><strong>Passive Telemetry:</strong></p>
-            <ul className="list-disc pl-4 space-y-1">
-              <li>Keystroke Dynamics: Not monitored. Future app-only typing pattern capture.</li>
-              <li>Circadian Rhythm: Not monitored. Future sleep variance detection.</li>
-              <li>App Usage: Not monitored. Future Android UsageStats tracking.</li>
-            </ul>
-            <p className="italic mt-2">These signals require device-level permissions and long-term baselines not possible in this browser-based prototype.</p>
-          </div>
+              ))}
+              {loading && (
+                <div className="flex items-center gap-2 text-gray-500 text-sm italic p-4 bg-gray-100 rounded-lg max-w-[50%] animate-pulse">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full delay-75"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full delay-150"></div>
+                  Analyzing distress factors...
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
