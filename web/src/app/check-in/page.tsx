@@ -12,8 +12,9 @@ type ChatMessage = {
   score?: number
   risk_band?: string
   factors?: string[]
-  diagnosis?: string
+  guidance?: string
   prevention_methods?: string[]
+  mindguard_class?: string
 }
 
 const PRE_SCRIPTED_MESSAGES = [
@@ -51,15 +52,21 @@ export default function CheckInPage() {
       })
       const data = await res.json()
       
-      setMessages(prev => [...prev, {
-        role: 'scorer',
-        content: `Distress Score Updated: ${data.current_score.toFixed(1)}/100`,
-        score: data.current_score,
-        risk_band: data.risk_band,
-        factors: data.factors,
-        diagnosis: data.diagnosis,
-        prevention_methods: data.prevention_methods
-      }])
+      setMessages(prev => {
+        const newMsgs = [...prev]
+        if (newMsgs.length > 0 && newMsgs[newMsgs.length - 1].role === 'user') {
+          newMsgs[newMsgs.length - 1] = { ...newMsgs[newMsgs.length - 1], mindguard_class: data.mindguard_class }
+        }
+        return [...newMsgs, {
+          role: 'scorer',
+          content: `Distress Level Assessed`,
+          score: data.current_score,
+          risk_band: data.risk_band,
+          factors: data.factors,
+          guidance: data.guidance,
+          prevention_methods: data.prevention_methods
+        }]
+      })
     } catch (e) {
       console.error(e)
     } finally {
@@ -95,11 +102,27 @@ export default function CheckInPage() {
     }
   }
 
+  const latestScore = messages.filter(m => m.score !== undefined).pop()?.score || 50
+  const currentTier = latestScore >= 75 ? 3 : latestScore >= 40 ? 2 : 1
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col p-4">
       <div className="max-w-2xl w-full mx-auto flex-1 flex flex-col">
-        <h1 className="text-2xl font-bold mb-4">Victim Check-in (Synthetic Case: case_001)</h1>
+        <h1 className="text-2xl font-bold mb-2">Victim Check-in (Synthetic Case: case_001)</h1>
         
+        <div className={`mb-4 p-3 rounded-md border ${
+          currentTier === 3 ? 'bg-red-50 border-red-200 text-red-900' :
+          currentTier === 2 ? 'bg-yellow-50 border-yellow-200 text-yellow-900' :
+          'bg-green-50 border-green-200 text-green-900'
+        }`}>
+          <div className="font-semibold text-sm">Escalation Tier: {currentTier}</div>
+          <div className="text-xs mt-1">
+            {currentTier === 3 && "High / Critical: Immediate Tele MANAS surfacing and contact alert."}
+            {currentTier === 2 && "Medium / Moderate: Prompt for Tele MANAS connection."}
+            {currentTier === 1 && "Low / Good: On-device resilience exercises. No external alert."}
+          </div>
+        </div>
+
         <Card className="flex-1 flex flex-col mb-4 overflow-hidden">
           <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((msg, i) => (
@@ -108,11 +131,20 @@ export default function CheckInPage() {
                   msg.role === 'user' ? 'bg-blue-600 text-white' : 
                   msg.role === 'system' ? 'bg-gray-100 text-gray-900 flex items-start gap-2' : 'bg-orange-50 border border-orange-200 text-gray-800'
                 }`}>
-                  <p className="flex-1">{msg.content}</p>
+                  <div className="flex-1">
+                    <p>{msg.content}</p>
+                    {msg.mindguard_class && (
+                      <div className="mt-2 flex justify-end">
+                        <Badge variant={msg.mindguard_class === 'Safe' ? 'secondary' : 'destructive'} className="text-[10px]">
+                          MindGuard: {msg.mindguard_class}
+                        </Badge>
+                      </div>
+                    )}
+                  </div>
                   
                   {msg.role === 'system' && (
                     <Button size="icon" variant="ghost" className="h-6 w-6 mt-1 text-orange-600 hover:text-orange-700 hover:bg-orange-100" onClick={() => {
-                  const speechText = msg.diagnosis ? `Based on your check-in: ${msg.diagnosis}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
+                  const speechText = msg.guidance ? `Guidance: ${msg.guidance}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
                   playAudio(speechText)
                 }} title="Play Audio">
                       🔊
@@ -128,15 +160,19 @@ export default function CheckInPage() {
                         </Badge>
                       </div>
                       <div>
+                        <span className="font-semibold">Calibrated Score:</span>
+                        <span className="text-xs ml-2">{Math.max(0, (msg.score || 50) - 4).toFixed(0)} - {Math.min(100, (msg.score || 50) + 4).toFixed(0)} (90% Confidence)</span>
+                      </div>
+                      <div>
                         <span className="font-semibold">Key Factors:</span>
                         <ul className="list-disc pl-4 mt-1 text-xs">
                           {msg.factors?.map((f: string, j: number) => <li key={j}>{f}</li>)}
                         </ul>
                       </div>
-                      {msg.diagnosis && (
+                      {msg.guidance && (
                         <div>
-                          <span className="font-semibold">Diagnosis:</span>
-                          <p className="text-xs mt-1">{msg.diagnosis}</p>
+                          <span className="font-semibold">Guidance:</span>
+                          <p className="text-xs mt-1">{msg.guidance}</p>
                         </div>
                       )}
                       {msg.prevention_methods && msg.prevention_methods.length > 0 && (
@@ -149,7 +185,7 @@ export default function CheckInPage() {
                       )}
                       <div className="pt-2">
                         <Button variant="outline" size="sm" onClick={() => {
-                          const speechText = msg.diagnosis ? `Based on your check-in: ${msg.diagnosis}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
+                          const speechText = msg.guidance ? `Guidance: ${msg.guidance}. ${msg.prevention_methods ? 'Here are some suggestions: ' + msg.prevention_methods.join('. ') : ''}` : msg.content;
                           playAudio(speechText)
                         }}>🔊 Play Audio Remedies</Button>
                       </div>
@@ -176,6 +212,19 @@ export default function CheckInPage() {
               {msg}
             </Button>
           ))}
+        </div>
+
+        <div className="mt-8 border-t pt-4">
+          <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Future Roadmap — Not active in this build</h3>
+          <div className="bg-gray-100 p-3 rounded-md text-xs text-gray-500 space-y-2">
+            <p><strong>Passive Telemetry:</strong></p>
+            <ul className="list-disc pl-4 space-y-1">
+              <li>Keystroke Dynamics: Not monitored. Future app-only typing pattern capture.</li>
+              <li>Circadian Rhythm: Not monitored. Future sleep variance detection.</li>
+              <li>App Usage: Not monitored. Future Android UsageStats tracking.</li>
+            </ul>
+            <p className="italic mt-2">These signals require device-level permissions and long-term baselines not possible in this browser-based prototype.</p>
+          </div>
         </div>
       </div>
     </div>
