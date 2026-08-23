@@ -1,0 +1,5 @@
+# Environment variables / secrets
+.env
+
+# Backend/API folder
+api/
