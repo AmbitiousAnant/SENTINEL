@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel - Main Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-tint": "#426656",
+                      "surface-bright": "#f9f9f7",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#eeeeeb",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#a8cfbc",
+                      "on-error": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed-dim": "#e9b3ff",
+                      "tertiary-container": "#8b43af",
+                      "on-primary-fixed": "#002116",
+                      "primary-container": "#476b5b",
+                      "tertiary": "#712895",
+                      "on-primary-container": "#c2ead6",
+                      "on-secondary-fixed-variant": "#464745",
+                      "tertiary-fixed": "#f7d9ff",
+                      "secondary-fixed": "#e3e2e0",
+                      "surface-container-low": "#f4f4f1",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#e2e3e0",
+                      "on-tertiary-container": "#f6d6ff",
+                      "on-surface-variant": "#414844",
+                      "on-surface": "#1a1c1b",
+                      "on-secondary-container": "#626361",
+                      "outline-variant": "#c1c8c3",
+                      "surface": "#f9f9f7",
+                      "on-secondary": "#ffffff",
+                      "surface-container-high": "#e8e8e6",
+                      "secondary": "#5d5f5d",
+                      "inverse-on-surface": "#f1f1ee",
+                      "primary-fixed": "#c4ebd7",
+                      "on-secondary-fixed": "#1a1c1b",
+                      "on-tertiary-fixed": "#310048",
+                      "secondary-fixed-dim": "#c6c7c4",
+                      "background": "#f9f9f7",
+                      "secondary-container": "#e0e0dd",
+                      "primary": "#2f5344",
+                      "on-primary-fixed-variant": "#2a4e3f",
+                      "on-background": "#1a1c1b",
+                      "outline": "#717974",
+                      "surface-container-highest": "#e2e3e0",
+                      "on-tertiary-fixed-variant": "#6b218f",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#a8cfbc",
+                      "inverse-surface": "#2f312f",
+                      "surface-dim": "#dadad7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "280px",
+                      "mobile-margin": "1.25rem",
+                      "desktop-margin": "2.5rem",
+                      "gutter": "1.5rem",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Manrope"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Manrope"
+                      ],
+                      "label-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Manrope"
+                      ],
+                      "headline-lg-mobile": [
+                              "Manrope"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased h-screen overflow-hidden flex flex-col md:flex-row">
+<!-- TopAppBar (Mobile & Desktop Header Area) -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-280px)] z-40 bg-surface/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center h-16 px-mobile-margin md:px-desktop-margin">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim md:hidden">Sentinel</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/20 rounded-full transition-all opacity-100 hover:opacity-80">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+<img alt="Alex's Profile Avatar" class="w-8 h-8 rounded-full object-cover" data-alt="A small circular profile avatar for a user named Alex. The avatar shows a minimalist, stylized, and abstract human silhouette against a pale moss green background, reflecting the corporate modern and calm aesthetic of the application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYyqbJWnnEfp5mZb5iYkcDqGy4WSY3bB6lyw9a2z2VfDUxX_9ome9L9lW_0dYWz_tr-__356bkdboSdFwvE0K8lGPw_vVZbZAvLby-hU5GPwr5asCxuwM0_bIJrmSxSeWAVASzYCAtjOFz-T2iVVNJEB7IuuEOtAEfUmQRlixSu0EQvad7E413DCsYY3H1vrCZm8d_F8aYspsChQycaUZxLq330uo73rh39-ZSnhW30ofgGpmj3SCvHA"/>
+</div>
+</header>
+<!-- SideNavBar (Desktop) -->
+<nav class="fixed left-0 top-0 h-full w-[280px] hidden md:flex flex-col border-r border-outline-variant/10 bg-surface-container-low z-50">
+<div class="flex flex-col h-full py-desktop-margin">
+<!-- Brand -->
+<div class="px-6 mb-8 flex items-center gap-3">
+<img alt="Sentinel Wordmark Logo" class="w-8 h-8 object-contain" data-alt="A simple, elegant monogram logo representing the letter S for Sentinel. The design is geometric, corporate, and modern, using primary forest green colors on a transparent background, conveying a sense of quiet intelligence and security." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGIz5xdHMLTiqN13oOnmlmJzXLA74rK6kwsB1TZfxrglMcLUEKl2UoxinHVb1zkDbB4vVmrQEcYnJOzKmrE8PeezWW-0E5yr2Gp5sWeb9nQwVLbsY4L5pRbroRWyr8CWO5rnyzl_2mhCLsObgeCEC1E4bEdlZE8bYlGGutlsIJ-47ETBODH3WL_z85Bj5iJ0j98ziqeAxHNlcMS2VCItqITgAubKrDeivhHRyNqdHpxUabHwmBfytl9w"/>
+<div>
+<h1 class="font-display-lg text-display-lg font-bold tracking-tight text-primary dark:text-primary-fixed-dim" style="font-size: 24px; line-height: 28px;">SENTINEL</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Quiet Intelligence</p>
+</div>
+</div>
+<!-- Tabs -->
+<ul class="flex-1 space-y-1">
+<li>
+<a class="flex items-center gap-base px-4 py-3 text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed-dim bg-primary-container/10 hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors duration-150 ease-in-out active:scale-95" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors duration-150 ease-in-out active:scale-95 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Patterns</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors duration-150 ease-in-out active:scale-95 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-md text-label-md">Analysis</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors duration-150 ease-in-out active:scale-95 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="font-label-md text-label-md">Insights</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors duration-150 ease-in-out active:scale-95 border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</li>
+</ul>
+<!-- Footer Tabs -->
+<ul class="space-y-1 mt-auto px-2">
+<li>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors duration-150 ease-in-out active:scale-95 rounded-lg border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span class="font-label-md text-label-md">Privacy</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors duration-150 ease-in-out active:scale-95 rounded-lg border-l-4 border-transparent" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-[280px] pt-24 px-mobile-margin md:px-desktop-margin pb-24 md:pb-8 overflow-y-auto w-full max-w-[1440px] mx-auto scroll-smooth">
+<!-- Header Section -->
+<header class="mb-10">
+<h1 class="font-headline-lg text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-on-background mb-2">Good morning, Alex</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Here’s what Sentinel noticed.</p>
+</header>
+<!-- Top Row: Current Pattern & Change Insight -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- CURRENT PATTERN Card (Span 2) -->
+<section class="lg:col-span-2 bg-surface border border-outline-variant/10 rounded-[16px] p-6 shadow-[0_4px_20px_rgba(71,107,91,0.08)] relative overflow-hidden flex flex-col justify-between">
+<div class="flex justify-between items-start mb-6">
+<h2 class="font-headline-md text-headline-md text-on-surface">CURRENT PATTERN</h2>
+<div class="bg-primary/10 text-primary px-4 py-1.5 rounded-full flex items-center gap-2 font-label-sm text-label-sm border border-primary/20">
+<span class="w-2 h-2 rounded-full bg-primary block animate-pulse"></span>
+                        STABLE
+                    </div>
+</div>
+<!-- Signature Visualization Area -->
+<div class="h-48 w-full relative mt-4 flex items-end">
+<!-- Baseline Band -->
+<div class="absolute inset-0 top-1/4 bottom-1/4 bg-primary/5 rounded-full blur-md"></div>
+<!-- Organic Line (SVG simulation for structural layout) -->
+<svg class="w-full h-full absolute inset-0 z-10" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="opacity-50" d="M0 50 Q 25 40, 50 60 T 100 50" fill="none" stroke="#a8cfbc" stroke-width="2"></path>
+<path d="M0 55 Q 25 35, 50 65 T 90 45" fill="none" stroke="#2f5344" stroke-width="2.5"></path>
+<!-- Current Point -->
+<circle class="animate-pulse" cx="90" cy="45" fill="#2f5344" r="4"></circle>
+<circle class="opacity-30" cx="90" cy="45" fill="none" r="8" stroke="#2f5344" stroke-width="1"></circle>
+</svg>
+</div>
+</section>
+<!-- INSIGHT Card: Something has changed (Span 1) -->
+<section class="bg-surface border border-outline-variant/10 rounded-[16px] p-6 shadow-[0_4px_20px_rgba(71,107,91,0.08)] relative overflow-hidden flex flex-col justify-between group">
+<!-- Soft purple ambient glow -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-[#C67AEA]/10 rounded-full blur-3xl group-hover:bg-[#C67AEA]/20 transition-all duration-500"></div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-[#8b43af]">insights</span>
+<h2 class="font-label-md text-label-md text-[#8b43af] uppercase tracking-widest font-bold">Insight</h2>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3 leading-tight">Something has changed</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Recent conversations differ from your usual pattern.</p>
+</div>
+<button class="w-full py-3 bg-[#f6d6ff]/30 hover:bg-[#f6d6ff]/50 text-[#712895] font-label-md text-label-md rounded-lg transition-colors flex items-center justify-center gap-2 border border-[#8b43af]/20">
+                    See why
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</section>
+</div>
+<!-- Automatic Analysis Pipeline Card -->
+<section class="mb-8 bg-surface border border-outline-variant/10 rounded-[16px] p-6 shadow-[0_4px_20px_rgba(71,107,91,0.08)]">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-6">Automatic Analysis</h2>
+<div class="flex flex-wrap md:flex-nowrap items-center justify-between gap-2 md:gap-4 overflow-x-auto pb-4 hide-scrollbar">
+<!-- Stage 1 -->
+<div class="flex flex-col items-center gap-2 min-w-[80px]">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant border border-outline-variant/20">
+<span class="material-symbols-outlined text-lg">chat</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center">Conversation</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant/30 min-w-[20px] max-w-[40px]"></div>
+<!-- Stage 2 -->
+<div class="flex flex-col items-center gap-2 min-w-[80px]">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant border border-outline-variant/20">
+<span class="material-symbols-outlined text-lg">translate</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center">Language</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant/30 min-w-[20px] max-w-[40px]"></div>
+<!-- Stage 3 -->
+<div class="flex flex-col items-center gap-2 min-w-[80px]">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant border border-outline-variant/20">
+<span class="material-symbols-outlined text-lg">mood</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center">Emotion</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant/30 min-w-[20px] max-w-[40px]"></div>
+<!-- Stage 4 -->
+<div class="flex flex-col items-center gap-2 min-w-[80px]">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant border border-outline-variant/20">
+<span class="material-symbols-outlined text-lg">public</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center">Context</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant/30 min-w-[20px] max-w-[40px]"></div>
+<!-- Stage 5 -->
+<div class="flex flex-col items-center gap-2 min-w-[80px]">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
+<span class="material-symbols-outlined text-lg">trending_flat</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold text-center">Baseline</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant/30 min-w-[20px] max-w-[40px]"></div>
+<!-- Stage 6 (Deviation - Highlighted) -->
+<div class="flex flex-col items-center gap-2 min-w-[80px]">
+<div class="w-12 h-12 rounded-full bg-[#f6d6ff]/50 flex items-center justify-center text-[#712895] border border-[#8b43af]/30 shadow-sm relative">
+<span class="absolute -top-1 -right-1 w-3 h-3 bg-[#712895] rounded-full border-2 border-surface animate-pulse"></span>
+<span class="material-symbols-outlined text-lg">call_split</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#712895] font-bold text-center">Deviation</span>
+</div>
+<div class="flex-1 h-px bg-outline-variant/30 min-w-[20px] max-w-[40px]"></div>
+<!-- Stage 7 -->
+<div class="flex flex-col items-center gap-2 min-w-[80px]">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant border border-outline-variant/20 opacity-50">
+<span class="material-symbols-outlined text-lg">warning</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center opacity-50">Risk</span>
+</div>
+</div>
+</section>
+<!-- Recent Signals Grid -->
+<section>
+<div class="flex justify-between items-end mb-6">
+<h2 class="font-headline-md text-headline-md text-on-background">Recent Signals</h2>
+<a class="font-label-sm text-label-sm text-primary hover:underline" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Signal Card 1: Conversation -->
+<div class="bg-surface border-l-[3px] border-l-[#8b43af] border-t border-r border-b border-outline-variant/10 rounded-[16px] p-5 shadow-[0_4px_10px_rgba(71,107,91,0.03)] hover:shadow-[0_4px_20px_rgba(71,107,91,0.08)] transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+<span class="font-label-sm text-label-sm uppercase">Conversation</span>
+</div>
+<span class="material-symbols-outlined text-[#8b43af] text-[20px]">trending_up</span>
+</div>
+<div class="mb-3">
+<p class="font-headline-md text-headline-md text-on-surface">Elevated</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Shorter replies, unusual timing</p>
+</div>
+<!-- Mini Viz -->
+<div class="h-8 w-full mt-auto opacity-70">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 20">
+<path d="M0 10 L 20 12 L 40 10 L 60 15 L 80 5 L 100 8" fill="none" stroke="#8b43af" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<!-- Signal Card 2: Sleep -->
+<div class="bg-surface border border-outline-variant/10 rounded-[16px] p-5 shadow-[0_4px_10px_rgba(71,107,91,0.03)] hover:shadow-[0_4px_20px_rgba(71,107,91,0.08)] transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">bedtime</span>
+<span class="font-label-sm text-label-sm uppercase">Sleep</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">trending_flat</span>
+</div>
+<div class="mb-3">
+<p class="font-headline-md text-headline-md text-on-surface">Normal</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">7h 15m avg this week</p>
+</div>
+<!-- Mini Viz -->
+<div class="h-8 w-full mt-auto opacity-50">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 20">
+<path d="M0 10 L 20 9 L 40 11 L 60 10 L 80 12 L 100 10" fill="none" stroke="#476b5b" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<!-- Signal Card 3: Activity -->
+<div class="bg-surface border border-outline-variant/10 rounded-[16px] p-5 shadow-[0_4px_10px_rgba(71,107,91,0.03)] hover:shadow-[0_4px_20px_rgba(71,107,91,0.08)] transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">directions_run</span>
+<span class="font-label-sm text-label-sm uppercase">Activity</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">trending_up</span>
+</div>
+<div class="mb-3">
+<p class="font-headline-md text-headline-md text-on-surface">Steady</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Matching baseline</p>
+</div>
+<!-- Mini Viz -->
+<div class="h-8 w-full mt-auto opacity-50">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 20">
+<path d="M0 15 L 20 14 L 40 10 L 60 8 L 80 5 L 100 6" fill="none" stroke="#476b5b" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+<!-- Signal Card 4: App Engagement -->
+<div class="bg-surface border border-outline-variant/10 rounded-[16px] p-5 shadow-[0_4px_10px_rgba(71,107,91,0.03)] hover:shadow-[0_4px_20px_rgba(71,107,91,0.08)] transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">smartphone</span>
+<span class="font-label-sm text-label-sm uppercase">App Engagement</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">trending_down</span>
+</div>
+<div class="mb-3">
+<p class="font-headline-md text-headline-md text-on-surface">Reduced</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">-15% vs last week</p>
+</div>
+<!-- Mini Viz -->
+<div class="h-8 w-full mt-auto opacity-40">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 20">
+<path d="M0 5 L 20 8 L 40 7 L 60 12 L 80 15 L 100 16" fill="none" stroke="#717974" stroke-width="1.5"></path>
+</svg>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 bg-surface dark:bg-surface-container-lowest border-t border-outline-variant/10 shadow-[0_-4px_20px_rgba(71,107,91,0.08)] md:hidden z-50 pb-safe">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 active:bg-surface-container-high transition-transform duration-200 active:scale-90 w-16" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm-mobile text-label-sm-mobile mt-0.5" style="font-size: 10px;">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:bg-surface-container-high transition-transform duration-200 active:scale-90 w-16" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-sm-mobile text-label-sm-mobile mt-0.5" style="font-size: 10px;">Pattern</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:bg-surface-container-high transition-transform duration-200 active:scale-90 w-16" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="font-label-sm-mobile text-label-sm-mobile mt-0.5" style="font-size: 10px;">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:bg-surface-container-high transition-transform duration-200 active:scale-90 w-16" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm-mobile text-label-sm-mobile mt-0.5" style="font-size: 10px;">Support</span>
+</a>
+</nav>
+</body></html>

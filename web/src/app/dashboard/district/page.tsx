@@ -46,65 +46,64 @@ export default function DistrictDashboard() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">District Dashboard</h1>
-          <Badge variant="outline" className="text-sm">Kanpur Zone</Badge>
-        </div>
-        
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <CardTitle>Abstracted Cases Overview</CardTitle>
-              <Badge variant="outline" className="text-xs uppercase bg-indigo-50 text-indigo-700 border-indigo-200">
-                Priority Sorted
-              </Badge>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Case ID</TableHead>
-                  <TableHead>Name (Abstracted)</TableHead>
-                  <TableHead>District</TableHead>
-                  <TableHead>Current Score (0-100)</TableHead>
-                  <TableHead>Risk Band</TableHead>
-                  <TableHead>Trend (Smoothed)</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {cases.map((c) => (
-                  <TableRow key={c.id}>
-                    <TableCell className="font-medium">{c.id}</TableCell>
-                    <TableCell>{c.name}</TableCell>
-                    <TableCell>{c.district}</TableCell>
-                    <TableCell>
-                      {c.current_score.toFixed(1)}
-                      <span className="text-xs text-gray-500 ml-1">+/- 4.2</span>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={c.risk_band === 'High' ? 'destructive' : c.risk_band === 'Medium' ? 'default' : 'secondary'}>
-                        {c.risk_band}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Sparkline data={c.history_scores} />
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <a href={`/dashboard/counsellor?case=${c.id}`} className="text-blue-600 hover:underline text-sm">
-                        View Details
-                      </a>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+    <div className="space-y-6">
+      <div className="mb-10">
+        <h1 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-2">Good morning, Sentinel Admin</h1>
+        <p className="font-sans text-lg text-muted-foreground">Here’s what Sentinel noticed across Kanpur Zone.</p>
       </div>
+      
+      <Card className="bg-card border border-border/50 rounded-2xl shadow-sm">
+        <CardHeader>
+          <div className="flex items-center gap-3">
+            <CardTitle className="font-heading text-xl">Abstracted Cases Overview</CardTitle>
+            <Badge variant="outline" className="text-xs uppercase bg-primary/10 text-primary border-primary/20">
+              Priority Sorted
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border">
+                <TableHead className="font-heading">Case ID</TableHead>
+                <TableHead className="font-heading">Name (Abstracted)</TableHead>
+                <TableHead className="font-heading">District</TableHead>
+                <TableHead className="font-heading">Current Score (0-100)</TableHead>
+                <TableHead className="font-heading">Risk Band</TableHead>
+                <TableHead className="font-heading">Trend (Smoothed)</TableHead>
+                <TableHead className="text-right font-heading">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {cases.map((c) => (
+                <TableRow key={c.id} className="border-border/50 hover:bg-accent/20">
+                  <TableCell className="font-medium text-foreground">{c.id}</TableCell>
+                  <TableCell className="text-muted-foreground">{c.name}</TableCell>
+                  <TableCell className="text-muted-foreground">{c.district}</TableCell>
+                  <TableCell className="text-foreground font-medium">
+                    {c.current_score.toFixed(1)}
+                    <span className="text-xs text-muted-foreground ml-1">+/- 4.2</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={c.risk_band === 'High' ? 'destructive' : c.risk_band === 'Medium' ? 'default' : 'secondary'}
+                           className={c.risk_band === 'High' ? 'bg-destructive/10 text-destructive border border-destructive/20' : ''}>
+                      {c.risk_band}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Sparkline data={c.history_scores} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <a href={`/dashboard/counsellor?case=${c.id}`} className="text-primary hover:underline text-sm font-semibold">
+                      View Details
+                    </a>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   )
 }

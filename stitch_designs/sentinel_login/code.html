@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel - Sign In</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#426656",
+                        "surface-bright": "#f9f9f7",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#eeeeeb",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#a8cfbc",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#e9b3ff",
+                        "tertiary-container": "#8b43af",
+                        "on-primary-fixed": "#002116",
+                        "primary-container": "#476b5b",
+                        "tertiary": "#712895",
+                        "on-primary-container": "#c2ead6",
+                        "on-secondary-fixed-variant": "#464745",
+                        "tertiary-fixed": "#f7d9ff",
+                        "secondary-fixed": "#e3e2e0",
+                        "surface-container-low": "#f4f4f1",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e2e3e0",
+                        "on-tertiary-container": "#f6d6ff",
+                        "on-surface-variant": "#414844",
+                        "on-surface": "#1a1c1b",
+                        "on-secondary-container": "#626361",
+                        "outline-variant": "#c1c8c3",
+                        "surface": "#f9f9f7",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e8e8e6",
+                        "secondary": "#5d5f5d",
+                        "inverse-on-surface": "#f1f1ee",
+                        "primary-fixed": "#c4ebd7",
+                        "on-secondary-fixed": "#1a1c1b",
+                        "on-tertiary-fixed": "#310048",
+                        "secondary-fixed-dim": "#c6c7c4",
+                        "background": "#f9f9f7",
+                        "secondary-container": "#e0e0dd",
+                        "primary": "#2f5344",
+                        "on-primary-fixed-variant": "#2a4e3f",
+                        "on-background": "#1a1c1b",
+                        "outline": "#717974",
+                        "surface-container-highest": "#e2e3e0",
+                        "on-tertiary-fixed-variant": "#6b218f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#a8cfbc",
+                        "inverse-surface": "#2f312f",
+                        "surface-dim": "#dadad7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "mobile-margin": "1.25rem",
+                        "desktop-margin": "2.5rem",
+                        "gutter": "1.5rem",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Manrope"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Manrope"],
+                        "label-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-container min-h-screen flex items-center justify-center px-mobile-margin md:px-desktop-margin antialiased">
+<!-- Main Card Container -->
+<div class="w-full max-w-md bg-surface rounded-[16px] border border-outline-variant/20 shadow-[0_4px_20px_rgba(71,107,91,0.04)] overflow-hidden">
+<div class="p-8 md:p-10 flex flex-col items-center">
+<!-- Brand & Headline -->
+<div class="text-center mb-10 w-full">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight mb-2 uppercase">SENTINEL</h1>
+<p class="font-headline-md text-headline-md text-on-surface">Notice change. Bring support.</p>
+</div>
+<!-- Form Area -->
+<form class="w-full flex flex-col gap-5">
+<!-- Email Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="email">Email</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/20 text-on-surface font-body-md text-body-md rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder-on-surface-variant/50" id="email" placeholder="name@example.com" type="email"/>
+</div>
+<!-- Password Field -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface-variant" for="password">Password</label>
+<a class="font-label-md text-label-md text-primary hover:text-primary-container transition-colors" href="#">Forgot password?</a>
+</div>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/20 text-on-surface font-body-md text-body-md rounded-lg px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="password" type="password"/>
+</div>
+<!-- Sign In Action -->
+<button class="mt-2 w-full bg-primary text-on-primary font-label-md text-label-md py-3.5 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors" type="submit">
+                    Sign in
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- Divider -->
+<div class="w-full flex items-center gap-4 my-8">
+<div class="flex-1 h-px bg-outline-variant/30"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Or</span>
+<div class="flex-1 h-px bg-outline-variant/30"></div>
+</div>
+<!-- Secondary Action -->
+<button class="w-full border border-outline/30 text-on-surface bg-surface-container-lowest font-label-md text-label-md py-3.5 rounded-lg flex items-center justify-center gap-3 hover:bg-surface-variant/30 transition-colors">
+<svg fill="none" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M23.04 12.2614C23.04 11.4459 22.9668 10.6627 22.8309 9.90155H12V14.3644H18.1887C17.922 15.8077 17.1122 17.0296 15.8903 17.8451V20.7335H19.6105C21.7876 18.7303 23.04 15.7654 23.04 12.2614Z" fill="#4285F4" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M12 23.4998C15.105 23.4998 17.7082 22.4704 19.6105 20.7334L15.8903 17.845C14.8609 18.535 13.5447 18.9424 12 18.9424C9.00474 18.9424 6.46955 16.9198 5.56518 14.1848H1.72314V17.1644C3.61541 20.9228 7.5045 23.4998 12 23.4998Z" fill="#34A853" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M5.56523 14.1851C5.33532 13.4951 5.20473 12.7588 5.20473 12.0003C5.20473 11.2418 5.33532 10.5055 5.56523 9.81554V6.83594H1.72319C0.93991 8.39712 0.490479 10.1423 0.490479 12.0003C0.490479 13.8584 0.93991 15.6035 1.72319 17.1647L5.56523 14.1851Z" fill="#FBBC05" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M12 5.0577C13.6927 5.0577 15.2078 5.64251 16.4035 6.79124L19.6941 3.50059C17.703 1.64251 15.1005 0.500244 12 0.500244C7.5045 0.500244 3.61541 3.0772 1.72314 6.83561L5.56518 9.81521C6.46955 7.08022 9.00474 5.0577 12 5.0577Z" fill="#EA4335" fill-rule="evenodd"></path>
+</svg>
+                Continue with Google
+            </button>
+<!-- Creation Link -->
+<div class="mt-8">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">
+                    Don't have an account? <span class="font-semibold text-primary">Create account</span>
+</a>
+</div>
+</div>
+<!-- Privacy Footer -->
+<div class="bg-surface-container-low px-8 py-5 border-t border-outline-variant/10 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Your well-being data remains under your control.</span>
+</div>
+</div>
+</body></html>

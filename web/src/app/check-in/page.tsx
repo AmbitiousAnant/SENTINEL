@@ -176,44 +176,91 @@ export default function CheckInPage() {
             </CardContent>
           </Card>
 
-          {/* Telemetry Dashboard (Static Roadmap) */}
-          <Card className="mt-4 border-indigo-100 shadow-sm bg-gray-50/50">
-            <CardHeader className="pb-2 bg-gray-100/50 border-b">
-              <CardTitle className="text-sm text-gray-500 uppercase tracking-wider flex items-center gap-2">
-                Simulated Telemetry (Not Active)
-                <Badge variant="outline" className="ml-auto text-[10px] bg-white text-gray-400 border-gray-200">
+          {/* Telemetry Dashboard */}
+          <Card className="mt-4 border-indigo-100 shadow-sm bg-white">
+            <CardHeader className="pb-2 bg-indigo-50/50">
+              <CardTitle className="text-sm text-indigo-900 uppercase tracking-wider flex items-center gap-2">
+                Simulated Telemetry
+                <Badge variant="outline" className="ml-auto text-[10px] bg-white text-indigo-600 border-indigo-200">
                   ROADMAP
                 </Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-4">
-              <div className="text-xs text-gray-500 italic mb-2 border-l-2 border-indigo-200 pl-2">
+            <CardContent className="p-4 space-y-5">
+              <div className="text-xs text-indigo-600/80 italic mb-2 border-l-2 border-indigo-200 pl-2">
                 Roadmap — signal set informed by MindGuard (Ji et al. 2024) and BiAffect (Cao et al.), pending wearable/app-level integration.
               </div>
               
-              <div className="opacity-50 pointer-events-none">
-                <div>
-                  <div className="flex justify-between items-baseline mb-1">
-                    <span className="text-xs font-semibold text-gray-500 uppercase">Avg Resting Heart Rate</span>
-                    <span className="text-lg font-bold text-gray-400">-- BPM</span>
-                  </div>
-                  <div className="text-[10px] text-gray-400">Requires Watch/Band Sync</div>
+              {/* Heart Rate Sparkline */}
+              <div>
+                <div className="flex justify-between items-baseline mb-1">
+                  <span className="text-xs font-semibold text-gray-500 uppercase">Avg Resting Heart Rate</span>
+                  <span className="text-lg font-bold text-indigo-500">105 BPM</span>
                 </div>
-
-                <div className="h-16 mt-4 border-t pt-2">
-                  <span className="text-xs font-semibold text-gray-500 uppercase block">Circadian Cycle (Sleep Hrs)</span>
-                  <div className="w-full h-full bg-gray-100 rounded mt-1 flex items-center justify-center text-xs text-gray-400">
-                    [Chart Placeholder]
-                  </div>
-                </div>
-
-                <div className="h-16 mt-4 border-t pt-2">
-                  <span className="text-xs font-semibold text-gray-500 uppercase block">Social App Usage (Mins)</span>
-                  <div className="w-full h-full bg-gray-100 rounded mt-1 flex items-center justify-center text-xs text-gray-400">
-                    [Chart Placeholder]
-                  </div>
-                </div>
+                <div className="text-[10px] text-gray-400">High/Erratic (±15 bpm)</div>
+                <div className="text-[9px] text-gray-400 italic mt-1 leading-tight">Illustrative pattern shape from MindGuard (Ji et al.)/BiAffect (Cao et al.) findings, populated with synthetic data.</div>
               </div>
+
+              {/* Circadian Rhythm (Sleep) - Native SVG to avoid Recharts crashes */}
+              <div>
+                <span className="text-xs font-semibold text-gray-500 uppercase mb-2 block">Circadian Cycle (Sleep Hrs)</span>
+                <div className="h-28 w-full border-b border-l border-gray-200 flex items-end p-1 relative">
+                  {/* Y-axis labels */}
+                  <div className="absolute -left-4 bottom-0 text-[8px] text-gray-400">0</div>
+                  <div className="absolute -left-4 top-0 text-[8px] text-gray-400">10</div>
+                  
+                  {/* SVG Line Chart */}
+                  <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <polyline 
+                      points="0,60 25,70 50,80 75,75 100,85" 
+                      fill="none" 
+                      stroke="#6366f1" 
+                      strokeWidth="3" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                    />
+                    <circle cx="0" cy="60" r="2" fill="#6366f1" />
+                    <circle cx="25" cy="70" r="2" fill="#6366f1" />
+                    <circle cx="50" cy="80" r="2" fill="#6366f1" />
+                    <circle cx="75" cy="75" r="2" fill="#6366f1" />
+                    <circle cx="100" cy="85" r="2" fill="#6366f1" />
+                  </svg>
+
+                  {/* X-axis labels */}
+                  <div className="absolute -bottom-4 left-0 text-[8px] text-gray-400">Mon</div>
+                  <div className="absolute -bottom-4 left-1/4 text-[8px] text-gray-400">Tue</div>
+                  <div className="absolute -bottom-4 left-1/2 text-[8px] text-gray-400">Wed</div>
+                  <div className="absolute -bottom-4 left-[75%] text-[8px] text-gray-400">Thu</div>
+                  <div className="absolute -bottom-4 right-0 text-[8px] text-gray-400">Fri</div>
+                </div>
+                <div className="text-[9px] text-gray-400 italic mt-6 leading-tight">Illustrative pattern shape from MindGuard (Ji et al.)/BiAffect (Cao et al.) findings, populated with synthetic data.</div>
+              </div>
+
+              {/* Social Activity - Native CSS Bars to avoid Recharts crashes */}
+              <div className="mt-6">
+                <span className="text-xs font-semibold text-gray-500 uppercase mb-2 block">Social App Usage (Mins)</span>
+                <div className="h-28 w-full border-b border-l border-gray-200 flex items-end justify-around pb-0 pt-4 relative">
+                  {/* Y-axis labels */}
+                  <div className="absolute -left-4 bottom-0 text-[8px] text-gray-400">0</div>
+                  <div className="absolute -left-4 top-0 text-[8px] text-gray-400">Max</div>
+                  
+                  {/* Bars */}
+                  <div className="flex flex-col items-center justify-end h-full w-1/4">
+                    <div className="w-full bg-[#818cf8] rounded-t-sm" style={{height: '5%'}}></div>
+                    <div className="text-[8px] text-gray-400 mt-1">WhatsApp</div>
+                  </div>
+                  <div className="flex flex-col items-center justify-end h-full w-1/4">
+                    <div className="w-full bg-[#818cf8] rounded-t-sm" style={{height: '2%'}}></div>
+                    <div className="text-[8px] text-gray-400 mt-1">Calls</div>
+                  </div>
+                  <div className="flex flex-col items-center justify-end h-full w-1/4">
+                    <div className="w-full bg-[#818cf8] rounded-t-sm" style={{height: '15%'}}></div>
+                    <div className="text-[8px] text-gray-400 mt-1">Instagram</div>
+                  </div>
+                </div>
+                <div className="text-[9px] text-gray-400 italic mt-4 leading-tight">Illustrative pattern shape from MindGuard (Ji et al.)/BiAffect (Cao et al.) findings, populated with synthetic data.</div>
+              </div>
+
             </CardContent>
           </Card>
 
@@ -355,6 +402,32 @@ export default function CheckInPage() {
               )}
               <div ref={messagesEndRef} />
             </CardContent>
+            <div className="p-3 border-t bg-white flex gap-2">
+              <input 
+                type="text"
+                placeholder="Type your check-in here..."
+                className="flex-1 p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.currentTarget.value.trim() !== '') {
+                    sendCheckIn(e.currentTarget.value)
+                    e.currentTarget.value = ''
+                  }
+                }}
+              />
+              <Button 
+                className="h-auto bg-indigo-600 hover:bg-indigo-700 text-white"
+                onClick={(e) => {
+                  const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                  if (input.value.trim() !== '') {
+                    sendCheckIn(input.value)
+                    input.value = ''
+                  }
+                }}
+                disabled={loading}
+              >
+                Send
+              </Button>
+            </div>
           </Card>
         </div>
       </div>

@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   // @ts-ignore
   allowedDevOrigins: [
     '192.168.29.36',
+    '172.16.45.34',
+    '10.180.254.52',
     'localhost:3000',
     '127.0.0.1:3000'
   ]

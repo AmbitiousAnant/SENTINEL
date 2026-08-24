@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel - Support</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#426656",
+                        "surface-bright": "#f9f9f7",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#eeeeeb",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#a8cfbc",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#e9b3ff",
+                        "tertiary-container": "#8b43af",
+                        "on-primary-fixed": "#002116",
+                        "primary-container": "#476b5b",
+                        "tertiary": "#712895",
+                        "on-primary-container": "#c2ead6",
+                        "on-secondary-fixed-variant": "#464745",
+                        "tertiary-fixed": "#f7d9ff",
+                        "secondary-fixed": "#e3e2e0",
+                        "surface-container-low": "#f4f4f1",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e2e3e0",
+                        "on-tertiary-container": "#f6d6ff",
+                        "on-surface-variant": "#414844",
+                        "on-surface": "#1a1c1b",
+                        "on-secondary-container": "#626361",
+                        "outline-variant": "#c1c8c3",
+                        "surface": "#f9f9f7",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e8e8e6",
+                        "secondary": "#5d5f5d",
+                        "inverse-on-surface": "#f1f1ee",
+                        "primary-fixed": "#c4ebd7",
+                        "on-secondary-fixed": "#1a1c1b",
+                        "on-tertiary-fixed": "#310048",
+                        "secondary-fixed-dim": "#c6c7c4",
+                        "background": "#DCE8DF", /* Pale Moss for background */
+                        "secondary-container": "#e0e0dd",
+                        "primary": "#2f5344",
+                        "on-primary-fixed-variant": "#2a4e3f",
+                        "on-background": "#1a1c1b",
+                        "outline": "#717974",
+                        "surface-container-highest": "#e2e3e0",
+                        "on-tertiary-fixed-variant": "#6b218f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#a8cfbc",
+                        "inverse-surface": "#2f312f",
+                        "surface-dim": "#dadad7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "16px", /* Matches Card radius guidance */
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "mobile-margin": "1.25rem",
+                        "desktop-margin": "2.5rem",
+                        "gutter": "1.5rem",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Manrope", "sans-serif"],
+                        "body-lg": ["Hanken Grotesk", "sans-serif"],
+                        "headline-md": ["Manrope", "sans-serif"],
+                        "label-md": ["Hanken Grotesk", "sans-serif"],
+                        "headline-lg": ["Manrope", "sans-serif"],
+                        "headline-lg-mobile": ["Manrope", "sans-serif"],
+                        "body-md": ["Hanken Grotesk", "sans-serif"],
+                        "label-sm": ["Hanken Grotesk", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Soft Ambient Shadow for active/floating */
+        .ambient-shadow {
+            box-shadow: 0 4px 20px rgba(71, 107, 91, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased overflow-x-hidden min-h-screen">
+<!-- TopAppBar -->
+<div class="fixed top-0 right-0 w-full md:w-[calc(100%-280px)] z-40 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center h-16 px-mobile-margin md:px-desktop-margin">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim md:hidden">
+            Sentinel
+        </div>
+<div class="hidden md:block"></div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-variant/20 rounded-full transition-all text-on-surface-variant dark:text-secondary-fixed-dim active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/20">
+<img alt="Alex's Profile Avatar" class="w-full h-full object-cover" data-alt="A small, professional avatar portrait of a person with a calm expression, set against a soft, neutral forest green background. The lighting is soft and even, typical of a high-quality studio portrait. The style is modern corporate, matching a quiet intelligence UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0piB05lT3W2uTLhiI5Jmuw2SIcCxhvesaONFbD8FuCy21motZR4mDd4Uz9x-7IkB8vT_hyxWuA6Nkh0SnvVrYGQIkJjMsbk_VLI6dAXA_Josk67T3em7mXq98Qy8LAMRYQH-lExrERwvkA3FsPD27wRISttk6IQicqNPL6Jis_Wqy2kD6MF3u16cI3UErTSn_7nEMXKwdP1IxQX3AmKMRxf2dTw8oBDZqcZGifx0TgeOtFCWs3GmXdQ"/>
+</div>
+</div>
+</div>
+<!-- SideNavBar (Desktop) -->
+<nav class="fixed left-0 top-0 h-full w-[280px] hidden md:flex flex-col border-r border-outline-variant/10 bg-surface-container-low dark:bg-surface-dim">
+<div class="flex flex-col h-full py-desktop-margin">
+<div class="px-6 mb-8">
+<h1 class="font-display-lg text-display-lg font-bold tracking-tight text-primary dark:text-primary-fixed-dim">SENTINEL</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Quiet Intelligence</p>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Patterns</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-md text-label-md">Analysis</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors mx-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+<span class="font-label-md text-label-md">Insights</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed-dim bg-primary-container/10 mx-2 rounded-r-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+<div class="mt-auto px-2 flex flex-col gap-2 border-t border-outline-variant/10 pt-4">
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-label-md text-label-md">Privacy</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 dark:hover:bg-surface-container-highest/20 transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="md:ml-[280px] pt-24 pb-24 md:pb-12 px-mobile-margin md:px-desktop-margin max-w-[1440px] mx-auto min-h-screen flex flex-col">
+<header class="mb-12 max-w-2xl">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-4">You don’t have to handle this alone.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Additional support is available.</p>
+</header>
+<!-- Bento Grid for Support Tiers -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter flex-1">
+<!-- Tier 1: Self Support (Spans 4 cols on desktop) -->
+<section class="md:col-span-4 bg-surface rounded-xl border border-outline-variant/10 p-6 flex flex-col gap-6">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<div class="w-8 h-8 rounded-full bg-surface-variant/50 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="self_improvement">self_improvement</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Tier 1: Self Support</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Tools for immediate grounding and resilience.</p>
+</div>
+<div class="flex flex-col gap-3 mt-auto">
+<button class="w-full flex items-center justify-between p-4 rounded-lg bg-surface-bright border border-outline-variant/20 hover:border-primary/50 transition-colors">
+<span class="font-label-md text-label-md text-on-surface">Grounding Exercises</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 rounded-lg bg-surface-bright border border-outline-variant/20 hover:border-primary/50 transition-colors">
+<span class="font-label-md text-label-md text-on-surface">Breathing Techniques</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="w-full flex items-center justify-between p-4 rounded-lg bg-surface-bright border border-outline-variant/20 hover:border-primary/50 transition-colors">
+<span class="font-label-md text-label-md text-on-surface">Resilience Building</span>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Tier 2: Human Support (Primary Focus - Spans 8 cols) -->
+<section class="md:col-span-8 flex flex-col gap-gutter">
+<div class="mb-2">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="group">group</span>
+</div>
+                        Tier 2: Human Support
+                    </h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter h-full">
+<!-- Tele-MANAS Card (Primary) -->
+<div class="bg-surface rounded-xl border border-primary/20 ambient-shadow p-8 flex flex-col justify-between relative overflow-hidden group">
+<!-- Decorative subtle gradient background -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary-container/5 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="relative z-10">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-2">Tele-MANAS</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">National Tele Mental Health Programme. Professional support is a call away, 24/7.</p>
+<div class="font-display-lg text-display-lg text-primary mb-8 font-bold tracking-widest">
+                                14416
+                            </div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md rounded px-6 py-4 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity relative z-10">
+<span class="material-symbols-outlined" data-icon="call">call</span>
+                            Call Tele-MANAS
+                        </button>
+</div>
+<!-- Trusted Contact Card -->
+<div class="bg-surface rounded-xl border border-outline-variant/10 p-8 flex flex-col justify-between relative overflow-hidden">
+<div class="relative z-10">
+<div class="w-12 h-12 rounded-full bg-surface-variant text-on-surface flex items-center justify-center mb-6">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-2">Trusted Contact</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Reach out to your pre-selected support network.</p>
+<div class="flex items-center gap-4 p-4 bg-surface-bright rounded-lg border border-outline-variant/20 mb-8">
+<div class="w-12 h-12 rounded-full bg-surface-variant overflow-hidden">
+<img alt="Sarah (Sister)" class="w-full h-full object-cover" data-alt="A small profile picture of a trusted friend or family member, an older woman with a kind, reassuring smile. The background is a soft, warm neutral tone. The lighting is gentle and flattering, conveying warmth and reliability in a professional, modern style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn7zeWGJPCRWOxXzWNzMiWrwWZCdIUdGlxjoGTyWTy3UZMLhf6PTz74dWu4WM7ZWXpT_tcAVY5S5aQ4lnw5BKkrLbZRgA0knbnN94moZIgwvx9d6wSc5WNPrrET_UUwY5yQyHrkKH9yx4-GBxgPweW2ALHcDWMgwonBKPea-nDBQEpWyRkNFWAYpu7WmCJxJ-UvDA_EtY1a2LwNb2WXBN_PmvzQSqpfgjKXvygx9h11xKV-iUgT51x-Q"/>
+</div>
+<div>
+<div class="font-label-md text-label-md text-on-surface font-semibold">Sarah (Sister)</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Available for support</div>
+</div>
+</div>
+</div>
+<button class="w-full border-2 border-primary-container text-primary-container bg-transparent font-label-md text-label-md rounded px-6 py-3 flex items-center justify-center gap-2 hover:bg-primary-container/5 transition-colors relative z-10">
+<span class="material-symbols-outlined" data-icon="sms">sms</span>
+                            Message Sarah
+                        </button>
+</div>
+</div>
+</section>
+<!-- Tier 3: Immediate Support (Full width at bottom) -->
+<section class="md:col-span-12 mt-8 bg-surface rounded-xl border border-outline-variant/10 p-6">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant/50 flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined" data-icon="emergency">emergency</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Tier 3: Immediate Support</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">For urgent situations requiring immediate intervention.</p>
+</div>
+</div>
+<button class="border border-outline text-on-surface font-label-md text-label-md rounded px-6 py-3 hover:bg-surface-variant/20 transition-colors whitespace-nowrap">
+                        View Emergency Resources
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 bg-surface dark:bg-surface-container-lowest border-t border-outline-variant/10 shadow-[0_-4px_20px_rgba(71,107,91,0.08)] md:hidden z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-sm text-label-sm mt-1">Pattern</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+<span class="font-label-sm text-label-sm mt-1">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help" data-weight="fill">help</span>
+<span class="font-label-sm text-label-sm mt-1">Support</span>
+</a>
+</nav>
+</body></html>

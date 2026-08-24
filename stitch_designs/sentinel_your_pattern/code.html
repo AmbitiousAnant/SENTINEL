@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel - Your Pattern</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-tint": "#426656",
+                        "surface-bright": "#f9f9f7",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#eeeeeb",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#a8cfbc",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#e9b3ff",
+                        "tertiary-container": "#8b43af",
+                        "on-primary-fixed": "#002116",
+                        "primary-container": "#476b5b",
+                        "tertiary": "#712895",
+                        "on-primary-container": "#c2ead6",
+                        "on-secondary-fixed-variant": "#464745",
+                        "tertiary-fixed": "#f7d9ff",
+                        "secondary-fixed": "#e3e2e0",
+                        "surface-container-low": "#f4f4f1",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#e2e3e0",
+                        "on-tertiary-container": "#f6d6ff",
+                        "on-surface-variant": "#414844",
+                        "on-surface": "#1a1c1b",
+                        "on-secondary-container": "#626361",
+                        "outline-variant": "#c1c8c3",
+                        "surface": "#f9f9f7",
+                        "on-secondary": "#ffffff",
+                        "surface-container-high": "#e8e8e6",
+                        "secondary": "#5d5f5d",
+                        "inverse-on-surface": "#f1f1ee",
+                        "primary-fixed": "#c4ebd7",
+                        "on-secondary-fixed": "#1a1c1b",
+                        "on-tertiary-fixed": "#310048",
+                        "secondary-fixed-dim": "#c6c7c4",
+                        "background": "#f9f9f7",
+                        "secondary-container": "#e0e0dd",
+                        "primary": "#2f5344",
+                        "on-primary-fixed-variant": "#2a4e3f",
+                        "on-background": "#1a1c1b",
+                        "outline": "#717974",
+                        "surface-container-highest": "#e2e3e0",
+                        "on-tertiary-fixed-variant": "#6b218f",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#a8cfbc",
+                        "inverse-surface": "#2f312f",
+                        "surface-dim": "#dadad7"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "sidebar-width": "280px",
+                        "mobile-margin": "1.25rem",
+                        "desktop-margin": "2.5rem",
+                        "gutter": "1.5rem",
+                        "base": "8px"
+                    },
+                    fontFamily: {
+                        "display-lg": ["Manrope"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-md": ["Manrope"],
+                        "label-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #DCE8DF; }
+        .ambient-shadow { box-shadow: 0 4px 20px rgba(71, 107, 91, 0.08); }
+        .glass-card { background: rgba(244, 247, 245, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(118, 119, 117, 0.1); }
+        .organic-line { fill: none; stroke: #476b5b; stroke-width: 2; filter: drop-shadow(0 2px 4px rgba(71,107,91,0.2)); }
+        .baseline-band { fill: rgba(168, 207, 188, 0.2); }
+        .deviation-point { fill: #8b43af; }
+    </style>
+</head>
+<body class="text-on-background font-body-md h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[280px] hidden md:flex flex-col bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant/10 z-50">
+<div class="flex flex-col h-full py-desktop-margin">
+<div class="px-6 mb-12">
+<h1 class="font-display-lg text-display-lg font-bold tracking-tight text-primary dark:text-primary-fixed-dim">SENTINEL</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Quiet Intelligence</p>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-primary dark:text-primary-fixed-dim font-bold border-l-4 border-primary dark:border-primary-fixed-dim bg-primary-container/10 scale-95 duration-150 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-md text-label-md">Patterns</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-label-md text-label-md">Analysis</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+<span class="font-label-md text-label-md">Insights</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-2">
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+<span class="font-label-md text-label-md">Privacy</span>
+</a>
+<a class="flex items-center gap-base px-4 py-3 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-full md:w-[calc(100%-280px)] z-40 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center h-16 px-mobile-margin md:px-desktop-margin">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim md:hidden">Sentinel</div>
+<div class="hidden"></div>
+<div class="flex items-center gap-4 ml-auto">
+<button class="p-2 text-on-surface-variant dark:text-secondary-fixed-dim hover:bg-surface-variant/20 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<img alt="Alex's Profile Avatar" class="w-8 h-8 rounded-full object-cover border border-outline-variant/20" data-alt="A small circular profile avatar of a professional looking individual against a clean, light-colored background. The lighting is soft and natural, emphasizing a calm and focused demeanor. The aesthetic is corporate modern and minimalist, aligning with a high-end, quiet intelligence brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiZp9m3LA2orgzcwixCcvoHTp0oU0g0GwMSGkqELUyyzzpRM_6fsTCkSMiQObCsUW1nEYTkANub9E2fUlwIvgzvWONPyjfhFa5-OSegEzHhFmUaVCEhTw_GIAUeFmkUmGcJY1vkxMxyuWlQBZ0U-qs8H2kulC3ZvvRxmx9f2tjKokO6oovbM39NveF8hRx9d0bn8qz4gMxiDuDPrkXkt_q5--0dTdGGWPDvqm1l74-wqIYYZfimhweKw"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full md:ml-[280px] mt-16 overflow-y-auto pt-6 px-mobile-margin md:px-desktop-margin pb-24 md:pb-8">
+<div class="max-w-[1440px] mx-auto flex flex-col gap-8">
+<header class="flex flex-col gap-2">
+<h2 class="font-display-lg text-display-lg text-on-surface">Your Pattern</h2>
+<p class="font-body-lg text-body-lg text-secondary">Sentinel learns what is normal for you.</p>
+</header>
+<!-- Main Viz Glass Card -->
+<section class="glass-card rounded-[16px] p-6 ambient-shadow">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">14-Day Baseline</h3>
+<div class="w-full h-64 relative">
+<!-- SVG Chart Simulation -->
+<svg class="w-full h-full preserve-aspect-ratio-none" viewbox="0 0 800 200">
+<!-- Baseline Band -->
+<path class="baseline-band" d="M 0 120 Q 100 100 200 130 T 400 110 T 600 140 T 800 120 L 800 80 Q 700 100 600 80 T 400 100 T 200 90 T 0 100 Z"></path>
+<!-- Current Pattern Line -->
+<path class="organic-line" d="M 0 110 Q 100 90 200 120 T 400 100 T 600 130 T 800 110"></path>
+<!-- Deviation Point -->
+<circle class="deviation-point shadow-lg" cx="600" cy="130" r="4"></circle>
+</svg>
+</div>
+</section>
+<!-- Dimensions Tabs -->
+<section class="flex flex-col gap-6">
+<div class="flex gap-4 border-b border-outline-variant/20 overflow-x-auto pb-2">
+<button class="font-label-md text-label-md text-primary font-semibold border-b-2 border-primary px-2 pb-2 whitespace-nowrap">Conversation</button>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors px-2 pb-2 whitespace-nowrap">Sleep</button>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors px-2 pb-2 whitespace-nowrap">Activity</button>
+<button class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors px-2 pb-2 whitespace-nowrap">App engagement</button>
+</div>
+<!-- Tab Content: Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Current -->
+<div class="bg-surface rounded-[16px] p-4 border border-outline-variant/10 ambient-shadow">
+<div class="font-label-sm text-label-sm text-secondary mb-2 uppercase">Current Pattern</div>
+<div class="font-headline-md text-headline-md text-on-surface">Stable</div>
+<div class="font-body-md text-body-md text-on-surface-variant mt-2 text-sm">Within normal parameters.</div>
+</div>
+<!-- Baseline -->
+<div class="bg-surface rounded-[16px] p-4 border border-outline-variant/10 ambient-shadow">
+<div class="font-label-sm text-label-sm text-secondary mb-2 uppercase">Personal Baseline</div>
+<div class="font-headline-md text-headline-md text-on-surface">Moderate</div>
+<div class="font-body-md text-body-md text-on-surface-variant mt-2 text-sm">Typical range established.</div>
+</div>
+<!-- Deviation -->
+<div class="bg-surface rounded-[16px] p-4 border border-outline-variant/10 ambient-shadow">
+<div class="font-label-sm text-label-sm text-tertiary-container mb-2 uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">warning</span> Deviation
+                        </div>
+<div class="font-headline-md text-headline-md text-on-surface">-12%</div>
+<div class="font-body-md text-body-md text-on-surface-variant mt-2 text-sm">Slight decrease noted yesterday.</div>
+</div>
+<!-- Trend & History -->
+<div class="bg-surface rounded-[16px] p-4 border border-outline-variant/10 ambient-shadow flex flex-col justify-between">
+<div>
+<div class="font-label-sm text-label-sm text-secondary mb-1 uppercase">Trend</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">trending_flat</span>
+<span class="font-body-md text-body-md text-on-surface">Level</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant/20">
+<div class="font-label-sm text-label-sm text-secondary mb-1 uppercase">Historical Range</div>
+<div class="font-body-md text-body-md text-on-surface text-sm">45 - 82 metric units</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="docked full-width bottom-0 md:hidden z-50 fixed left-0 w-full flex justify-around items-center h-16 bg-surface dark:bg-surface-container-lowest border-t border-outline-variant/10 shadow-[0_-4px_20px_rgba(71,107,91,0.08)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:bg-surface-container-high transition-transform duration-200 tap:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 active:bg-surface-container-high transition-transform duration-200 tap:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Pattern</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:bg-surface-container-high transition-transform duration-200 tap:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Insights</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-secondary-fixed-dim px-4 py-1 active:bg-surface-container-high transition-transform duration-200 tap:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-sm-mobile text-label-sm-mobile">Support</span>
+</a>
+</nav>
+</body></html>
