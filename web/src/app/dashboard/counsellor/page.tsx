@@ -152,6 +152,7 @@ function CounsellorViewContent() {
                   <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="rounded" /> Financial Assistance Logged</label>
                   <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="rounded" /> Legal Aid Connected</label>
                   <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="rounded" /> Rehabilitation Program Referral</label>
+                  <label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" className="rounded" /> Medical Treatment</label>
                 </div>
               </div>
             </div>
