@@ -38,7 +38,10 @@ export default function DistrictDashboard() {
   useEffect(() => {
     fetch(`${API_BASE}/dashboard/cases`)
       .then(r => r.json())
-      .then(d => setCases(d.cases))
+      .then(d => {
+        const sortedCases = d.cases.sort((a: Case, b: Case) => b.current_score - a.current_score)
+        setCases(sortedCases)
+      })
       .catch(e => console.error(e))
   }, [])
 
@@ -52,14 +55,19 @@ export default function DistrictDashboard() {
         
         <Card>
           <CardHeader>
-            <CardTitle>Synthetic Cases Overview</CardTitle>
+            <div className="flex items-center gap-3">
+              <CardTitle>Abstracted Cases Overview</CardTitle>
+              <Badge variant="outline" className="text-xs uppercase bg-indigo-50 text-indigo-700 border-indigo-200">
+                Priority Sorted
+              </Badge>
+            </div>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Case ID</TableHead>
-                  <TableHead>Name (Synthetic)</TableHead>
+                  <TableHead>Name (Abstracted)</TableHead>
                   <TableHead>District</TableHead>
                   <TableHead>Current Score (0-100)</TableHead>
                   <TableHead>Risk Band</TableHead>

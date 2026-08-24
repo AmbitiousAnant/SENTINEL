@@ -64,34 +64,34 @@ export default function CheckInPage() {
     setMessages(prev => [...prev, { role: 'user', content: text }])
     setLoading(true)
 
-    try {
-      const res = await fetch(`${API_BASE}/scorer/`, {
+    // Simulate network round-trip time for demo visibility
+    setTimeout(() => {
+      fetch(`${API_BASE}/scorer/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ case_id: "case_001", message: text })
       })
-      const data = await res.json()
-      
-      setMessages(prev => {
-        const newMsgs = [...prev]
-        if (newMsgs.length > 0 && newMsgs[newMsgs.length - 1].role === 'user') {
-          newMsgs[newMsgs.length - 1] = { ...newMsgs[newMsgs.length - 1], mindguard_class: data.mindguard_class }
-        }
-        return [...newMsgs, {
-          role: 'scorer',
-          content: `Distress Level Assessed`,
-          score: data.current_score,
-          risk_band: data.risk_band,
-          factors: data.factors,
-          guidance: data.guidance,
-          prevention_methods: data.prevention_methods
-        }]
+      .then(res => res.json())
+      .then(data => {
+        setMessages(prev => {
+          const newMsgs = [...prev]
+          if (newMsgs.length > 0 && newMsgs[newMsgs.length - 1].role === 'user') {
+            newMsgs[newMsgs.length - 1] = { ...newMsgs[newMsgs.length - 1], mindguard_class: data.mindguard_class }
+          }
+          return [...newMsgs, {
+            role: 'scorer',
+            content: `Distress Level Assessed`,
+            score: data.current_score,
+            risk_band: data.risk_band,
+            factors: data.factors,
+            guidance: data.guidance,
+            prevention_methods: data.prevention_methods
+          }]
+        })
       })
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setLoading(false)
-    }
+      .catch(e => console.error(e))
+      .finally(() => setLoading(false))
+    }, 1200)
   }
 
   const playAudio = async (text: string) => {
@@ -176,57 +176,44 @@ export default function CheckInPage() {
             </CardContent>
           </Card>
 
-          {/* Telemetry Dashboard */}
-          <Card className="mt-4 border-indigo-100 shadow-sm bg-white">
-            <CardHeader className="pb-2 bg-indigo-50/50">
-              <CardTitle className="text-sm text-indigo-900 uppercase tracking-wider flex items-center gap-2">
-                Simulated Telemetry
-                <Badge variant="outline" className="ml-auto text-[10px] bg-white text-indigo-600 border-indigo-200">
-                  LIVE STREAM
+          {/* Telemetry Dashboard (Static Roadmap) */}
+          <Card className="mt-4 border-indigo-100 shadow-sm bg-gray-50/50">
+            <CardHeader className="pb-2 bg-gray-100/50 border-b">
+              <CardTitle className="text-sm text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                Simulated Telemetry (Not Active)
+                <Badge variant="outline" className="ml-auto text-[10px] bg-white text-gray-400 border-gray-200">
+                  ROADMAP
                 </Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-5">
+            <CardContent className="p-4 space-y-4">
+              <div className="text-xs text-gray-500 italic mb-2 border-l-2 border-indigo-200 pl-2">
+                Roadmap — signal set informed by MindGuard (Ji et al. 2024) and BiAffect (Cao et al.), pending wearable/app-level integration.
+              </div>
               
-              {/* Heart Rate Sparkline */}
-              <div>
-                <div className="flex justify-between items-baseline mb-1">
-                  <span className="text-xs font-semibold text-gray-500 uppercase">Avg Resting Heart Rate</span>
-                  <span className={`text-lg font-bold ${
-                    currentTier === 3 ? 'text-indigo-600' : currentTier === 2 ? 'text-purple-600' : 'text-teal-600'
-                  }`}>{TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].hr} BPM</span>
+              <div className="opacity-50 pointer-events-none">
+                <div>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <span className="text-xs font-semibold text-gray-500 uppercase">Avg Resting Heart Rate</span>
+                    <span className="text-lg font-bold text-gray-400">-- BPM</span>
+                  </div>
+                  <div className="text-[10px] text-gray-400">Requires Watch/Band Sync</div>
                 </div>
-                <div className="text-[10px] text-gray-400">{TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].hrVariance}</div>
-              </div>
 
-              {/* Circadian Rhythm (Sleep) */}
-              <div className="h-32">
-                <span className="text-xs font-semibold text-gray-500 uppercase mb-2 block">Circadian Cycle (Sleep Hrs)</span>
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].sleep}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                    <XAxis dataKey="day" tick={{fontSize: 10}} axisLine={false} tickLine={false} />
-                    <YAxis tick={{fontSize: 10}} axisLine={false} tickLine={false} domain={[0, 10]} />
-                    <Tooltip contentStyle={{fontSize: '12px'}} />
-                    <Line type="monotone" dataKey="hrs" stroke={currentTier === 3 ? '#4f46e5' : currentTier === 2 ? '#9333ea' : '#0d9488'} strokeWidth={3} dot={{r: 3}} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+                <div className="h-16 mt-4 border-t pt-2">
+                  <span className="text-xs font-semibold text-gray-500 uppercase block">Circadian Cycle (Sleep Hrs)</span>
+                  <div className="w-full h-full bg-gray-100 rounded mt-1 flex items-center justify-center text-xs text-gray-400">
+                    [Chart Placeholder]
+                  </div>
+                </div>
 
-              {/* Social Activity */}
-              <div className="h-32">
-                <span className="text-xs font-semibold text-gray-500 uppercase mb-2 block">Social App Usage (Mins)</span>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={TELEMETRY_DATA[currentTier as keyof typeof TELEMETRY_DATA].social}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                    <XAxis dataKey="app" tick={{fontSize: 10}} axisLine={false} tickLine={false} />
-                    <YAxis tick={{fontSize: 10}} axisLine={false} tickLine={false} />
-                    <Tooltip contentStyle={{fontSize: '12px'}} />
-                    <Bar dataKey="mins" fill={currentTier === 3 ? '#818cf8' : currentTier === 2 ? '#c084fc' : '#5eead4'} radius={[4,4,0,0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+                <div className="h-16 mt-4 border-t pt-2">
+                  <span className="text-xs font-semibold text-gray-500 uppercase block">Social App Usage (Mins)</span>
+                  <div className="w-full h-full bg-gray-100 rounded mt-1 flex items-center justify-center text-xs text-gray-400">
+                    [Chart Placeholder]
+                  </div>
+                </div>
               </div>
-
             </CardContent>
           </Card>
 
