@@ -36,6 +36,27 @@ export default function SecurityCompliance() {
             </p>
           </div>
 
+          <div>
+            <h3 className="font-bold text-lg mb-2">Zero-Egress On-Device Pipeline</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Sentinel operates a 6-stage fully local pipeline. Behavioral feature extraction (via TensorFlow Lite) and conversational generation (via 4-bit quantized Gemma 4 E2B) execute entirely on-device. No raw behavioral data—text, media, location, or usage logs—ever leaves the zero-egress boundary (Ref: Research Paper, Section 3.1 & 3.3).
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-lg mb-2">Permission Minimization</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              The architecture requests only standard OS-level permissions (<code>PACKAGE_USAGE_STATS</code> and <code>ACTIVITY_RECOGNITION</code>). To protect user privacy, it explicitly avoids capturing system-wide ambient data, relying on first-party text surfaces rather than invasive Accessibility services or custom keyboards (Ref: Research Paper, Section 3.2).
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-bold text-lg mb-2">Generative Safety & Guardrails</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Interactions are secured by multiple independent safety layers. Prompt generation is grounded in PHQ-9/GAD-7 clinical lexicons via Retrieval-Augmented Generation (RAG) and verified by EmoGuard. Furthermore, a turn-level MindGuard classifier screens all user replies in real-time to immediately triage self-harm or harm-to-others risk (Ref: Research Paper, Section 3.3 & 3.6).
+            </p>
+          </div>
+
         </CardContent>
       </Card>
     </div>
