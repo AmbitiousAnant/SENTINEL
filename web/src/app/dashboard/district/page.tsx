@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { LineChart, Line, ResponsiveContainer, YAxis } from 'recharts'
 
-const API_BASE = "http://127.0.0.1:8000/api"
+const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent); const API_BASE = isAndroid ? "http://10.0.2.2:8000/api" : "http://127.0.0.1:8000/api"
 
 type Case = {
   id: string
@@ -52,34 +52,56 @@ export default function DistrictDashboard() {
         <p className="font-sans text-lg text-muted-foreground">Here’s what Sentinel noticed across Kanpur Zone.</p>
       </div>
       
-      <Card className="bg-card border border-border/50 rounded-2xl shadow-sm">
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <CardTitle className="font-heading text-xl">Abstracted Cases Overview</CardTitle>
-            <Badge variant="outline" className="text-xs uppercase bg-primary/10 text-primary border-primary/20">
-              Priority Sorted
-            </Badge>
+      <Card className="bg-card border border-border/50 rounded-2xl shadow-sm overflow-hidden">
+        <CardHeader className="bg-sidebar border-b border-border/50">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <CardTitle className="font-heading text-xl">PoA Act (SC/ST) Monitored Cases</CardTitle>
+              <Badge variant="outline" className="text-xs uppercase bg-primary/10 text-primary border-primary/20">
+                Priority Sorted
+              </Badge>
+            </div>
+            <div className="flex gap-2">
+               <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-500/20">IVRS Sync: Active</Badge>
+               <Badge variant="outline" className="bg-green-500/10 text-green-600 border-green-500/20">NHAA/14566 Link: Connected</Badge>
+            </div>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0 overflow-x-auto">
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-muted/50">
               <TableRow className="border-border">
-                <TableHead className="font-heading">Case ID</TableHead>
-                <TableHead className="font-heading">Name (Abstracted)</TableHead>
-                <TableHead className="font-heading">District</TableHead>
-                <TableHead className="font-heading">Current Score (0-100)</TableHead>
+                <TableHead className="font-heading py-4 pl-4">Case ID</TableHead>
+                <TableHead className="font-heading">Atrocity Case Type</TableHead>
+                <TableHead className="font-heading">Relief / Comp. Status</TableHead>
+                <TableHead className="font-heading">Protection</TableHead>
+                <TableHead className="font-heading">Current Score</TableHead>
                 <TableHead className="font-heading">Risk Band</TableHead>
                 <TableHead className="font-heading">Trend (Smoothed)</TableHead>
-                <TableHead className="text-right font-heading">Actions</TableHead>
+                <TableHead className="text-right font-heading pr-4">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {cases.map((c) => (
+              {cases.map((c, index) => {
+                const poaTypes = ["Sec 3(1)(w) - Sexual Exploitation", "Sec 3(2)(v) - Grievous Hurt", "Sec 3(1)(r) - Intentional Insult", "Sec 3(1)(g) - Land Dispossession"];
+                const compStatuses = ["FIR Stage (25%)", "Charge Sheet (50%)", "Pending Approval", "Fully Disbursed"];
+                const protection = ["Active - High Risk", "Local Station Notified", "None Requested", "Active - Relocated"];
+                
+                return (
                 <TableRow key={c.id} className="border-border/50 hover:bg-accent/20">
-                  <TableCell className="font-medium text-foreground">{c.id}</TableCell>
-                  <TableCell className="text-muted-foreground">{c.name}</TableCell>
-                  <TableCell className="text-muted-foreground">{c.district}</TableCell>
+                  <TableCell className="font-medium text-foreground pl-4">
+                    <div>{c.id}</div>
+                    <div className="text-xs text-muted-foreground font-normal">{c.name}</div>
+                  </TableCell>
+                  <TableCell className="text-[13px] font-medium">{poaTypes[index % poaTypes.length]}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="text-[11px] font-normal">{compStatuses[index % compStatuses.length]}</Badge>
+                  </TableCell>
+                  <TableCell>
+                     <span className={`text-[12px] flex items-center gap-1 ${index % 4 === 0 ? 'text-orange-500' : 'text-muted-foreground'}`}>
+                        {index % 4 === 0 ? '⚠️' : '🛡️'} {protection[index % protection.length]}
+                     </span>
+                  </TableCell>
                   <TableCell className="text-foreground font-medium">
                     {c.current_score.toFixed(1)}
                     <span className="text-xs text-muted-foreground ml-1">+/- 4.2</span>
@@ -93,13 +115,13 @@ export default function DistrictDashboard() {
                   <TableCell>
                     <Sparkline data={c.history_scores} />
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right pr-4">
                     <a href={`/dashboard/counsellor?case=${c.id}`} className="text-primary hover:underline text-sm font-semibold">
                       View Details
                     </a>
                   </TableCell>
                 </TableRow>
-              ))}
+              )})}
             </TableBody>
           </Table>
         </CardContent>

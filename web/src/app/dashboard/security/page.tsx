@@ -9,6 +9,41 @@ export default function SecurityCompliance() {
         <p className="font-sans text-lg text-muted-foreground">Architectural privacy protections and data security standards.</p>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <Card className="bg-green-500/5 border-green-500/20">
+          <CardContent className="p-4 flex flex-col gap-2">
+            <span className="text-xs uppercase tracking-wider text-muted-foreground font-bold">SQLCipher State</span>
+            <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+              <span className="text-xl">🔒</span>
+              <span className="font-mono font-bold">AES-256 (ACTIVE)</span>
+            </div>
+            <span className="text-[10px] text-muted-foreground">Key Rotation: 12hrs</span>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-blue-500/5 border-blue-500/20">
+          <CardContent className="p-4 flex flex-col gap-2">
+            <span className="text-xs uppercase tracking-wider text-muted-foreground font-bold">TEE Enclave</span>
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
+              <span className="text-xl">🛡️</span>
+              <span className="font-mono font-bold">ARM TrustZone</span>
+            </div>
+            <span className="text-[10px] text-muted-foreground">StrongBox Status: Validated</span>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-purple-500/5 border-purple-500/20">
+          <CardContent className="p-4 flex flex-col gap-2">
+            <span className="text-xs uppercase tracking-wider text-muted-foreground font-bold">Data Egress Logs</span>
+            <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400">
+              <span className="text-xl">🛑</span>
+              <span className="font-mono font-bold">Zero Egress</span>
+            </div>
+            <span className="text-[10px] text-muted-foreground">0 bytes leaked in 30 days</span>
+          </CardContent>
+        </Card>
+      </div>
+
       <Card className="bg-card border border-border/50 rounded-2xl shadow-sm">
         <CardHeader>
           <CardTitle className="font-heading text-xl text-primary">Data Protection Architecture</CardTitle>

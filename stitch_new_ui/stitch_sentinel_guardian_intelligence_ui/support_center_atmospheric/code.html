@@ -1,0 +1,220 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Immediate Support</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f9f9f7",
+                        "surface-tint": "#426656",
+                        "on-tertiary-fixed-variant": "#6b218f",
+                        "surface-container-highest": "#e2e3e0",
+                        "surface-bright": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "on-tertiary-fixed": "#310048",
+                        "on-secondary-fixed-variant": "#3f4943",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e2e3e0",
+                        "tertiary-container": "#863eaa",
+                        "tertiary-fixed-dim": "#e9b3ff",
+                        "inverse-primary": "#a8cfbc",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#c4ecd7",
+                        "inverse-on-surface": "#f1f1ef",
+                        "on-primary-container": "#bae2ce",
+                        "on-secondary-fixed": "#141e18",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dadad8",
+                        "on-tertiary-container": "#f2cdff",
+                        "on-surface": "#1a1c1b",
+                        "primary": "#2a4e3f",
+                        "primary-container": "#426656",
+                        "secondary-container": "#d7e3da",
+                        "on-primary-fixed-variant": "#2a4e3f",
+                        "outline": "#717974",
+                        "outline-variant": "#c1c8c2",
+                        "surface-container-low": "#f4f4f1",
+                        "secondary-fixed": "#dae5dc",
+                        "background": "#f9f9f7",
+                        "secondary": "#56615a",
+                        "on-surface-variant": "#414844",
+                        "surface-container": "#eeeeec",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#5a655e",
+                        "inverse-surface": "#2f3130",
+                        "primary-fixed-dim": "#a8cfbc",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "secondary-fixed-dim": "#bec9c1",
+                        "tertiary": "#6c2290",
+                        "tertiary-fixed": "#f7d9ff",
+                        "on-primary-fixed": "#002115",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "base": "8px",
+                        "container-padding-mobile": "1.25rem",
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "container-padding-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "title-lg": ["Manrope"],
+                        "display-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "label-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-soft {
+            animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col items-center relative">
+<!-- Environmental Background Layer -->
+<div class="fixed inset-0 z-0 pointer-events-none flex items-center justify-center overflow-hidden">
+<img alt="" aria-hidden="true" class="min-w-[120vw] min-h-[120vh] object-cover opacity-10 translate-y-16 scale-110" src="https://lh3.googleusercontent.com/aida/AEtjO1XiCYoEezvi1vQeVwLJLMJh385gEORaqFKsIbP49hinIKA9gkD-iPOcnW36ZDF4oPANl7_pHKLr0EqYVyO2p0jDJe11lJmgldVnR-U4nZeIRXLBf41b39bIaHYY16NocivtwEX-0CEadApwAFgf6wU0arYDLwym8Gej-2iYUR37XqMFLUjbm0reK6pck2wTNp0KDMtbsA2wNPwAN7oHhjGfqsliNzX2RyLC9J8scsZIrAMdhmNVEhHlU7Q">
+</div>
+<!-- Top Navigation (Transactional/Task-focused, suppressed main shell, custom header) -->
+<header class="w-full max-w-screen-md mx-auto fixed top-0 bg-surface/90 backdrop-blur-md z-50 flex items-center justify-between px-container-padding-mobile h-20">
+<button aria-label="Back to Home" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors" onclick="window.history.back()">
+<span class="material-symbols-outlined text-primary text-[24px]">close</span>
+</button>
+<div class="font-title-lg text-title-lg text-primary opacity-0 transition-opacity duration-300" id="headerTitle">Support</div>
+<div class="w-12 h-12"></div> <!-- Placeholder for balance -->
+</header>
+<main class="w-full max-w-screen-md mx-auto px-container-padding-mobile pt-32 pb-32 flex-grow flex flex-col relative z-10">
+<!-- Hero / Emotional Anchor -->
+<section class="mb-[64px] flex flex-col items-center text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-tertiary mb-sm max-w-[300px]">
+                You don't have to handle this alone.
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-[90%] mb-xl">
+                We are here to help. Reach out to someone now.
+            </p>
+
+</section>
+<!-- Primary Actions (Tertiary Palette focus for support context) -->
+<section class="flex flex-col gap-lg w-full max-w-md mx-auto mb-[64px]">
+<!-- Tele-MANAS Call -->
+<button class="w-full h-20 bg-tertiary-container text-on-tertiary-container rounded-2xl flex items-center px-lg shadow-[0px_8px_24px_rgba(107,33,143,0.12)] active:scale-95 transition-all duration-200">
+<div class="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center mr-md">
+<span class="material-symbols-outlined text-on-tertiary">call</span>
+</div>
+<div class="flex flex-col items-start text-left">
+<span class="font-title-lg text-title-lg font-bold">Talk to Tele-MANAS</span>
+<span class="font-label-md text-label-md opacity-80">14416 - Free, 24/7 Confidential Help</span>
+</div>
+</button>
+<!-- Trusted Contact -->
+<button class="w-full h-20 bg-white/85 backdrop-blur-sm text-tertiary border border-surface-dim rounded-2xl flex items-center px-lg active:scale-95 transition-all duration-200 hover:bg-white/95 shadow-sm">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center mr-md">
+<span class="material-symbols-outlined text-tertiary">person</span>
+</div>
+<div class="flex flex-col items-start text-left">
+<span class="font-title-lg text-title-lg font-bold">Contact Trusted Person</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Mom (Primary Contact)</span>
+</div>
+</button>
+<!-- Emergency Services (Secondary Action) -->
+<button class="w-full h-16 bg-error-container/80 text-on-error-container rounded-2xl flex items-center justify-center px-lg active:scale-95 transition-all duration-200 mt-sm hover:bg-error-container">
+<span class="material-symbols-outlined mr-sm text-[20px]">emergency</span>
+<span class="font-label-md text-label-md font-bold">Call Emergency Services (112)</span>
+</button>
+</section>
+<!-- Immediate Grounding Module (Tactile & Calm) -->
+<section class="mt-auto pt-xl border-t border-surface-dim w-full max-w-md mx-auto">
+<h2 class="font-title-lg text-title-lg text-on-surface mb-lg px-xs text-center">Immediate Grounding</h2>
+<div class="bg-white/85 backdrop-blur-sm rounded-2xl p-lg border border-surface-dim relative overflow-hidden shadow-sm">
+<!-- Inner privacy inset feeling -->
+<div class="absolute inset-0 border border-white/50 rounded-2xl pointer-events-none"></div>
+<div class="flex flex-col items-center gap-md relative z-10 text-center">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex-shrink-0 flex items-center justify-center mb-xs">
+<span class="material-symbols-outlined text-on-secondary-container" data-weight="fill">air</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg font-bold text-on-surface mb-sm">Breathe With Me</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg max-w-[260px] mx-auto">Follow the expanding circle to slow your breathing and heart rate.</p>
+<!-- Mini Breathing Visualizer -->
+<div class="h-40 w-full bg-surface-container-low rounded-xl flex items-center justify-center relative overflow-hidden border border-[#dadad7]/50">
+<div class="absolute inset-0 opacity-10 bg-gradient-to-r from-transparent via-primary-container to-transparent"></div>
+<!-- Baseline -->
+<div class="absolute w-full h-[1px] border-b border-dashed border-[#dadad7] top-1/2 -translate-y-1/2"></div>
+<!-- Breathing Circle -->
+<div class="w-20 h-20 rounded-full bg-primary-container/10 border-2 border-primary-container/30 flex items-center justify-center pulse-soft" style="animation-duration: 6s;">
+<div class="w-10 h-10 rounded-full bg-primary-container opacity-40 pulse-soft" style="animation-duration: 6s; animation-delay: 0.2s;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>
+        // Simple header title appearance on scroll
+        const headerTitle = document.getElementById('headerTitle');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 80) {
+                headerTitle.classList.remove('opacity-0');
+            } else {
+                headerTitle.classList.add('opacity-0');
+            }
+        });
+    </script>
+
+
+</body></html>

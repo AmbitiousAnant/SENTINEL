@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel - Automatic Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f9f9f7",
+                        "surface-tint": "#426656",
+                        "on-tertiary-fixed-variant": "#6b218f",
+                        "surface-container-highest": "#e2e3e0",
+                        "surface-bright": "#f9f9f7",
+                        "surface-container-high": "#e8e8e6",
+                        "on-tertiary-fixed": "#310048",
+                        "on-secondary-fixed-variant": "#3f4943",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e2e3e0",
+                        "tertiary-container": "#863eaa",
+                        "tertiary-fixed-dim": "#e9b3ff",
+                        "inverse-primary": "#a8cfbc",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#c4ecd7",
+                        "inverse-on-surface": "#f1f1ef",
+                        "on-primary-container": "#bae2ce",
+                        "on-secondary-fixed": "#141e18",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#dadad8",
+                        "on-tertiary-container": "#f2cdff",
+                        "on-surface": "#1a1c1b",
+                        "primary": "#2a4e3f",
+                        "primary-container": "#426656",
+                        "secondary-container": "#d7e3da",
+                        "on-primary-fixed-variant": "#2a4e3f",
+                        "outline": "#717974",
+                        "outline-variant": "#c1c8c2",
+                        "surface-container-low": "#f4f4f1",
+                        "secondary-fixed": "#dae5dc",
+                        "background": "#f9f9f7",
+                        "secondary": "#56615a",
+                        "on-surface-variant": "#414844",
+                        "surface-container": "#eeeeec",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#5a655e",
+                        "inverse-surface": "#2f3130",
+                        "primary-fixed-dim": "#a8cfbc",
+                        "on-error": "#ffffff",
+                        "on-background": "#1a1c1b",
+                        "secondary-fixed-dim": "#bec9c1",
+                        "tertiary": "#6c2290",
+                        "tertiary-fixed": "#f7d9ff",
+                        "on-primary-fixed": "#002115",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "base": "8px",
+                        "container-padding-mobile": "1.25rem",
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "container-padding-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "title-lg": ["Manrope"],
+                        "display-lg": ["Manrope"],
+                        "headline-md": ["Manrope"],
+                        "label-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Manrope"],
+                        "headline-lg-mobile": ["Manrope"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.1px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f7; /* bg-surface */
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Subtle node pulsing for active pipeline step */
+        @keyframes subtlePulse {
+            0% { box-shadow: 0 0 0 0 rgba(42, 78, 63, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(42, 78, 63, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(42, 78, 63, 0); }
+        }
+        .node-active {
+            animation: subtlePulse 2.5s infinite;
+        }
+
+        /* Sentinel Signal SVG Path Animation (optional slight drift) */
+        @keyframes driftPath {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(1px); }
+            100% { transform: translateY(0); }
+        }
+        .signal-drift {
+            animation: driftPath 4s ease-in-out infinite;
+        }
+
+        /* Sequential Node Appear Animation */
+        @keyframes nodeAppear {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .node-animate {
+            opacity: 0;
+            animation: nodeAppear 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-on-surface flex flex-col min-h-screen">
+<!-- TopAppBar (From JSON, Exact Styles) -->
+<header class="fixed top-0 w-full z-50 bg-surface dark:bg-surface-dim flex items-center justify-between px-container-padding-mobile h-16 w-full">
+<button aria-label="Go back" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-150 group">
+<span class="material-symbols-outlined text-primary" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-title-lg text-title-lg font-bold text-primary tracking-tight">Sentinel</h1>
+<div class="w-10 h-10 rounded-full overflow-hidden ring-1 ring-surface-dim bg-surface-container-high flex-shrink-0">
+<!-- Generic Avatar Placeholder for Privacy/Minimalist vibe -->
+<img class="w-full h-full object-cover grayscale opacity-80" data-alt="A minimalist, highly stylized abstract geometric portrait in soft corporate light colors (muted greens, off-whites). High key lighting, perfectly smooth digital render, conveying professional anonymity and data privacy in a clean, modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCivt-n5ifIJIVC2sekIYkRXY2LCIQbAfSKE17d8LS8rEflo_bbSRoouffghteePxkDnxPAoI3K3wG_4OhqaRe5ePZsZ4KJNv-bsVYjYGp48fKGfYu9I1nA1Ob4SEOYP-7yZYL1DCbDnC4OLXGRlKcyEEWSdlo-EciEKXRaIVafkp_Md5-J3NinmmPU3_5EMWnkEbqLlfPYK7zxi5gjtDEssudmQAjHjMOQl4yRTnsh4jxuGx5sw4A9"/>
+</div>
+</header>
+<!-- Main Content Canvas (Suppressed BottomNav) -->
+<main class="flex-grow pt-24 pb-xl px-container-padding-mobile md:max-w-2xl md:mx-auto w-full">
+<!-- Header Section -->
+<section class="mb-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-xs">Analysis Pipeline</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">Transparent breakdown of continuous intelligence processing. No black boxes.</p>
+</section>
+<!-- Pipeline Stepper (The "Explainable AI" Journey) -->
+<section class="mb-xl relative">
+<!-- Organic Botanical Connecting Line -->
+<svg class="absolute left-[19px] top-6 w-[2px] h-[calc(100%-48px)] overflow-visible text-surface-container-highest" fill="none" preserveaspectratio="none" viewbox="0 0 2 400">
+<path d="M1,0 Q10,40 1,80 T1,160 T1,240 T1,320 T1,400" stroke="currentColor" stroke-linecap="round" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+</svg>
+<div class="flex flex-col gap-lg pb-8">
+<!-- Step 1: Completed -->
+<div class="flex items-start gap-md relative z-10 node-animate delay-1">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+<span class="material-symbols-outlined text-on-primary icon-fill text-[20px]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="pt-2">
+<h3 class="font-label-md text-label-md text-primary font-bold uppercase tracking-wider mb-1">Conversation</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Raw transcript ingested and encrypted in private vault.</p>
+</div>
+</div>
+<!-- Step 2: Completed -->
+<div class="flex items-start gap-md relative z-10 node-animate delay-2">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+<span class="material-symbols-outlined text-on-primary icon-fill text-[20px]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="pt-2">
+<h3 class="font-label-md text-label-md text-primary font-bold uppercase tracking-wider mb-1">Language</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Syntactic structures parsed without semantic bias.</p>
+</div>
+</div>
+<!-- Step 3: Active/Processing -->
+<div class="flex items-start gap-md relative z-10 node-animate delay-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center flex-shrink-0 mt-1 node-active">
+<span class="material-symbols-outlined text-on-primary-container text-[20px]" data-icon="psychology">psychology</span>
+</div>
+<div class="pt-2">
+<h3 class="font-label-md text-label-md text-on-surface font-bold uppercase tracking-wider mb-1">Emotion</h3>
+<p class="font-body-md text-body-md text-on-surface">Extracting emotional valence and tonal shifts.</p>
+</div>
+</div>
+<!-- Step 4: Pending -->
+<div class="flex items-start gap-md relative z-10 opacity-40 node-animate delay-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="history">history</span>
+</div>
+<div class="pt-2">
+<h3 class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider mb-1">Context</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Cross-referencing against 30-day historical baseline.</p>
+</div>
+</div>
+<!-- Step 5: Pending -->
+<div class="flex items-start gap-md relative z-10 opacity-40 node-animate delay-5">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="troubleshoot">troubleshoot</span>
+</div>
+<div class="pt-2">
+<h3 class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider mb-1">Pattern</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Identifying behavioral deviations.</p>
+</div>
+</div>
+<!-- Step 6: Pending -->
+<div class="flex items-start gap-md relative z-10 opacity-40 node-animate delay-6">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface flex items-center justify-center flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="shield">shield</span>
+</div>
+<div class="pt-2">
+<h3 class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider mb-1">Risk</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Assessing severity and generating intervention pathways.</p>
+</div>
+</div>
+<!-- Botanical Motif at End of Pipeline -->
+<div class="flex justify-start ml-2 mt-2 node-animate" style="animation-delay: 0.8s;">
+<img alt="Botanical Motif" class="w-14 h-14 object-contain mix-blend-multiply opacity-50 grayscale hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtT9kWzsoHHI_tR3YB8jZ9J5ENqkhLG0lejoznv2NbFvWov2WvZtNWbsqty_1h9NfoophW3CGoMvftbdWp9665UafcDdXDVrlSpycY_1PHSze3aDMpQwneydJqnrE1Gy1nDifpbKpOsKvOfXU5s6YUAPht7M75aCbHOmPJt0G25lOHq4tqPEk0AP1cyagiHaier_EBmThX_87nSYaoleuyT64ebfVNZvuQOeMo7jx5znWW9bhHOOsl"/>
+</div>
+</div>
+</section>
+<!-- Detected Signals (Bento Grid Style) -->
+<section>
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-title-lg text-title-lg text-on-surface">Detected Signals</h2>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-widest">Real-time</span>
+</div>
+<div class="grid grid-cols-1 gap-md">
+<!-- Signal Card 1 (Tertiary Deviation - Critical) -->
+<div class="bg-surface-container-lowest rounded-xl p-md ring-1 ring-inset ring-surface-dim relative overflow-hidden">
+<div class="flex justify-between items-start mb-sm relative z-10">
+<div>
+<div class="flex items-center gap-xs mb-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<h4 class="font-label-md text-label-md text-on-surface font-semibold">Negative Emotional Language</h4>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">87% Pattern Confidence</p>
+</div>
+<span class="material-symbols-outlined text-tertiary bg-tertiary-fixed-dim/30 p-1 rounded-full text-[18px]" data-icon="priority_high">priority_high</span>
+</div>
+<!-- The Sentinel Signal Graphic -->
+<div class="w-full h-16 mt-4 relative signal-drift">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 60">
+<!-- Fill Area -->
+<path d="M0,50 C50,50 80,45 120,30 C160,15 200,10 250,20 C280,26 300,35 300,35 L300,60 L0,60 Z" fill="#6c2290" opacity="0.05"></path>
+<!-- Baseline (Dashed, surface-dim) -->
+<path d="M0,45 L300,45" fill="none" stroke="#dadad8" stroke-dasharray="4 4" stroke-width="1"></path>
+<!-- Current Flow (Tertiary Solid) -->
+<path d="M0,50 C50,50 80,45 120,30 C160,15 200,10 250,20 C280,26 300,35 300,35" fill="none" stroke="#6c2290" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+</div>
+</div>
+<!-- Signal Card 2 (Primary - Stable/Monitoring) -->
+<div class="bg-surface-container-lowest rounded-xl p-md ring-1 ring-inset ring-surface-dim relative overflow-hidden">
+<div class="flex justify-between items-start mb-sm relative z-10">
+<div>
+<div class="flex items-center gap-xs mb-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<h4 class="font-label-md text-label-md text-on-surface font-semibold">Withdrawal Indicators</h4>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">42% Pattern Confidence (Monitoring)</p>
+</div>
+<span class="material-symbols-outlined text-primary bg-primary-fixed/50 p-1 rounded-full text-[18px]" data-icon="visibility">visibility</span>
+</div>
+<!-- The Sentinel Signal Graphic -->
+<div class="w-full h-16 mt-4 relative signal-drift">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 60">
+<!-- Fill Area -->
+<path d="M0,45 C60,40 100,42 150,45 C200,48 240,43 300,40 L300,60 L0,60 Z" fill="#2a4e3f" opacity="0.05"></path>
+<!-- Baseline (Dashed, surface-dim) -->
+<path d="M0,45 L300,45" fill="none" stroke="#dadad8" stroke-dasharray="4 4" stroke-width="1"></path>
+<!-- Current Flow (Primary Solid) -->
+<path d="M0,45 C60,40 100,42 150,45 C200,48 240,43 300,40" fill="none" stroke="#2a4e3f" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- Privacy Footer Anchor -->
+<div class="mt-12 text-center">
+<p class="font-label-sm text-label-sm text-outline flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span>
+                Analysis processed locally. Data remains encrypted.
+            </p>
+</div>
+</main>
+</body></html>

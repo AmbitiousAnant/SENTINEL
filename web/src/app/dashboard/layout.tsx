@@ -1,16 +1,24 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
   return (
     <div className="bg-background text-foreground font-sans antialiased min-h-screen flex flex-col md:flex-row">
       {/* TopAppBar (Mobile & Desktop Header Area) */}
-      <header className="fixed top-0 right-0 w-full md:w-[calc(100%-280px)] z-40 bg-background/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center h-16 px-5 md:px-10">
+      <header className="fixed top-0 left-0 right-0 md:left-[280px] z-40 bg-background/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center h-16 px-5 md:px-10 border-b border-border">
         <div className="flex items-center gap-4">
-          <span className="font-heading text-2xl font-bold text-primary md:hidden">Sentinel</span>
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-foreground md:hidden"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
+          <span className="font-heading text-xl font-bold text-primary md:hidden">Sentinel</span>
         </div>
         <div className="flex items-center gap-4">
-          <button className="p-2 text-muted-foreground hover:bg-accent/20 rounded-full transition-all">
+          <button className="p-2 text-muted-foreground hover:bg-accent/20 rounded-full transition-all hidden md:block">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
           </button>
           <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm">
@@ -19,9 +27,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </header>
       
-      {/* SideNavBar (Desktop) */}
-      <nav className="fixed left-0 top-0 h-full w-[280px] hidden md:flex flex-col border-r border-border bg-sidebar z-50">
-        <div className="flex flex-col h-full py-10">
+      {/* SideNavBar (Desktop & Mobile Drawer) */}
+      <nav className={`fixed left-0 top-0 h-full w-[280px] flex-col border-r border-border bg-sidebar z-50 transition-transform duration-300 ease-in-out md:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:flex`}>
+        <div className="flex flex-col h-full py-6 md:py-10 overflow-y-auto">
+          {/* Mobile Close Button */}
+          <div className="px-6 mb-4 flex justify-end md:hidden">
+            <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-muted-foreground">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+          
           {/* Brand */}
           <div className="px-6 mb-8 flex items-center gap-3">
             <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-primary-foreground font-heading font-bold text-lg">S</div>
@@ -72,8 +87,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
       </nav>
 
+      {/* Mobile Backdrop Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Main Content Canvas */}
-      <main className="flex-1 md:ml-[280px] pt-24 px-5 md:px-10 pb-24 md:pb-8 w-full max-w-[1440px] mx-auto">
+      <main className="flex-1 md:ml-[280px] pt-24 px-4 md:px-10 pb-24 md:pb-8 w-full max-w-[1440px] mx-auto overflow-x-hidden">
         {children}
       </main>
     </div>

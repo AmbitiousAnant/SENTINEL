@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-const API_BASE = "http://127.0.0.1:8000/api"
+const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent); const API_BASE = isAndroid ? "http://10.0.2.2:8000/api" : "http://127.0.0.1:8000/api"
 
 type Case = {
   id: string

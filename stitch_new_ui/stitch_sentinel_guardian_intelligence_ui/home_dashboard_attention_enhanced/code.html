@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sentinel - Home (Updated State)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-primary": "#ffffff",
+                "on-tertiary-fixed": "#310048",
+                "tertiary-fixed": "#f6d9ff",
+                "surface-container-highest": "#e2e3e0",
+                "tertiary-container": "#8f2bc0",
+                "primary": "#2a4e3f",
+                "surface": "#f9f9f7",
+                "inverse-primary": "#a8cfbc",
+                "secondary-container": "#d7e3da",
+                "on-tertiary-container": "#f2ccff",
+                "outline": "#717974",
+                "surface-container-low": "#f4f4f1",
+                "on-surface-variant": "#414844",
+                "inverse-surface": "#2f3130",
+                "outline-variant": "#c1c8c2",
+                "on-secondary": "#ffffff",
+                "on-primary-fixed": "#002115",
+                "primary-fixed": "#c4ecd7",
+                "on-primary-container": "#bae2ce",
+                "surface-variant": "#e2e3e0",
+                "tertiary": "#7300a4",
+                "surface-container": "#eeeeec",
+                "surface-dim": "#dadad8",
+                "surface-container-high": "#e8e8e6",
+                "background": "#f9f9f7",
+                "surface-bright": "#f9f9f7",
+                "error": "#ba1a1a",
+                "secondary": "#56615a",
+                "on-surface": "#1a1c1b",
+                "tertiary-fixed-dim": "#e9b3ff",
+                "on-error-container": "#93000a",
+                "on-error": "#ffffff",
+                "secondary-fixed": "#dae5dc",
+                "on-secondary-fixed-variant": "#3f4943",
+                "surface-tint": "#426656",
+                "secondary-fixed-dim": "#bec9c1",
+                "inverse-on-surface": "#f1f1ef",
+                "primary-fixed-dim": "#a8cfbc",
+                "on-tertiary": "#ffffff",
+                "on-secondary-container": "#5a655e",
+                "primary-container": "#426656",
+                "on-primary-fixed-variant": "#2a4e3f",
+                "on-tertiary-fixed-variant": "#7200a3",
+                "on-background": "#1a1c1b",
+                "surface-container-lowest": "#ffffff",
+                "error-container": "#ffdad6",
+                "on-secondary-fixed": "#141e18"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "xs": "4px",
+                "gutter": "16px",
+                "xl": "32px",
+                "lg": "24px",
+                "sm": "8px",
+                "container-padding-desktop": "48px",
+                "container-padding-mobile": "1.25rem",
+                "md": "16px",
+                "base": "8px"
+        },
+        "fontFamily": {
+                "headline-md": [
+                        "Manrope"
+                ],
+                "headline-lg": [
+                        "Manrope"
+                ],
+                "title-lg": [
+                        "Manrope"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "display-lg": [
+                        "Manrope"
+                ],
+                "label-md": [
+                        "Hanken Grotesk"
+                ],
+                "label-sm": [
+                        "Hanken Grotesk"
+                ],
+                "headline-lg-mobile": [
+                        "Manrope"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "title-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "26px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "57px",
+                        {
+                                "lineHeight": "64px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.1px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.5px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "28px",
+                        {
+                                "lineHeight": "36px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim fixed top-0 w-full z-50 flat no shadows flex items-center justify-between px-container-padding-mobile h-16 w-full md:hidden">
+<div class="flex items-center gap-4">
+<!-- No leading icon specified for this generic home state in prompt, using empty space for balance -->
+<span aria-hidden="true" class="material-symbols-outlined text-transparent select-none">arrow_back</span>
+</div>
+<h1 class="font-display-lg text-headline-md text-primary dark:text-primary-fixed-dim text-center flex-1 font-bold tracking-tight">Sentinel</h1>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A small, circular profile picture placeholder with a minimalist, corporate aesthetic. It features a simple geometric avatar icon in muted sage green and soft grey, set against a pristine white background. The image is brightly lit, evoking a clean, high-end digital platform feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3FzQ2H0-wno0BsrkCh-IB85-QLq3QeXP-HMSuN5bFDKbpp53I9afZvVlBLGJ9O6bdL9DNABrvk5uGoXP_Pa6NnPj1iQIX2DqKC7T2_LmWSDksxYs8QKQRXRtPG1t1LryoMdiojR3Gy22PT0tlbI0YdZY1uRFGLu7mhUPXquhGK5PVOaVpDLPH6pvU895ZD434Y0k3A6j5QX-l--k5SHJgujLhgfzKLvNMvBiK1SahqyGHjyH2S9bp"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 pt-20 pb-28 px-container-padding-mobile md:px-container-padding-desktop max-w-[1280px] mx-auto w-full md:pt-32">
+<div class="flex flex-col gap-lg md:gap-xl h-full justify-center">
+<!-- Header Section -->
+<section class="flex flex-col gap-xs text-center md:text-left mt-8 md:mt-0">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Something has changed.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Your recent pattern is different from your usual range.</p>
+</section>
+<!-- Sentinel Signal (Attention State) -->
+<section class="relative w-full h-64 md:h-96 rounded-xl overflow-hidden bg-surface-container-lowest border border-surface-dim shadow-[0px_4px_20px_rgba(26,28,27,0.04)] flex items-center justify-center p-md">
+<!-- Inner soft inset for 'recessed' feel -->
+<div class="absolute inset-0 border border-surface-dim opacity-50 rounded-xl pointer-events-none"></div>
+<!-- Botanical Motif Accent -->
+<img alt="Botanical motif accent" class="absolute bottom-0 left-4 h-32 w-auto opacity-30 mix-blend-multiply pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtT9kWzsoHHI_tR3YB8jZ9J5ENqkhLG0lejoznv2NbFvWov2WvZtNWbsqty_1h9NfoophW3CGoMvftbdWp9665UafcDdXDVrlSpycY_1PHSze3aDMpQwneydJqnrE1Gy1nDifpbKpOsKvOfXU5s6YUAPht7M75aCbHOmPJt0G25lOHq4tqPEk0AP1cyagiHaier_EBmThX_87nSYaoleuyT64ebfVNZvuQOeMo7jx5znWW9bhHOOsl"/>
+<!-- SVG Visualization representing the Sentinel Signal in Attention State -->
+<svg class="w-full h-full relative z-10" height="100%" preserveaspectratio="none" viewbox="0 0 1000 300" width="100%">
+<!-- Baseline - Thin dashed line #dadad7 (surface-dim) -->
+<path d="M 0 150 Q 250 150 500 150 T 1000 150" fill="none" stroke="#dadad8" stroke-dasharray="8 8" stroke-width="2"></path>
+<!-- Gradient Area under current flow -->
+<path d="M 0 150 C 200 140 300 100 400 60 C 500 20 600 280 700 240 C 800 200 900 160 1000 150 L 1000 300 L 0 300 Z" fill="url(#attentionGradient)"></path>
+<!-- Current Flow - Thick organic solid line #712895 (tertiary) for deviation -->
+<path class="animate-[dash_3s_ease-in-out_infinite]" d="M 0 150 C 200 140 300 100 400 60 C 500 20 600 280 700 240 C 800 200 900 160 1000 150" fill="none" stroke="#7300a4" stroke-linecap="round" stroke-width="4"></path>
+<defs>
+<!-- Gradient mapped to tertiary color for attention state (5% opacity) -->
+<lineargradient id="attentionGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#7300a4" stop-opacity="0.1"></stop>
+<stop offset="100%" stop-color="#7300a4" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- Indicator Chip -->
+<div class="absolute top-4 right-4 bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm px-3 py-1 rounded-full flex items-center gap-2 z-20">
+<span class="material-symbols-outlined text-[14px]">insights</span>
+                    Deviation Detected
+                </div>
+</section>
+<!-- Action Area -->
+<section class="flex flex-col md:flex-row gap-4 md:items-center mt-4">
+<button class="bg-primary-container text-surface-container-lowest font-label-md text-label-md px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-container/90 transition-colors w-full md:w-auto">
+<span>See what Sentinel noticed</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="text-on-surface-variant font-label-md text-label-md px-6 py-3 rounded-lg hover:underline transition-all w-full md:w-auto text-center">
+                    Dismiss
+                </button>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container-lowest dark:bg-surface-dim shadow-[0px_-4px_20px_rgba(26,28,27,0.04)] fixed bottom-0 w-full z-50 rounded-t-xl fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe md:hidden shadow-sm">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container dark:bg-primary-container text-on-secondary-container dark:text-on-primary-container rounded-full px-5 py-1 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</a>
+<!-- Pattern (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant py-1 hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 rounded-full px-5 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-sm text-label-sm mt-1">Pattern</span>
+</a>
+<!-- Insights (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant py-1 hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 rounded-full px-5 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-sm text-label-sm mt-1">Insights</span>
+</a>
+<!-- Settings (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant py-1 hover:bg-surface-variant/50 dark:hover:bg-surface-variant/20 rounded-full px-5 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

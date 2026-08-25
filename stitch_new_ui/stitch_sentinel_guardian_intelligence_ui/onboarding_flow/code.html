@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Sentinel Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&amp;family=Hanken+Grotesk:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"on-error": "#ffffff", "on-tertiary": "#ffffff", "on-tertiary-fixed-variant": "#7200a3", "surface-tint": "#426656", "on-background": "#1a1c1b", "inverse-primary": "#a8cfbc", "on-primary-fixed": "#002115", "on-primary-fixed-variant": "#2a4e3f", error: "#ba1a1a", "error-container": "#ffdad6", "inverse-surface": "#2f3130", "on-secondary-container": "#5a655e", "tertiary-fixed": "#f6d9ff", "on-secondary": "#ffffff", "tertiary-fixed-dim": "#e9b3ff", "surface-container-low": "#f4f4f1", "secondary-fixed": "#dae5dc", "surface-dim": "#dadad8", "surface-container": "#eeeeec", tertiary: "#7300a4", secondary: "#56615a", "outline-variant": "#c1c8c2", "on-secondary-fixed": "#141e18", "on-tertiary-fixed": "#310048", "surface-variant": "#e2e3e0", "on-surface-variant": "#414844", "on-primary-container": "#bae2ce", "tertiary-container": "#8f2bc0", background: "#f9f9f7", "primary-fixed": "#c4ecd7", "primary-fixed-dim": "#a8cfbc", "on-primary": "#ffffff", "on-surface": "#1a1c1b", "primary-container": "#426656", "on-error-container": "#93000a", "surface-container-high": "#e8e8e6", "surface-container-lowest": "#ffffff", outline: "#717974", "secondary-container": "#d7e3da", primary: "#2a4e3f", "on-secondary-fixed-variant": "#3f4943", "surface-container-highest": "#e2e3e0", "inverse-on-surface": "#f1f1ef", surface: "#f9f9f7", "on-tertiary-container": "#f2ccff", "surface-bright": "#f9f9f7", "secondary-fixed-dim": "#bec9c1"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {"container-padding-desktop": "48px", xs: "4px", lg: "24px", gutter: "16px", base: "8px", "container-padding-mobile": "1.25rem", xl: "32px", sm: "8px", md: "16px"}, fontFamily: {"title-lg": ["Manrope"], "body-lg": ["Hanken Grotesk"], "display-lg": ["Manrope"], "body-md": ["Hanken Grotesk"], "label-md": ["Hanken Grotesk"], "label-sm": ["Hanken Grotesk"], "headline-lg-mobile": ["Manrope"], "headline-md": ["Manrope"], "headline-lg": ["Manrope"], headline: ["Manrope"], display: ["Manrope"], body: ["Hanken Grotesk"], label: ["Hanken Grotesk"]}, fontSize: {"title-lg": ["20px", {lineHeight: "28px", fontWeight: "500"}], "body-lg": ["18px", {lineHeight: "26px", fontWeight: "400"}], "display-lg": ["57px", {lineHeight: "64px", letterSpacing: "-0.02em", fontWeight: "700"}], "body-md": ["16px", {lineHeight: "24px", fontWeight: "400"}], "label-md": ["14px", {lineHeight: "20px", letterSpacing: "0.1px", fontWeight: "500"}], "label-sm": ["12px", {lineHeight: "16px", letterSpacing: "0.5px", fontWeight: "500"}], "headline-lg-mobile": ["28px", {lineHeight: "36px", fontWeight: "600"}], "headline-md": ["24px", {lineHeight: "32px", fontWeight: "600"}], "headline-lg": ["32px", {lineHeight: "40px", fontWeight: "600"}]}}}};</script>
+<style>
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        }
+        .carousel-container::-webkit-scrollbar { 
+            display: none;  /* Safari and Chrome */
+        }
+        .carousel-item {
+            scroll-snap-align: center;
+            min-width: 100%;
+        }
+        .indicator-dot {
+            transition: all 0.3s ease;
+        }
+        .indicator-dot.active {
+            width: 24px;
+            background-color: #426656;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="h-full bg-background text-on-background flex flex-col font-body-md selection:bg-primary selection:text-on-primary overflow-hidden">
+<!-- Content Area -->
+<main class="flex-grow flex flex-col relative z-0">
+<!-- Carousel -->
+<div class="carousel-container flex-grow h-full w-full" id="onboarding-carousel">
+<!-- Page 1 -->
+<div class="carousel-item flex flex-col h-full w-full px-container-padding-mobile pt-lg pb-[120px] justify-center items-center">
+<div class="w-full max-w-md mx-auto flex flex-col h-full justify-around">
+<div class="w-full flex-grow flex items-center justify-center relative mb-lg">
+<!-- Sentinel Signal Visualization Placeholder -->
+<div class="w-full aspect-square rounded-full border border-surface-dim bg-surface-container-low flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface to-surface-container-lowest opacity-50"></div>
+<!-- Abstract SVG for Signal -->
+<svg class="w-full h-full text-primary opacity-20" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0,50 Q25,20 50,50 T100,50 L100,100 L0,100 Z" fill="currentColor"></path>
+</svg>
+<svg class="w-full h-full text-primary absolute inset-0 opacity-40" preserveaspectratio="none" style="animation: pulse 4s infinite alternate;" viewbox="0 0 100 100">
+<path d="M0,50 Q25,70 50,50 T100,50" fill="none" stroke="currentColor" stroke-width="2"></path>
+<path d="M0,50 Q25,40 50,50 T100,50" fill="none" stroke="currentColor" stroke-dasharray="2,2" stroke-width="0.5"></path>
+</svg>
+<img class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30 pointer-events-none" data-alt="Abstract rendering of a soft, flowing digital wave. The aesthetic is corporate minimalist, using muted greens (#426656) on a pristine light background (#faf9f7). The lighting is bright and soft, creating a sense of quiet intelligence and data security without feeling overly technical. The mood is calm and reassuring." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNdSghTC1sjnrrrqIj0ne48S8EAvshbKy9TbERhO-qC7Fvbkk0Y_YVUMXCe14wX12tJnsMBbhp68NjBhW16uIKC_muZ7anMXcy-XKaBs5u6gDa4Y1FQ-p2XNRh9xLa-fcNXzMejhrxjev6G5-81HVzPSjA6cJvMXRchqlFPiBK_nIryd75uW2ftkI2jWznOfZ5wDCXFGwo5o3AyWxl96tWVobi7E9cEdrHHN0Z1jK86tKoUuaxpUCR"/>
+</div>
+</div>
+<div class="text-center space-y-md">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
+                            Sentinel watches for change.
+                        </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm mx-auto">
+                            Sentinel quietly analyzes patterns over time to identify meaningful changes.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Page 2 -->
+<div class="carousel-item flex flex-col h-full w-full px-container-padding-mobile pt-lg pb-[120px] justify-center items-center">
+<div class="w-full max-w-md mx-auto flex flex-col h-full justify-around">
+<div class="w-full flex-grow flex items-center justify-center relative mb-lg">
+<div class="w-full h-64 rounded-2xl border border-surface-dim bg-surface-container-lowest p-md relative overflow-hidden flex flex-col justify-end">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent to-surface-container-low opacity-50"></div>
+<!-- Baseline Visualization -->
+<div class="w-full h-full relative">
+<div class="absolute bottom-10 left-0 w-full h-px border-t border-dashed border-outline-variant"></div>
+<div class="flex items-end justify-between h-full w-full pb-4 px-2 space-x-2">
+<div class="w-1/6 bg-secondary-container h-1/3 rounded-t-sm opacity-50"></div>
+<div class="w-1/6 bg-secondary-container h-1/2 rounded-t-sm opacity-70"></div>
+<div class="w-1/6 bg-primary h-3/4 rounded-t-sm"></div>
+<div class="w-1/6 bg-secondary-container h-2/5 rounded-t-sm opacity-60"></div>
+<div class="w-1/6 bg-secondary-container h-1/3 rounded-t-sm opacity-50"></div>
+</div>
+</div>
+<img class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-20 pointer-events-none" data-alt="A minimalist data visualization showing a personal baseline graph. The style is clean, editorial, and tactile, resembling high-end stationery. Soft greens (#426656) contrast with a warm white background (#faf9f7). The lighting implies a physical object rather than a screen, evoking safety and personal privacy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAjWuMIWIvbzNL9Tu6YBK1Dp1lXjU780LVM_DBDH-MdF0aDinoLd2AaR6eeAkMAaRRouAXLLxsFLOrrCGZKPnQIt2hoH-wI5mTIEOP-Vt7Z55Ss5whkfsd7OCpoat0eGPqrG4t5YRXcAcu83pQsInf-M-66B8sLAlabryLvSQxKJbzkEktLVBBdxBpI8aQdnhxxgJe_sxIv1ZdIlkhqn9eGmjEH8oSsdo-8ySeMOGWy0XeodQpJZ7S"/>
+</div>
+</div>
+<div class="text-center space-y-md">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
+                            Your pattern is unique.
+                        </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm mx-auto">
+                            Sentinel learns what is normal for you instead of comparing you to everyone else.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Page 3 -->
+<div class="carousel-item flex flex-col h-full w-full px-container-padding-mobile pt-lg pb-[120px] justify-center items-center">
+<div class="w-full max-w-md mx-auto flex flex-col h-full justify-around">
+<div class="w-full flex-grow flex items-center justify-center relative mb-lg">
+<div class="w-full space-y-md">
+<div class="flex items-center space-x-md p-md bg-surface-container-lowest rounded-xl border border-surface-dim shadow-[0px_4px_20px_rgba(26,28,27,0.02)]">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Local analysis</h3>
+</div>
+</div>
+<div class="flex items-center space-x-md p-md bg-surface-container-lowest rounded-xl border border-surface-dim shadow-[0px_4px_20px_rgba(26,28,27,0.02)]">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Encrypted storage</h3>
+</div>
+</div>
+<div class="flex items-center space-x-md p-md bg-surface-container-lowest rounded-xl border border-surface-dim shadow-[0px_4px_20px_rgba(26,28,27,0.02)]">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">manage_accounts</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">User-controlled</h3>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center space-y-md">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
+                            Your data stays yours.
+                        </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm mx-auto">
+                            Privacy is built into how Sentinel works.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Fixed Bottom Controls -->
+<div class="fixed bottom-0 left-0 w-full px-container-padding-mobile pb-8 pt-4 bg-gradient-to-t from-background via-background to-transparent z-10">
+<div class="max-w-md mx-auto w-full flex flex-col space-y-md">
+<!-- Stepper Indicators -->
+<div class="flex justify-center space-x-2 mb-2">
+<div class="indicator-dot h-2 w-2 rounded-full bg-surface-dim active"></div>
+<div class="indicator-dot h-2 w-2 rounded-full bg-surface-dim"></div>
+<div class="indicator-dot h-2 w-2 rounded-full bg-surface-dim"></div>
+</div>
+<div class="flex flex-col space-y-xs w-full">
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-on-primary-fixed-variant transition-colors">
+                        Get started
+                    </button>
+<button class="w-full py-4 bg-transparent text-on-surface-variant rounded-lg font-label-md text-label-md hover:underline transition-all">
+                        Learn more
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('onboarding-carousel');
+            const indicators = document.querySelectorAll('.indicator-dot');
+            
+            // Simple scroll spy to update indicators
+            carousel.addEventListener('scroll', () => {
+                const scrollLeft = carousel.scrollLeft;
+                const width = carousel.offsetWidth;
+                
+                // Calculate which page we are mostly on
+                const activeIndex = Math.round(scrollLeft / width);
+                
+                indicators.forEach((indicator, index) => {
+                    if (index === activeIndex) {
+                        indicator.classList.add('active');
+                        indicator.classList.remove('bg-surface-dim');
+                        indicator.classList.add('bg-primary');
+                    } else {
+                        indicator.classList.remove('active');
+                        indicator.classList.remove('bg-primary');
+                        indicator.classList.add('bg-surface-dim');
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>

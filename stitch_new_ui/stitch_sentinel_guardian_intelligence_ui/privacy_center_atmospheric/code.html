@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Privacy Center - Sentinel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface": "#f9f9f7",
+                      "surface-tint": "#426656",
+                      "on-tertiary-fixed-variant": "#6b218f",
+                      "surface-container-highest": "#e2e3e0",
+                      "surface-bright": "#f9f9f7",
+                      "surface-container-high": "#e8e8e6",
+                      "on-tertiary-fixed": "#310048",
+                      "on-secondary-fixed-variant": "#3f4943",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-variant": "#e2e3e0",
+                      "tertiary-container": "#863eaa",
+                      "tertiary-fixed-dim": "#e9b3ff",
+                      "inverse-primary": "#a8cfbc",
+                      "on-secondary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#c4ecd7",
+                      "inverse-on-surface": "#f1f1ef",
+                      "on-primary-container": "#bae2ce",
+                      "on-secondary-fixed": "#141e18",
+                      "error": "#ba1a1a",
+                      "surface-dim": "#dadad8",
+                      "on-tertiary-container": "#f2cdff",
+                      "on-surface": "#1a1c1b",
+                      "primary": "#2a4e3f",
+                      "primary-container": "#426656",
+                      "secondary-container": "#d7e3da",
+                      "on-primary-fixed-variant": "#2a4e3f",
+                      "outline": "#717974",
+                      "outline-variant": "#c1c8c2",
+                      "surface-container-low": "#f4f4f1",
+                      "secondary-fixed": "#dae5dc",
+                      "background": "#f9f9f7",
+                      "secondary": "#56615a",
+                      "on-surface-variant": "#414844",
+                      "surface-container": "#eeeeec",
+                      "on-error-container": "#93000a",
+                      "on-secondary-container": "#5a655e",
+                      "inverse-surface": "#2f3130",
+                      "primary-fixed-dim": "#a8cfbc",
+                      "on-error": "#ffffff",
+                      "on-background": "#1a1c1b",
+                      "secondary-fixed-dim": "#bec9c1",
+                      "tertiary": "#6c2290",
+                      "tertiary-fixed": "#f7d9ff",
+                      "on-primary-fixed": "#002115",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "32px",
+                      "lg": "24px",
+                      "md": "16px",
+                      "base": "8px",
+                      "container-padding-mobile": "1.25rem",
+                      "sm": "8px",
+                      "gutter": "16px",
+                      "xs": "4px",
+                      "container-padding-desktop": "48px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-lg": [
+                              "Manrope"
+                      ],
+                      "display-lg": [
+                              "Manrope"
+                      ],
+                      "headline-md": [
+                              "Manrope"
+                      ],
+                      "label-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Manrope"
+                      ],
+                      "headline-lg-mobile": [
+                              "Manrope"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "26px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "57px",
+                              {
+                                      "lineHeight": "64px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.1px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.5px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.surface');
+            color: theme('colors.on-surface');
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Subdued Sentinel Signal Background */
+        .sentinel-bg {
+            background-image: 
+                linear-gradient(to right, theme('colors.surface-dim') 1px, transparent 1px),
+                linear-gradient(to bottom, theme('colors.surface-dim') 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        .privacy-inset {
+            box-shadow: inset 0 0 0 1px theme('colors.surface-dim');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen relative font-body-lg">
+<img alt="" class="fixed inset-0 w-full h-full object-cover opacity-5 z-0 pointer-events-none" src="https://lh3.googleusercontent.com/aida/AEtjO1XiCYoEezvi1vQeVwLJLMJh385gEORaqFKsIbP49hinIKA9gkD-iPOcnW36ZDF4oPANl7_pHKLr0EqYVyO2p0jDJe11lJmgldVnR-U4nZeIRXLBf41b39bIaHYY16NocivtwEX-0CEadApwAFgf6wU0arYDLwym8Gej-2iYUR37XqMFLUjbm0reK6pck2wTNp0KDMtbsA2wNPwAN7oHhjGfqsliNzX2RyLC9J8scsZIrAMdhmNVEhHlU7Q"/>
+<div class="fixed inset-0 sentinel-bg z-0"></div>
+<!-- TopAppBar (JSON Sourced) -->
+<nav class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md dark:bg-surface-dim/90 flex items-center justify-between px-container-padding-mobile h-16 w-full">
+<button class="active:scale-95 duration-150 text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<span class="font-title-lg text-title-lg text-primary dark:text-primary-fixed-dim font-bold">Sentinel</span>
+<div class="active:scale-95 duration-150 hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors rounded-full w-8 h-8 flex items-center justify-center overflow-hidden bg-surface-container-high">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">person</span>
+</div>
+</nav>
+<!-- Note: BottomNavBar suppressed per navigation shell rules (Task-Focused/Privacy Page). -->
+<main class="relative z-10 pt-24 pb-32 px-container-padding-mobile md:px-container-padding-desktop max-w-7xl mx-auto flex flex-col gap-lg md:gap-xl">
+<!-- Header Section -->
+<header class="text-center md:text-left py-lg">
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface tracking-tight mb-xs">
+                Your data stays yours.
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                We believe privacy is a fundamental right. Sentinel is designed from the ground up to process insights directly on your device, ensuring a secure, closed-loop system.
+            </p>
+</header>
+<!-- Visual Flow Diagram -->
+<section class="w-full bg-surface-container-lowest/90 backdrop-blur-sm privacy-inset rounded-xl p-md md:p-lg relative z-10">
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-lg text-center md:text-left">Architecture of Trust</h2>
+<div class="flex flex-col md:flex-row items-center justify-between gap-md md:gap-lg relative">
+<!-- Connector Line (Desktop) -->
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-[1px] bg-surface-dim -z-10 transform -translate-y-1/2"></div>
+<!-- Connector Line (Mobile) -->
+<div class="block md:hidden absolute left-1/2 top-0 w-[1px] h-full bg-surface-dim -z-10 transform -translate-x-1/2"></div>
+<!-- Step 1: Device -->
+<div class="flex flex-col items-center gap-base w-full md:w-1/3 bg-surface/90 backdrop-blur-sm p-md rounded-lg privacy-inset">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">smartphone</span>
+</div>
+<span class="font-title-lg text-title-lg text-on-surface">YOUR DEVICE</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center">Data generation point</span>
+</div>
+<!-- Arrow Mobile -->
+<span class="material-symbols-outlined text-outline md:hidden">arrow_downward</span>
+<!-- Step 2: Local Analysis -->
+<div class="flex flex-col items-center gap-base w-full md:w-1/3 bg-surface/90 backdrop-blur-sm p-md rounded-lg privacy-inset">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined">memory</span>
+</div>
+<span class="font-title-lg text-title-lg text-on-surface text-center">LOCAL ANALYSIS</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-center">Processed via Neural Engine</span>
+</div>
+<!-- Arrow Mobile -->
+<span class="material-symbols-outlined text-outline md:hidden">arrow_downward</span>
+<!-- Step 3: Private Insight (Confirmation State) -->
+<div class="flex flex-col items-center gap-base w-full md:w-1/3 bg-primary-container/90 backdrop-blur-sm p-md rounded-lg shadow-sm">
+<div class="w-12 h-12 rounded-full bg-surface flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-title-lg text-title-lg text-on-primary-container text-center">PRIVATE INSIGHT</span>
+<span class="font-label-sm text-label-sm text-on-primary-container opacity-80 text-center">Secured &amp; Actionable</span>
+</div>
+</div>
+</section>
+<!-- Guarantees Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-md md:gap-lg relative z-10">
+<!-- Guarantee 1 -->
+<div class="bg-surface-container-low/90 backdrop-blur-sm p-lg rounded-xl flex items-start gap-md border-l-4 border-surface-dim hover:border-primary transition-colors duration-300 group">
+<div class="p-sm bg-surface-container-highest rounded-lg text-on-surface group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">cloud_off</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">No raw conversations uploaded</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Your audio environment and raw transcripts never leave your device. We extract patterns, not personal dialogue.</p>
+</div>
+</div>
+<!-- Guarantee 2 -->
+<div class="bg-surface-container-low/90 backdrop-blur-sm p-lg rounded-xl flex items-start gap-md border-l-4 border-surface-dim hover:border-primary transition-colors duration-300 group">
+<div class="p-sm bg-surface-container-highest rounded-lg text-on-surface group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">network_node</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Analysis is 100% Local</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">By leveraging on-device machine learning, all contextual analysis happens exactly where you are, instantly.</p>
+</div>
+</div>
+<!-- Guarantee 3 -->
+<div class="bg-surface-container-low/90 backdrop-blur-sm p-lg rounded-xl flex items-start gap-md border-l-4 border-surface-dim hover:border-primary transition-colors duration-300 group">
+<div class="p-sm bg-surface-container-highest rounded-lg text-on-surface group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Encrypted Storage</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Any derived insights stored on-device are protected using OS-level biometric encryption standards.</p>
+</div>
+</div>
+<!-- Guarantee 4 -->
+<div class="bg-surface-container-low/90 backdrop-blur-sm p-lg rounded-xl flex items-start gap-md border-l-4 border-surface-dim hover:border-primary transition-colors duration-300 group">
+<div class="p-sm bg-surface-container-highest rounded-lg text-on-surface group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">User-Controlled Sharing</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">You have absolute authority over what data, if any, is anonymized and shared to improve the model.</p>
+</div>
+</div>
+</section>
+</main>
+</body></html>
