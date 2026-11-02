@@ -67,6 +67,8 @@ function CounsellorViewContent() {
     }
   }
 
+  const [waStatus, setWaStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null)
+
   const handleTeleManas = () => {
     alert("Tele MANAS Handover Initiated.\n\nDialing 14416 for anonymous crisis support. No ID will be recorded per national guidelines.")
     window.location.href = "tel:14416"
@@ -74,6 +76,7 @@ function CounsellorViewContent() {
 
   const handleWhatsApp = async () => {
     setWaSending(true)
+    setWaStatus(null)
     try {
       const res = await fetch(`${API_BASE}/alerts/whatsapp`, {
         method: "POST",
@@ -82,12 +85,12 @@ function CounsellorViewContent() {
       })
       const data = await res.json()
       if (data.status === "success") {
-        alert("WhatsApp Alert Sent Successfully! (Twilio Sandbox)")
+        setWaStatus({ type: 'success', message: `WhatsApp Alert Sent Successfully! (Message SID: ${data.message_sid})` })
       } else {
-        alert("Failed to send WhatsApp alert: " + data.message)
+        setWaStatus({ type: 'error', message: "Failed to send WhatsApp alert: " + (data.message || "Unknown error") })
       }
-    } catch (e) {
-      alert("Error sending WhatsApp alert.")
+    } catch (e: any) {
+      setWaStatus({ type: 'error', message: "Could not contact backend API. Please make sure the Python server is running." })
     } finally {
       setWaSending(false)
     }
@@ -213,6 +216,17 @@ function CounsellorViewContent() {
                   </CardContent>
                 </Card>
               </div>
+
+              {waStatus && (
+                <div className={`p-3 rounded-lg text-sm font-medium flex items-center gap-2 transition-all ${
+                  waStatus.type === 'success' 
+                    ? 'bg-green-500/10 text-green-700 dark:text-green-400 border border-green-500/30' 
+                    : 'bg-destructive/10 text-destructive border border-destructive/30'
+                }`}>
+                  <span className="text-base">{waStatus.type === 'success' ? '✅' : '⚠️'}</span>
+                  <span>{waStatus.message}</span>
+                </div>
+              )}
             </div>
           </CardContent>
           <CardFooter className="bg-sidebar flex justify-end gap-3 p-4 border-t border-border">
