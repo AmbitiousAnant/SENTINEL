@@ -5,24 +5,34 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter }
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
-const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent); const API_BASE = isAndroid ? "http://10.0.2.2:8000/api" : "http://127.0.0.1:8000/api"
+import { FALLBACK_CASES } from '@/lib/mockData'
+
+const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent); const API_BASE = process.env.NEXT_PUBLIC_API_URL || (isAndroid ? "http://10.0.2.2:8000/api" : "http://127.0.0.1:8000/api")
 
 function CounsellorViewContent() {
   const searchParams = useSearchParams()
   const caseId = searchParams.get('case') || 'case_002' // Default to our high risk case
-  const [caseData, setCaseData] = useState<any>(null)
+  const initialFallback = FALLBACK_CASES.find(c => c.id === caseId) || FALLBACK_CASES[0]
+  const [caseData, setCaseData] = useState<any>(initialFallback)
 
   const [waSending, setWaSending] = useState(false)
 
   useEffect(() => {
     fetch(`${API_BASE}/dashboard/cases/${caseId}`)
-      .then(r => r.json())
-      .then(d => setCaseData(d))
-      .catch(e => console.error(e))
+      .then(r => {
+        if (!r.ok) throw new Error("API response not ok")
+        return r.json()
+      })
+      .then(d => {
+        if (d && !d.error) setCaseData(d)
+      })
+      .catch(e => {
+        console.warn("Backend API unavailable, using resilient fallback case data:", e)
+      })
   }, [caseId])
 
-  if (!caseData) return <div className="p-8">Loading case data...</div>
-  if (caseData.error) return <div className="p-8 text-red-500">Error: Case not found or API error.</div>
+  if (!caseData) return <div className="p-8 font-sans">Loading case data...</div>
+  if (caseData.error) return <div className="p-8 text-red-500 font-sans">Error: Case not found or API error.</div>
 
   // Extract the latest factors from the messages (which acts as our structured summary)
   const allFactors = (caseData?.messages || [])

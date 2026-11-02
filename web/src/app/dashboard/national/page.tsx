@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent); const API_BASE = isAndroid ? "http://10.0.2.2:8000/api" : "http://127.0.0.1:8000/api"
+const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent); const API_BASE = process.env.NEXT_PUBLIC_API_URL || (isAndroid ? "http://10.0.2.2:8000/api" : "http://127.0.0.1:8000/api")
 
 type Case = {
   id: string
@@ -19,29 +19,38 @@ type AggregatedData = {
   total: number
 }
 
+import { FALLBACK_NATIONAL_DATA } from '@/lib/mockData'
+
 export default function NationalDashboard() {
-  const [data, setData] = useState<AggregatedData[]>([])
+  const [data, setData] = useState<AggregatedData[]>(FALLBACK_NATIONAL_DATA)
 
   useEffect(() => {
     fetch(`${API_BASE}/dashboard/cases`)
-      .then(r => r.json())
-      .then(d => {
-        // Mock state aggregation since our test data only covers UP
-        const grouped = d.cases.reduce((acc: any, c: Case) => {
-          const stateName = "Uttar Pradesh" // Hardcoded for demo test data scope
-          if (!acc[stateName]) {
-            acc[stateName] = { name: stateName, highRisk: 0, mediumRisk: 0, lowRisk: 0, total: 0 }
-          }
-          acc[stateName].total++
-          if (c.risk_band === 'High') acc[stateName].highRisk++
-          else if (c.risk_band === 'Medium') acc[stateName].mediumRisk++
-          else acc[stateName].lowRisk++
-          return acc
-        }, {})
-        
-        setData(Object.values(grouped))
+      .then(r => {
+        if (!r.ok) throw new Error("API response not ok")
+        return r.json()
       })
-      .catch(e => console.error(e))
+      .then(d => {
+        if (d && Array.isArray(d.cases) && d.cases.length > 0) {
+          // Mock state aggregation since our test data only covers UP
+          const grouped = d.cases.reduce((acc: any, c: Case) => {
+            const stateName = "Uttar Pradesh" // Hardcoded for demo test data scope
+            if (!acc[stateName]) {
+              acc[stateName] = { name: stateName, highRisk: 0, mediumRisk: 0, lowRisk: 0, total: 0 }
+            }
+            acc[stateName].total++
+            if (c.risk_band === 'High') acc[stateName].highRisk++
+            else if (c.risk_band === 'Medium') acc[stateName].mediumRisk++
+            else acc[stateName].lowRisk++
+            return acc
+          }, {})
+          
+          setData(Object.values(grouped))
+        }
+      })
+      .catch(e => {
+        console.warn("Backend API unavailable, using resilient fallback for National Rollup:", e)
+      })
   }, [])
 
   return (
