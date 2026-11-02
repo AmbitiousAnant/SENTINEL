@@ -359,6 +359,24 @@ export default function CheckInPage() {
 
       <div className="max-w-7xl w-full mx-auto flex flex-col gap-5 relative z-10 flex-1">
         
+        {/* Quick Nav Bar */}
+        <div className="flex items-center justify-between pb-1">
+          <a href="/" className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors bg-card/80 backdrop-blur px-3 py-1.5 rounded-lg border border-border/60">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <span>SENTINEL Hub</span>
+          </a>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono text-muted-foreground hidden sm:inline">Offline Edge Node</span>
+            <a href="/dashboard/counsellor?case=case_002" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20">
+              <span>Counsellor View</span>
+            </a>
+            <a href="/dashboard/national" className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground hover:bg-accent/40 transition-colors bg-card/80 backdrop-blur px-3 py-1.5 rounded-lg border border-border/60">
+              <span>National Dashboard</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </div>
+        </div>
+
         {/* UPGRADE 7: Mandatory 5-Step AI Value Chain Banner */}
         <div className="w-full bg-zinc-950 text-white rounded-2xl p-3 sm:p-4 border border-zinc-800 shadow-xl">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">

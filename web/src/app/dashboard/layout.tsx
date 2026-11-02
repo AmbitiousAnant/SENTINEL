@@ -46,7 +46,21 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
           </div>
           {/* Tabs */}
-          <ul className="flex-1 space-y-1 mt-4">
+          <ul className="flex-1 space-y-1 mt-4 px-2">
+            <li className="mb-3">
+              <a className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-teal-500/10 text-teal-300 border border-teal-500/30 hover:bg-teal-500/20 transition-all font-semibold text-xs tracking-wide" href="/check-in">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <span>Citizen Check-in (Edge)</span>
+                <span className="ml-auto text-[9px] bg-teal-500/30 px-1.5 py-0.5 rounded text-teal-200 font-mono font-bold animate-pulse">ON-DEVICE</span>
+              </a>
+            </li>
+            <li className="mb-2">
+              <a className="flex items-center gap-3 px-3.5 py-2 text-muted-foreground hover:bg-accent/30 rounded-lg transition-colors text-xs" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span>Portal Hub</span>
+              </a>
+            </li>
+            <div className="pt-2 pb-1 px-3 text-[10px] font-mono uppercase tracking-wider text-muted-foreground/70">Command Center</div>
             <li>
               <a className="flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-accent/30 transition-colors border-l-4 border-transparent" href="/dashboard/national">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
