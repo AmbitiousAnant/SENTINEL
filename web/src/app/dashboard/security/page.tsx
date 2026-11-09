@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter }
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { ShieldCheck, Flame, RotateCcw, Lock, HardDrive, Terminal, CheckCircle2, AlertOctagon, TrendingUp, Cpu } from 'lucide-react'
+import DataProvenanceInspector from '@/components/DataProvenanceInspector'
 
 export default function SecurityCompliance() {
   const [shreddingActive, setShreddingActive] = useState(false)
@@ -228,6 +229,9 @@ export default function SecurityCompliance() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Interactive Academic Data Provenance & OS Telemetry Inspector */}
+      <DataProvenanceInspector />
     </div>
   )
 }
