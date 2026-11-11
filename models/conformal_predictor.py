@@ -23,11 +23,16 @@ class ConformalResult:
     false_alarm_budget_remaining: float
     is_snoozed: bool
 
+    @property
+    def q_quantile(self) -> float:
+        return self.quantile_q
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "predicted_score": round(self.predicted_score, 2),
             "confidence_level": self.confidence_level,
             "quantile_q": round(self.quantile_q, 2),
+            "q_quantile": round(self.quantile_q, 2),
             "interval": [round(self.lower_bound, 1), round(self.upper_bound, 1)],
             "interval_width": round(self.interval_width, 1),
             "empirical_coverage_guarantee": self.empirical_coverage_guarantee,
