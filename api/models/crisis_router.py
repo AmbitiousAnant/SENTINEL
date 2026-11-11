@@ -22,9 +22,14 @@ class RouterResult:
     recommended_score: float
     dialect_detected: str
 
+    @property
+    def is_acute_crisis(self) -> bool:
+        return self.is_acute
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "is_acute": self.is_acute,
+            "is_acute_crisis": self.is_acute,
             "matched_phrase": self.matched_phrase,
             "negation_detected": self.negation_detected,
             "negation_context": self.negation_context,
