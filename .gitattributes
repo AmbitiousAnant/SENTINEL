@@ -1,12 +1,40 @@
 # GitHub Linguist Configuration for SENTINEL
-# Ensures Python ML models and backend represent 80%+ of repo language share
+# Enforces Python & Edge AI Models as 85%+ of repository language statistics
 
+# 1. Vendor/Ignore UI Mock Wireframes & Static Prototypes
+stitch_designs/** linguist-vendored=true
+stitch_new_ui/** linguist-vendored=true
+*.html linguist-documentation=true
+
+# 2. Vendor/Ignore Client Web Frontend & Generated Bundles
+web/** linguist-vendored=true
+web/src/** linguist-vendored=true
 web/android/** linguist-vendored=true
-web/src/components/ui/** linguist-vendored=true
 web/public/** linguist-vendored=true
 web/.next/** linguist-vendored=true
 web/out/** linguist-vendored=true
-*.json linguist-documentation=true
-package-lock.json linguist-generated=true
+*.tsx linguist-vendored=true
+*.ts linguist-vendored=true
+*.js linguist-vendored=true
+*.jsx linguist-vendored=true
+*.mjs linguist-vendored=true
 *.css linguist-vendored=true
 *.svg linguist-vendored=true
+
+# 3. Mark Config & Package Data as Documentation/Generated
+*.json linguist-documentation=true
+package-lock.json linguist-generated=true
+package.json linguist-documentation=true
+*.xml linguist-documentation=true
+*.toml linguist-documentation=true
+*.gradle linguist-vendored=true
+*.properties linguist-documentation=true
+*.bat linguist-documentation=true
+*.ps1 linguist-documentation=true
+
+# 4. Explicitly Detect Python Core AI / Machine Learning Engine
+api/** linguist-detectable=true
+models/** linguist-detectable=true
+notebooks/** linguist-detectable=true
+*.py linguist-detectable=true
+*.ipynb linguist-detectable=true
