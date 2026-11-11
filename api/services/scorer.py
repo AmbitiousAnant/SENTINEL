@@ -123,38 +123,46 @@ CRISIS_PATTERNS = [
 ]
 
 def check_crisis_router(message: str) -> dict:
-    t0 = time.time()
-    lower = message.lower().strip()
-    
-    # 1. Check for explicit negations first
-    for pattern in NEGATION_PATTERNS:
-        if re.search(pattern, lower):
-            latency = (time.time() - t0) * 1000
-            return {
-                "is_acute": False,
-                "tier1_status": "CLEAR (Negation Verified: LLM Guardrail Cleared)",
-                "negation_detected": True,
-                "latency_ms": max(0.8, round(latency, 2))
-            }
-            
-    # 2. Check for acute crisis patterns
-    for pattern in CRISIS_PATTERNS:
-        if re.search(pattern, lower):
-            latency = (time.time() - t0) * 1000
-            return {
-                "is_acute": True,
-                "tier1_status": "ACUTE RISK LOCKED (LLM Bypassed -> Direct Handoff)",
-                "negation_detected": False,
-                "latency_ms": max(0.9, round(latency, 2))
-            }
-            
-    latency = (time.time() - t0) * 1000
-    return {
-        "is_acute": False,
-        "tier1_status": "CLEAR (Proceed to Gemma 4 E2B)",
-        "negation_detected": False,
-        "latency_ms": max(0.7, round(latency, 2))
-    }
+    try:
+        from models.crisis_router import get_crisis_router
+        router = get_crisis_router()
+        return router.route(message).to_dict()
+    except Exception:
+        t0 = time.time()
+        lower = message.lower().strip()
+        
+        # 1. Check for explicit negations first
+        for pattern in NEGATION_PATTERNS:
+            if re.search(pattern, lower):
+                latency = (time.time() - t0) * 1000
+                return {
+                    "is_acute": False,
+                    "tier1_status": "CLEAR (Negation Verified: LLM Guardrail Cleared)",
+                    "negation_detected": True,
+                    "latency_ms": max(0.8, round(latency, 2)),
+                    "negation_aware": True
+                }
+                
+        # 2. Check for acute crisis patterns
+        for pattern in CRISIS_PATTERNS:
+            if re.search(pattern, lower):
+                latency = (time.time() - t0) * 1000
+                return {
+                    "is_acute": True,
+                    "tier1_status": "ACUTE RISK LOCKED (LLM Bypassed -> Direct Handoff)",
+                    "negation_detected": False,
+                    "latency_ms": max(0.9, round(latency, 2)),
+                    "negation_aware": True
+                }
+                
+        latency = (time.time() - t0) * 1000
+        return {
+            "is_acute": False,
+            "tier1_status": "CLEAR (Proceed to Gemma 4 E2B)",
+            "negation_detected": False,
+            "latency_ms": max(0.7, round(latency, 2)),
+            "negation_aware": True
+        }
 
 def analyze_distress(message: str) -> dict:
     # Tier 1 Deterministic Router check (<5 ms)

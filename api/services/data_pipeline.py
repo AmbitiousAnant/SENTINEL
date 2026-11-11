@@ -191,37 +191,23 @@ def compute_isolation_forest_anomaly(x: List[float]) -> float:
     StudentLife baseline reference nodes.
     Output: Calibrated anomaly distress score in [0.0, 100.0].
     """
-    # Baseline StudentLife reference points (n=12 centroids across population quartiles)
-    reference_centroids = [
-        [0.0, 0.0, 0.0, 0.0, 0.0],
-        [-0.4, 0.1, -0.2, 0.0, -0.1],
-        [0.3, 0.2, 0.1, 0.3, 0.2],
-        [1.1, 0.8, 0.9, 0.7, 0.6],
-        [1.8, 1.5, 1.6, 1.2, 1.4],
-        [2.5, 2.2, 2.7, 1.9, 2.1],
-        [-0.8, -0.2, -0.5, -0.3, -0.4],
-        [0.5, 0.4, 0.6, 0.2, 0.3],
-        [1.5, 1.2, 1.4, 1.1, 1.0],
-        [2.8, 2.6, 3.1, 2.4, 2.5],
-        [0.2, 0.3, 0.0, 0.1, 0.2],
-        [3.5, 3.2, 3.8, 3.0, 3.3]
-    ]
-
-    # Calculate average euclidean distance to 3 nearest normal centroids
-    distances = []
-    for c in reference_centroids[:4]:  # Top 4 normal baseline centroids
-        dist_sq = sum((x[i] - c[i]) ** 2 for i in range(len(x)))
-        distances.append(math.sqrt(dist_sq))
-    
-    avg_min_dist = sum(sorted(distances)[:2]) / 2.0
-    
-    # Anomaly path length approximation c(n) = 2(ln(n-1) + 0.5772) - 2(n-1)/n
-    # Distance scaling maps to [0, 100]
-    # avg_min_dist = 0.0 -> score ~ 20.0
-    # avg_min_dist = 2.0 -> score ~ 55.0
-    # avg_min_dist = 4.0 -> score ~ 88.0
-    raw_if_score = 18.0 + (avg_min_dist * 18.5)
-    return max(10.0, min(98.0, raw_if_score))
+    try:
+        from models.isolation_forest import get_trained_studentlife_model
+        clf = get_trained_studentlife_model()
+        res = clf.predict_distress(x)
+        return float(res["distress_score"])
+    except Exception as e:
+        # Fallback to centroid distance approximation
+        reference_centroids = [
+            [0.0, 0.0, 0.0, 0.0, 0.0],
+            [-0.4, 0.1, -0.2, 0.0, -0.1],
+            [0.3, 0.2, 0.1, 0.3, 0.2],
+            [1.1, 0.8, 0.9, 0.7, 0.6]
+        ]
+        distances = [math.sqrt(sum((x[i] - c[i]) ** 2 for i in range(len(x)))) for c in reference_centroids]
+        avg_min_dist = sum(sorted(distances)[:2]) / 2.0
+        raw_if_score = 18.0 + (avg_min_dist * 18.5)
+        return max(10.0, min(98.0, raw_if_score))
 
 def execute_algorithm_1(
     raw_message_score: float,
