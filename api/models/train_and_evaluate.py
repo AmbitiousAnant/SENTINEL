@@ -83,8 +83,8 @@ def run_full_evaluation() -> Dict[str, Any]:
         backspace_count=10
     )
     ba_res = biaffect.process_keystrokes(session_strained)
-    print(f"  • Mean IKL: {ba_res['mean_interkey_latency_ms']}ms (z=+{ba_res['z_interkey_latency']}σ)")
-    print(f"  • Backspace Ratio: {ba_res['backspace_percentage']}% (z=+{ba_res['z_backspace_ratio']}σ)")
+    print(f"  * Mean IKL: {ba_res['mean_interkey_latency_ms']}ms (z=+{ba_res['z_interkey_latency']} sigma)")
+    print(f"  * Backspace Ratio: {ba_res['backspace_percentage']}% (z=+{ba_res['z_backspace_ratio']} sigma)")
     print(f"  • Cognitive Hesitation Score: {ba_res['cognitive_hesitation_score']}/100")
     print(f"  • Flags: {ba_res['clinical_flags']}")
 

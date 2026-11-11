@@ -135,15 +135,14 @@ class CrisisRouter:
         # Preceding or succeeding negation within 1-5 word token window
         self.negation_patterns = [
             # English
-            re.compile(r"(don't|dont|do\s+not|never|no|not|cannot|can't|won't|wont|wouldn't|didn't|did\s+not)\s+([a-z\s]{0,25})(die|kill|hurt|suicide|end|hang)", re.IGNORECASE),
+            re.compile(r'\b(don\'t|dont|do\s+not|never|no|not|cannot|can\'t|won\'t|wont|wouldn\'t|didn\'t|did\s+not)\s+([a-z\s]{0,25})\b(die|kill|hurt|suicide|end|hang)\b', re.IGNORECASE),
             # Hinglish
-            re.compile(r"(nahi|nhi|mat|na|never)\s+([a-z\s]{0,25})(marna|khatam|jaan\s+dena|marne)", re.IGNORECASE),
-            # Hindi reverse negation: "marna nahi chahta"
-            re.compile(r"(die|kill|suicide|marna|khatam)\s+([a-z\s]{0,15})(nahi|nhi|never|na|not)", re.IGNORECASE),
-            # Coping / resilience context
-            re.compile(r"(manage|cope|survive|fight|handle|study|future|live)\s+([a-z\s]{0,25})(stress|pressure|exams)", re.IGNORECASE)
+            re.compile(r'\b(nahi|nhi|mat|na|never)\s+([a-z\s]{0,25})\b(marna|khatam|jaan\s+dena|marne)\b', re.IGNORECASE),
+            # Hindi reverse negation
+            re.compile(r'\b(die|kill|suicide|marna|khatam)\b\s+([a-z\s]{0,15})\b(nahi|nhi|never|na|not)\b', re.IGNORECASE),
+            # Coping resilience
+            re.compile(r'\b(manage|cope|survive|fight|handle|study|future|live)\b\s+([a-z\s]{0,25})\b(stress|pressure|exams)\b', re.IGNORECASE)
         ]
-
     def check_negation(self, text: str) -> Tuple[bool, Optional[str]]:
         for pattern in self.negation_patterns:
             match = pattern.search(text)

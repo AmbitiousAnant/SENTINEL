@@ -76,9 +76,9 @@ class BiAffectEngine:
 
         clinical_flags = []
         if is_retarded:
-            clinical_flags.append(f"Psychomotor flight retardation (IKL: {ikl:.1f}ms, z=+{z_ikl:.2f}σ)")
+            clinical_flags.append(f"Psychomotor flight retardation (IKL: {ikl:.1f}ms, z=+{z_ikl:.2f} sigma)")
         if is_ruminating:
-            clinical_flags.append(f"Excessive backspace revision (BDR: {bdr*100:.1f}%, z=+{z_bdr:.2f}σ)")
+            clinical_flags.append(f"Excessive backspace revision (BDR: {bdr*100:.1f}%, z=+{z_bdr:.2f} sigma)")
         if not clinical_flags:
             clinical_flags.append("Fluid typing dynamics aligned with population priors")
 

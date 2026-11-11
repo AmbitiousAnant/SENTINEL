@@ -79,22 +79,14 @@ class SoapSynthesizer:
             speech = f"Hello counsellor, I am feeling severely overwhelmed. My sleep has drifted by nearly three hours and my distress score is {score:.0f}. I would appreciate your guidance."
 
         dispatch = (
-            f"🚨 *SENTINEL EMERGENCY DISPATCH (Build for Bharat 2026)*
-"
-            f"━━━━━━━━━━━━━━━━━━━━━━━
-"
-            f"• *Triage Tier:* {risk_str}
-"
-            f"• *Distress Score:* {score:.1f}/100
-"
-            f"• *Subjective:* {s}
-"
-            f"• *Objective:* {o}
-"
-            f"• *Plan:* 1-Tap Tele-MANAS Call: tel:14416
-"
-            f"• *Emergency Contact Alerted:* {trusted_contact}
-"
+            f"🚨 *SENTINEL EMERGENCY DISPATCH (Build for Bharat 2026)*\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"• *Triage Tier:* {risk_str}\n"
+            f"• *Distress Score:* {score:.1f}/100\n"
+            f"• *Subjective:* {s}\n"
+            f"• *Objective:* {o}\n"
+            f"• *Plan:* 1-Tap Tele-MANAS Call: tel:14416\n"
+            f"• *Emergency Contact Alerted:* {trusted_contact}\n"
             f"• *Security Proof:* Zero-Egress Kernel Verified (0 bytes unencrypted)"
         )
 
