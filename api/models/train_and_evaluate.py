@@ -1,5 +1,5 @@
 """
-SENTINEL V4 — Comprehensive Model Training, Evaluation & Benchmarking Suite
+SENTINEL V4 -- Comprehensive Model Training, Evaluation & Benchmarking Suite
 Executes training for Isolation Forest, benchmarks Crisis Router latency,
 validates Conformal Coverage, and tests Multi-Modal Sensor Fusion.
 """
@@ -19,8 +19,8 @@ from .studentlife_benchmark import SYNTHETIC_EMA_CASES_24, StudentLifeBenchmark
 
 def run_full_evaluation() -> Dict[str, Any]:
     print("=" * 70)
-    print("SENTINEL V4 — MODEL EVALUATION & BENCHMARK HARNESS")
-    print("Build for Bharat 2026 · PS 1 & PS 3")
+    print("SENTINEL V4 -- MODEL EVALUATION & BENCHMARK HARNESS")
+    print("Build for Bharat 2026 - PS 1 & PS 3")
     print("=" * 70)
 
     # 1. Isolation Forest Evaluation
@@ -30,7 +30,7 @@ def run_full_evaluation() -> Dict[str, Any]:
     for case in SYNTHETIC_EMA_CASES_24:
         pred = clf.predict_distress(case["features"])
         if_predictions.append((case["id"], case["true_score"], pred["distress_score"], pred["risk_band"]))
-        print(f"  • {case['name'][:28]:<28} | True: {case['true_score']:4.1f} | Pred: {pred['distress_score']:4.1f} | Band: {pred['risk_band']}")
+        print(f"  * {case['name'][:28]:<28} | True: {case['true_score']:4.1f} | Pred: {pred['distress_score']:4.1f} | Band: {pred['risk_band']}")
 
     # 2. Crisis Router Latency & Negation Benchmark
     print("\n[2/5] Benchmarking Crisis Router Latency (<5ms SLA)...")
@@ -53,7 +53,7 @@ def run_full_evaluation() -> Dict[str, Any]:
         if is_correct:
             correct_routes += 1
         status = "PASSED" if is_correct else "FAILED"
-        print(f"  • [{status}] Latency: {res.latency_ms:.2f}ms | Acute: {res.is_acute} | Negation: {res.negation_detected} | Phrase: '{phrase[:40]}...'")
+        print(f"  * [{status}] Latency: {res.latency_ms:.2f}ms | Acute: {res.is_acute} | Negation: {res.negation_detected} | Phrase: '{phrase[:40]}...'")
 
     avg_latency = sum(latencies) / len(latencies)
     p99_latency = sorted(latencies)[int(len(latencies) * 0.99)]
@@ -71,8 +71,8 @@ def run_full_evaluation() -> Dict[str, Any]:
             covered_count += 1
 
     emp_coverage = (covered_count / len(cp.calibration_residuals)) * 100.0
-    print(f"  • Non-Conformity Quantile q_90: {cp.q:.2f} points")
-    print(f"  • Empirical Coverage Achieved: {emp_coverage:.1f}% (Target: >= 90.0%)")
+    print(f"  * Non-Conformity Quantile q_90: {cp.q:.2f} points")
+    print(f"  * Empirical Coverage Achieved: {emp_coverage:.1f}% (Target: >= 90.0%)")
 
     # 4. BiAffect Psychomotor Typing Dynamics
     print("\n[4/5] Evaluating BiAffect Psychomotor Typing Analyzer...")
@@ -85,8 +85,8 @@ def run_full_evaluation() -> Dict[str, Any]:
     ba_res = biaffect.process_keystrokes(session_strained)
     print(f"  * Mean IKL: {ba_res['mean_interkey_latency_ms']}ms (z=+{ba_res['z_interkey_latency']} sigma)")
     print(f"  * Backspace Ratio: {ba_res['backspace_percentage']}% (z=+{ba_res['z_backspace_ratio']} sigma)")
-    print(f"  • Cognitive Hesitation Score: {ba_res['cognitive_hesitation_score']}/100")
-    print(f"  • Flags: {ba_res['clinical_flags']}")
+    print(f"  * Cognitive Hesitation Score: {ba_res['cognitive_hesitation_score']}/100")
+    print(f"  * Flags: {ba_res['clinical_flags']}")
 
     # 5. SOAP-Lite Clinical Card Synthesis
     print("\n[5/5] Synthesizing Multi-Dialect SOAP-Lite Intake Cards...")
@@ -97,16 +97,16 @@ def run_full_evaluation() -> Dict[str, Any]:
         guidance="Immediate 14416 safety dispatch",
         dialect="Casual Hinglish"
     )
-    print(f"  • Subjective: {soap.subjective}")
-    print(f"  • Objective:  {soap.objective}")
-    print(f"  • Assessment: {soap.assessment}")
-    print(f"  • Plan:       {soap.plan}")
+    print(f"  * Subjective: {soap.subjective}")
+    print(f"  * Objective:  {soap.objective}")
+    print(f"  * Assessment: {soap.assessment}")
+    print(f"  * Plan:       {soap.plan}")
 
     print("\n" + "=" * 70)
     print(f"VERIFICATION SUMMARY: ALL 5 MODEL MODULES OPERATIONAL")
-    print(f"• Crisis Router Latency: {avg_latency:.2f}ms (SLA: <5ms) — Accuracy: {router_acc:.0f}%")
-    print(f"• Conformal Coverage:   {emp_coverage:.1f}% (Guaranteed >= 90.0%)")
-    print(f"• Isolation Forest:     24/24 Benchmark Centroids Calibrated")
+    print(f"* Crisis Router Latency: {avg_latency:.2f}ms (SLA: <5ms) -- Accuracy: {router_acc:.0f}%")
+    print(f"* Conformal Coverage:   {emp_coverage:.1f}% (Guaranteed >= 90.0%)")
+    print(f"* Isolation Forest:     24/24 Benchmark Centroids Calibrated")
     print("=" * 70)
 
     return {

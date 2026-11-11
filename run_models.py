@@ -1,6 +1,6 @@
 """
-SENTINEL V4 — Python Machine Learning & Edge AI Runner
-Build for Bharat 2026 · Track 1: Software · PS 1 & PS 3
+SENTINEL V4 -- Python Machine Learning & Edge AI Runner
+Build for Bharat 2026 - Track 1: Software - PS 1 & PS 3
 
 Usage:
   python run_models.py --evaluate    Run full 5-model verification & benchmark harness
@@ -28,7 +28,7 @@ from models.train_and_evaluate import run_full_evaluation
 
 def run_benchmark():
     print("=" * 70)
-    print("SENTINEL V4 — HIGH-THROUGHPUT LATENCY BENCHMARK (10,000 ITERATIONS)")
+    print("SENTINEL V4 -- HIGH-THROUGHPUT LATENCY BENCHMARK (10,000 ITERATIONS)")
     print("=" * 70)
     router = get_crisis_router()
     clf = get_trained_studentlife_model()
@@ -59,15 +59,15 @@ def run_benchmark():
         clf.predict_distress(features[i % len(features)])
     t_if = (time.perf_counter() - t1) * 1000.0 / N
 
-    print(f"• Crisis Router Average Latency:  {t_router:.4f} ms ({1000.0/t_router:.0f} queries/sec)")
-    print(f"• Isolation Forest Latency:       {t_if:.4f} ms ({1000.0/t_if:.0f} inferences/sec)")
-    print(f"• Target SLA (< 5.0 ms):          PASSED ({(5.0 / t_router):.1f}x faster than threshold)")
+    print(f"* Crisis Router Average Latency:  {t_router:.4f} ms ({1000.0/t_router:.0f} queries/sec)")
+    print(f"* Isolation Forest Latency:       {t_if:.4f} ms ({1000.0/t_if:.0f} inferences/sec)")
+    print(f"* Target SLA (< 5.0 ms):          PASSED ({(5.0 / t_router):.1f}x faster than threshold)")
     print("=" * 70)
 
 
 def run_demo():
     print("=" * 70)
-    print("SENTINEL V4 — LIVE ALGORITHM 1 INTERACTIVE TRIAGE SIMULATION")
+    print("SENTINEL V4 -- LIVE ALGORITHM 1 INTERACTIVE TRIAGE SIMULATION")
     print("=" * 70)
     router = get_crisis_router()
     clf = get_trained_studentlife_model()
