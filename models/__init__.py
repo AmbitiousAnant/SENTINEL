@@ -1,40 +1,38 @@
 """
-SENTINEL V4 — Core Machine Learning & Edge AI Models
-Package Root Exports for Hackathon Judges & Researchers
+SENTINEL V4 — Python Machine Learning & Edge AI Models Package
+Build for Bharat 2026 · Track 1: Software · PS 1 & PS 3
+
+Modules:
+- isolation_forest: Pure-Python multi-tree anomaly detection on passive telemetry.
+- crisis_router: Negation-aware deterministic trie router (<2ms latency).
+- conformal_predictor: Split-conformal prediction intervals (90.0% coverage).
+- biaffect_engine: Psychomotor keystroke dynamics and cognitive rumination classifier.
+- gemma_mindguard: Quantized clinical distillation & structured decoding.
+- soap_synthesizer: Multi-dialect 4-Line SOAP-Lite clinical card synthesis.
+- studentlife_benchmark: Dartmouth StudentLife (n=48) population benchmark harness.
+- train_and_evaluate: Full training, cross-validation, and benchmarking suite.
 """
 
-import sys
-import os
-
-# Ensure api directory is on sys.path
-api_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "api")
-if api_dir not in sys.path:
-    sys.path.insert(0, api_dir)
-
-from models.isolation_forest import IsolationTree, IsolationForest, get_trained_studentlife_model
-from models.crisis_router import CrisisRouter, RouterResult, get_crisis_router
-from models.conformal_predictor import SplitConformalPredictor, ConformalInterval
-from models.biaffect_engine import BiAffectEngine, KeystrokeSession, KeystrokeMetrics
-from models.gemma_mindguard import GemmaMindGuard, SymptomExtractionResult
-from models.soap_synthesizer import SoapSynthesizer, SoapLiteCard
-from models.studentlife_benchmark import StudentLifeBenchmark, SYNTHETIC_EMA_CASES_24
+from .isolation_forest import IsolationForestModel, IsolationTree
+from .crisis_router import CrisisRouter, RouterResult
+from .conformal_predictor import SplitConformalPredictor, ConformalResult
+from .biaffect_engine import BiAffectEngine, KeystrokeSession
+from .gemma_mindguard import GemmaMindGuard, ClinicalAssessment
+from .soap_synthesizer import SoapSynthesizer, SoapCard
+from .studentlife_benchmark import StudentLifeBenchmark
 
 __all__ = [
+    "IsolationForestModel",
     "IsolationTree",
-    "IsolationForest",
-    "get_trained_studentlife_model",
     "CrisisRouter",
     "RouterResult",
-    "get_crisis_router",
     "SplitConformalPredictor",
-    "ConformalInterval",
+    "ConformalResult",
     "BiAffectEngine",
     "KeystrokeSession",
-    "KeystrokeMetrics",
     "GemmaMindGuard",
-    "SymptomExtractionResult",
+    "ClinicalAssessment",
     "SoapSynthesizer",
-    "SoapLiteCard",
+    "SoapCard",
     "StudentLifeBenchmark",
-    "SYNTHETIC_EMA_CASES_24",
 ]
