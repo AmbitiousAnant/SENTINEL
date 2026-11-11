@@ -1,0 +1,12 @@
+# GitHub Linguist Configuration for SENTINEL
+# Ensures Python ML models and backend represent 80%+ of repo language share
+
+web/android/** linguist-vendored=true
+web/src/components/ui/** linguist-vendored=true
+web/public/** linguist-vendored=true
+web/.next/** linguist-vendored=true
+web/out/** linguist-vendored=true
+*.json linguist-documentation=true
+package-lock.json linguist-generated=true
+*.css linguist-vendored=true
+*.svg linguist-vendored=true
