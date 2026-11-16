@@ -754,6 +754,9 @@ export default function CheckInPage() {
 
             {/* Biometric Emotion Avatar */}
             <EmotionAvatar tier={currentTier} score={latestScore} />
+
+            {/* Longitudinal Signal Graph with 90% Split-Conformal Band */}
+            <SentinelSignalGraph currentScore={latestScore} conformalBand={7.5} />
           </div>
 
           {/* RIGHT PANEL: Chat, Crisis Router Analytics, SOAP-Lite Card */}
