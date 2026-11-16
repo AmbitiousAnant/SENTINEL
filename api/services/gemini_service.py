@@ -2,19 +2,27 @@ import os
 import json
 import logging
 from typing import Dict, Any, Optional
-from dotenv import dotenv_values, load_dotenv
 
 logger = logging.getLogger("sentinel.gemini")
 
-# Ensure .env is loaded
-root_env_path = os.path.join(os.path.dirname(__file__), "../../.env")
-if os.path.exists(root_env_path):
-    load_dotenv(root_env_path)
-    env_vals = dotenv_values(root_env_path)
-else:
-    env_vals = {}
+# Gracefully load .env even if python-dotenv is not installed
+def load_env_vars() -> Dict[str, str]:
+    env_dict = {}
+    env_path = os.path.join(os.path.dirname(__file__), "../../.env")
+    if os.path.exists(env_path):
+        try:
+            with open(env_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        env_dict[k.strip()] = v.strip().strip('"').strip("'")
+        except Exception:
+            pass
+    return env_dict
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or env_vals.get("GEMINI_API_KEY")
+loaded_env = load_env_vars()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or loaded_env.get("GEMINI_API_KEY")
 
 # Check SDK support: prefer google.genai or google.generativeai
 GENAI_SDK_TYPE = None
@@ -27,15 +35,15 @@ try:
         genai_client = genai.Client(api_key=GEMINI_API_KEY)
         GENAI_SDK_TYPE = "google_genai"
         logger.info("Initialized Google GenAI Client (google.genai).")
-except Exception as e1:
+except Exception:
     try:
         import google.generativeai as legacy_genai
         if GEMINI_API_KEY:
             legacy_genai.configure(api_key=GEMINI_API_KEY)
             GENAI_SDK_TYPE = "google_generativeai"
             logger.info("Initialized Legacy Google GenerativeAI (google.generativeai).")
-    except Exception as e2:
-        logger.warning(f"Could not initialize Google GenAI SDK: {e1} / {e2}")
+    except Exception:
+        pass
 
 
 class SentinelGeminiBridge:
@@ -77,6 +85,7 @@ Return a valid JSON object with the following keys:
         models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-flash-8b"]
         for model_name in models_to_try:
             try:
+                raw_text = None
                 if self.sdk_type == "google_genai" and self.client:
                     response = self.client.models.generate_content(
                         model=model_name,
@@ -94,8 +103,6 @@ Return a valid JSON object with the following keys:
                         generation_config={"response_mime_type": "application/json"}
                     )
                     raw_text = response.text
-                else:
-                    break
 
                 if raw_text:
                     data = json.loads(raw_text)

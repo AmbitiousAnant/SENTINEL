@@ -1,20 +1,13 @@
 import os
 import json
-from google import genai
-from google.genai import types
-from dotenv import dotenv_values
-
-# Load from ../.env (since .env is in project root)
-env_vars = dotenv_values(os.path.join(os.path.dirname(__file__), '../../.env'))
-
-GEMINI_API_KEY = env_vars.get("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    client = genai.Client(api_key=GEMINI_API_KEY)
-else:
-    client = None
-
 import time
 import re
+from typing import Dict, Any, Optional
+
+try:
+    from api.services.gemini_service import evaluate_checkin_with_fallback
+except ImportError:
+    from services.gemini_service import evaluate_checkin_with_fallback
 
 PREDEFINED_RESPONSES = {
     # Mode 1: Tele-MANAS Youth & Student Rhythm Presets
