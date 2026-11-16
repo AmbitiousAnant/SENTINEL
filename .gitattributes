@@ -31,6 +31,7 @@ package.json linguist-documentation=true
 *.properties linguist-documentation=true
 *.bat linguist-documentation=true
 *.ps1 linguist-documentation=true
+*.md linguist-documentation=true
 
 # 4. Explicitly Detect Python Core AI / Machine Learning Engine
 api/** linguist-detectable=true
