@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from typing import Dict, Any, Optional
 from services.data_pipeline import (
     get_data_provenance_audit,
+    get_dual_source_manifest,
     TelemetryPacket,
     normalize_telemetry,
     execute_algorithm_1,
@@ -15,6 +16,11 @@ router = APIRouter()
 def get_provenance() -> Dict[str, Any]:
     """Returns complete academic dataset benchmarks, citations, and zero-egress telemetry audit."""
     return get_data_provenance_audit()
+
+@router.get("/dual-source-manifest")
+def get_dual_source_manifest_endpoint() -> Dict[str, Any]:
+    """Returns the formal Dual-Source Architecture manifest (OS Telemetry + Dartmouth StudentLife ground truth)."""
+    return get_dual_source_manifest()
 
 @router.post("/telemetry")
 def process_telemetry(packet: TelemetryPacket) -> Dict[str, Any]:

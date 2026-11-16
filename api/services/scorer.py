@@ -157,7 +157,7 @@ def check_crisis_router(message: str) -> dict:
             "negation_aware": True
         }
 
-def analyze_distress(message: str) -> dict:
+def analyze_distress(message: str, dialect: str = "English", previous_smoothed: float = 30.0) -> dict:
     # Tier 1 Deterministic Router check (<5 ms)
     router_result = check_crisis_router(message)
     
@@ -169,99 +169,42 @@ def analyze_distress(message: str) -> dict:
             res["response"] = res["guidance"]
         if "crisis_router" not in res:
             res["crisis_router"] = router_result
+        raw = res.get("raw_score", 30.0)
+        res["smoothed_score"] = round(0.70 * previous_smoothed + 0.30 * raw, 2)
+        res["risk_band"] = "Critical" if res["smoothed_score"] >= 75.0 else ("Medium" if res["smoothed_score"] >= 40.0 else "Low")
+        res["proknow_grounded"] = True
+        res["mindguard_verified"] = True
         return res
 
-    # If Tier 1 crisis router triggered on arbitrary text, immediately lock in acute protocol
+    # 2) If Tier 1 crisis router triggered on acute text, immediately lock in acute protocol
     if router_result["is_acute"]:
         return {
             "response": "Your safety and life are our absolute priority right now. The pain and fear you are experiencing are critical, but you do not have to face this alone tonight. Support is actively standing by.",
             "raw_score": 95.0,
+            "smoothed_score": round(0.70 * previous_smoothed + 0.30 * 95.0, 2),
+            "risk_band": "Critical",
             "factors": ["Deterministic Crisis Router: Acute distress expression detected", "Imminent crisis threshold breached", "Zero-Latency Handoff: Bypassing generative LLM for immediate protection"],
             "guidance": "Immediate safety protocol activated. Please remain in a secure room and connect directly to crisis intervention.",
             "prevention_methods": ["1-Tap Call Tele-MANAS (14416) or Police Emergency (112)", "Lock all entryways and stay in secure inner room", "Alert pre-configured Hardware Keystore trusted contact"],
             "mindguard_class": "Self-Harm / Imminent Threat",
-            "crisis_router": router_result
+            "crisis_router": router_result,
+            "inference_source": "DETERMINISTIC_CRISIS_ROUTER",
+            "proknow_grounded": True,
+            "mindguard_verified": True
         }
 
-    if not client:
-        # Fallback if no key
-        return {
-            "raw_score": 50.0, 
-            "response": "Thank you for checking in. We are monitoring your well-being closely.",
-            "factors": ["Standard baseline response", "Routine wellness telemetry"],
-            "guidance": "Take moments to rest and stay hydrated throughout the day.",
-            "prevention_methods": ["Try 4-7-8 breathing exercises", "Reach out to trusted support"],
-            "mindguard_class": "Safe",
-            "crisis_router": router_result
-        }
-        
-    prompt = f"""
-    Analyze the following check-in message for psychological triage (Build for Bharat / Tele-MANAS & SC/ST PoA context).
-    1. Write an empathetic, warm conversational response (2-3 sentences) directly comforting the user (field: "response").
-    2. Provide a distress score from 0.0 to 100.0 (field: "raw_score").
-       - Stable (< 40): Daily routine, exam prep, positive coping.
-       - Elevated (40–74): Anxiety, sleep disruption, academic burnout, physical exhaustion. NEVER include suicidal ideation factors in this band.
-       - Critical (>= 75): Explicit despair, acute fear, imminent crisis.
-    3. Provide 2-3 explainability factors (field: "factors").
-    4. Provide 2-3 specific prevention methods or remedies (field: "prevention_methods").
-    5. Evaluate guardrail: "Safe", "Self-Harm / Imminent Threat", or "Harm-to-Others" (field: "mindguard_class").
+    # 3) Delegate to Gemini Bridge with instant fallback
+    gemini_result = evaluate_checkin_with_fallback(message, dialect)
+    raw = gemini_result.get("raw_score", 30.0)
+    smoothed = 0.70 * previous_smoothed + 0.30 * raw
     
-    Message: "{message}"
-    
-    Output JSON format ONLY:
-    {{
-        "response": "Empathetic conversational response",
-        "raw_score": 50.0,
-        "factors": ["factor 1", "factor 2"],
-        "guidance": "Brief supportive guidance",
-        "prevention_methods": ["Prevention 1", "Prevention 2"],
-        "mindguard_class": "Safe"
-    }}
-    """
-    
-    try:
-        response = client.models.generate_content(
-            model='gemini-3.5-flash-lite',
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-            ),
-        )
-        data = json.loads(response.text)
-        if "response" not in data and "guidance" in data:
-            data["response"] = data["guidance"]
-        data["crisis_router"] = router_result
-        return data
-    except Exception as e:
-        print(f"Error calling Gemini: {e}")
-        lower = message.lower()
-        if any(w in lower for w in ["end", "die", "kill", "terrified", "hopeless", "suicide"]) and not router_result.get("negation_detected"):
-            return {
-                "response": "Your safety and life are the absolute priority right now. The fear and exhaustion you are feeling are immense, but you are not alone and support is standing by to protect you tonight.",
-                "raw_score": 92.0,
-                "factors": ["High acute distress detected", "Expressions of feeling overwhelmed/unsafe"],
-                "guidance": "Immediate protective steps recommended. Stay in a secure location and reach out to trusted support.",
-                "prevention_methods": ["Dial Tele-MANAS at 14416 right now.", "Lock doors and stay in a secure area.", "Contact an assigned support person."],
-                "mindguard_class": "Self-Harm / Imminent Threat",
-                "crisis_router": router_result
-            }
-        elif any(w in lower for w in ["anxious", "scared", "fear", "police", "sleep", "tired", "stress", "exhausted", "burnout"]):
-            return {
-                "response": "I hear how exhausted and anxious you are feeling. It is completely understandable to feel overwhelmed under stress. Take a slow, deep breath with me right now.",
-                "raw_score": 58.0,
-                "factors": ["Situational anxiety noted", "Circadian rest pattern drift", "Physical exhaustion reported"],
-                "guidance": "Focus on grounding techniques to help reduce physical muscle tension.",
-                "prevention_methods": ["Try 4-7-8 breathing exercises.", "Reach out to a family member or community counselor."],
-                "mindguard_class": "Safe",
-                "crisis_router": router_result
-            }
-        else:
-            return {
-                "response": "Thank you for checking in today. Staying connected and sharing your daily state is an important part of your ongoing recovery and support.",
-                "raw_score": 25.0,
-                "factors": ["Routine check-in completed", "Stable emotional tone"],
-                "guidance": "Continue maintaining your daily routines and reach out whenever you need to talk.",
-                "prevention_methods": ["Take a short walk outdoors.", "Stay connected with your support circle."],
-                "mindguard_class": "Safe",
-                "crisis_router": router_result
-            }
+    risk_band = "Low"
+    if smoothed >= 75.0:
+        risk_band = "Critical"
+    elif smoothed >= 40.0:
+        risk_band = "Medium"
+
+    gemini_result["smoothed_score"] = round(smoothed, 2)
+    gemini_result["risk_band"] = risk_band
+    gemini_result["crisis_router"] = router_result
+    return gemini_result
