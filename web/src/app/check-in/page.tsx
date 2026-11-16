@@ -8,6 +8,7 @@ import { getApiBase } from '@/lib/utils'
 import { SoapLiteCard, DialectProfile } from '@/components/SoapLiteCard'
 import { FloatingCallOverlay } from '@/components/FloatingCallOverlay'
 import DataProvenanceInspector from '@/components/DataProvenanceInspector'
+import { SentinelSignalGraph } from '@/components/SentinelSignalGraph'
 
 type GovTechMode = 'telemanas' | 'nhaa'
 
@@ -180,8 +181,8 @@ export default function CheckInPage() {
     }
   }
 
-  const avgLatency = Math.round(keyLatencies.reduce((a, b) => a + b, 0) / (keyLatencies.length || 1))
-  const backspaceRatio = Math.round((backspaceCount / (totalKeyCount || 1)) * 100)
+  const avgLatency = Math.round(keyLatencies.length > 0 ? (keyLatencies.reduce((a, b) => a + b, 0) / keyLatencies.length) : 154)
+  const backspaceRatio = Math.round((totalKeyCount > 0 ? (backspaceCount / totalKeyCount) : 0.04) * 100)
 
   // Handle False Alarm Budget Buttons
   const handleJustBusy = () => {
