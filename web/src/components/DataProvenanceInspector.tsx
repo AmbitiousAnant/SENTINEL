@@ -116,6 +116,14 @@ export default function DataProvenanceInspector({
             <CardDescription className="text-xs text-zinc-400">
               Validating training data origins, Dartmouth StudentLife (n=48) benchmarks, and Stage 0 split-conformal coverage.
             </CardDescription>
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
+              <span className="bg-emerald-950/60 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Source 1: Real-Time OS Telemetry (UsageStatsManager & Sleep API)
+              </span>
+              <span className="bg-blue-950/60 text-blue-300 px-2 py-0.5 rounded border border-blue-800 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-blue-400" /> Source 2: Academic Ground Truth (Dartmouth StudentLife n=46/48)
+              </span>
+            </div>
           </div>
 
           <Button
