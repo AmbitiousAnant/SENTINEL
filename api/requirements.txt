@@ -1,0 +1,23 @@
+# SENTINEL V4 — Python Edge AI & Clinical Decision Engine
+# Build for Bharat 2026 · Track 1: Software · PS 1 & PS 3
+
+# Core API & Runtime Engine
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.8.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Telecommunications & WhatsApp Emergency Gateway
+twilio>=9.0.0
+
+# LLM MindGuard & Cloud Gemma 4 E2B Fallback
+google-genai>=0.1.1
+
+# Terminal Visualization & Interactive Diagnostics
+rich>=13.7.0
+
+# Data Science, Evaluation & Notebooks
+numpy>=1.24.0
+scipy>=1.10.0
+matplotlib>=3.7.0

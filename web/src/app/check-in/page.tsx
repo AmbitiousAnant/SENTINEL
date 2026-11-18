@@ -217,35 +217,12 @@ export default function CheckInPage() {
       is_simulated: false
     }
 
-    // Try primary endpoint
-    try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 3500)
-      const res = await fetch(`${apiBase}/scorer/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          case_id: govTechMode === 'telemanas' ? 'TELEMANAS-STUDENT-01' : 'case_001', 
-          message: userMsg,
-          telemetry: telemetryPayload
-        }),
-        signal: controller.signal
-      })
-      clearTimeout(timeoutId)
-      if (res.ok) {
-        data = await res.json()
-      }
-    } catch (e1) {
-      console.warn("Primary API failed, trying fallback IP...", e1)
-    }
-
-    // Try alternate IP if primary failed
-    if (!data) {
+    // Try primary endpoint if API backend configured
+    if (apiBase) {
       try {
-        const altBase = apiBase.includes('10.21.96.179') ? 'http://127.0.0.1:8000/api' : 'http://10.21.96.179:8000/api'
-        const controller2 = new AbortController()
-        const timeoutId2 = setTimeout(() => controller2.abort(), 2000)
-        const res2 = await fetch(`${altBase}/scorer/`, {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 3500)
+        const res = await fetch(`${apiBase}/scorer/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -253,14 +230,39 @@ export default function CheckInPage() {
             message: userMsg,
             telemetry: telemetryPayload
           }),
-          signal: controller2.signal
+          signal: controller.signal
         })
-        clearTimeout(timeoutId2)
-        if (res2.ok) {
-          data = await res2.json()
+        clearTimeout(timeoutId)
+        if (res.ok) {
+          data = await res.json()
         }
-      } catch (e2) {
-        console.warn("Secondary API also unavailable, activating on-device Edge-AI fallback.")
+      } catch (e1) {
+        console.warn("Primary API failed, trying fallback IP...", e1)
+      }
+
+      // Try alternate IP if primary failed
+      if (!data) {
+        try {
+          const altBase = apiBase.includes('10.21.96.179') ? 'http://127.0.0.1:8000/api' : 'http://10.21.96.179:8000/api'
+          const controller2 = new AbortController()
+          const timeoutId2 = setTimeout(() => controller2.abort(), 2000)
+          const res2 = await fetch(`${altBase}/scorer/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              case_id: govTechMode === 'telemanas' ? 'TELEMANAS-STUDENT-01' : 'case_001', 
+              message: userMsg,
+              telemetry: telemetryPayload
+            }),
+            signal: controller2.signal
+          })
+          clearTimeout(timeoutId2)
+          if (res2.ok) {
+            data = await res2.json()
+          }
+        } catch (e2) {
+          console.warn("Secondary API also unavailable, activating on-device Edge-AI fallback.")
+        }
       }
     }
 

@@ -68,7 +68,9 @@ export default function DataProvenanceInspector({
     setLoading(true)
     const t0 = performance.now()
     try {
-      const res = await fetch(`${getApiBase()}/api/data/provenance`)
+      const base = getApiBase()
+      if (!base) throw new Error("No remote API base configured (using edge cached provenance)")
+      const res = await fetch(`${base}/data/provenance`)
       const data = await res.json()
       setFetchLatency(Math.round(performance.now() - t0))
       setApiProvenance(data)
