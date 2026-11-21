@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { 
   Database, ShieldCheck, Activity, Cpu, CheckCircle2, 
-  ExternalLink, RefreshCw, BarChart2, Layers, AlertCircle 
+  ExternalLink, RefreshCw, BarChart2, Layers, AlertCircle,
+  ChevronDown, ChevronUp
 } from 'lucide-react'
 import { getApiBase } from '@/lib/utils'
 
@@ -41,6 +42,7 @@ export default function DataProvenanceInspector({
   const [loading, setLoading] = useState(false)
   const [apiProvenance, setApiProvenance] = useState<any>(null)
   const [fetchLatency, setFetchLatency] = useState<number | null>(null)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   // Default demonstration features if none passed
   const features: FeatureVector = currentFeatures || {
@@ -95,6 +97,47 @@ export default function DataProvenanceInspector({
     7.48, 7.49, 7.50, 7.50, 7.50, 8.20, 9.40, 11.85
   ]
 
+  if (!isExpanded) {
+    return (
+      <Card className="w-full bg-card border-border shadow-sm rounded-2xl overflow-hidden font-sans transition-all hover:border-primary/40">
+        <div 
+          onClick={() => setIsExpanded(true)}
+          className="p-4 bg-zinc-950 text-white cursor-pointer hover:bg-zinc-900 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-zinc-800"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
+              <Database className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-bold text-white uppercase tracking-wider font-heading">
+                  Academic Data Provenance & Algorithm 1 Audit
+                </span>
+                <Badge variant="outline" className="text-[9px] bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-mono">
+                  DARTMOUTH n=48 · q=7.50
+                </Badge>
+                <Badge variant="outline" className="text-[9px] bg-blue-500/10 text-blue-400 border-blue-500/30 font-mono">
+                  ZERO-EGRESS VERIFIED
+                </Badge>
+              </div>
+              <p className="text-[11px] text-zinc-400 mt-0.5">
+                Source 1: Real-Time OS Telemetry (0-Egress) · Source 2: Dartmouth StudentLife 10-Week Cohort (Split-Conformal Residuals)
+              </p>
+            </div>
+          </div>
+          <Button 
+            size="sm" 
+            variant="outline"
+            className="text-xs bg-zinc-900 border-zinc-700 text-zinc-200 hover:text-white shrink-0 self-start sm:self-auto gap-1.5"
+          >
+            <span>Inspect Math & Residuals</span>
+            <ChevronDown className="w-3.5 h-3.5 text-emerald-400" />
+          </Button>
+        </div>
+      </Card>
+    )
+  }
+
   return (
     <Card className="w-full bg-card/95 border-border shadow-md rounded-2xl overflow-hidden font-sans">
       <CardHeader className="bg-zinc-950 text-white p-4 sm:p-5 border-b border-zinc-800">
@@ -128,16 +171,27 @@ export default function DataProvenanceInspector({
             </div>
           </div>
 
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={fetchLiveAudit}
-            disabled={loading}
-            className="text-xs bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-zinc-800 self-start sm:self-auto gap-1.5"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-400' : ''}`} />
-            <span>Verify Live API</span>
-          </Button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={fetchLiveAudit}
+              disabled={loading}
+              className="text-xs bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-zinc-800 gap-1.5"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-400' : ''}`} />
+              <span>Verify Live API</span>
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setIsExpanded(false)}
+              className="text-xs bg-zinc-900 border-zinc-700 text-zinc-200 hover:text-white gap-1"
+            >
+              <span>Collapse</span>
+              <ChevronUp className="w-3.5 h-3.5 text-emerald-400" />
+            </Button>
+          </div>
         </div>
 
         {/* Tab Navigation */}
