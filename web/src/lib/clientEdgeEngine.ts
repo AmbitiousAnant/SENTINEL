@@ -367,8 +367,11 @@ export async function triageCheckIn(
     }
   }
 
-  // 2. Direct Gemini 3.5 Cloud Cascade if NEXT_PUBLIC_GEMINI_API_KEY is configured
-  const geminiKey = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_GEMINI_API_KEY : ''
+  // 2. Direct Gemini 3.5 Cloud Cascade if GEMINI_API_KEY / NEXT_PUBLIC_GEMINI_API_KEY is configured
+  const geminiKey = (
+    (typeof process !== 'undefined' ? (process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY) : '') ||
+    (typeof window !== 'undefined' ? ((window as any).__SENTINEL_GEMINI_KEY__ || localStorage.getItem('sentinel_gemini_key') || '') : '')
+  )?.trim()
   if (geminiKey) {
     try {
       const prompt = `You are SENTINEL's clinical triage assistant for Tele-MANAS (14416).
