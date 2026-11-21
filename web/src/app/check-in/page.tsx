@@ -1,125 +1,97 @@
 "use client"
 import React, { useState, useRef, useEffect } from 'react'
-import { Loader2, Phone, Volume2, ShieldCheck, Clock, CheckCircle2, ChevronDown, ChevronUp, AlertTriangle, Sparkles, Activity, Key, SlidersHorizontal } from 'lucide-react'
+import { Loader2, Phone, Volume2, ShieldCheck, Clock, CheckCircle2, ChevronDown, ChevronUp, AlertTriangle, Sparkles, Activity, SlidersHorizontal, RefreshCw } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { getApiBase } from '@/lib/utils'
+import { TopNav } from '@/components/TopNav'
 import { SoapLiteCard, DialectProfile } from '@/components/SoapLiteCard'
 import { FloatingCallOverlay } from '@/components/FloatingCallOverlay'
 import DataProvenanceInspector from '@/components/DataProvenanceInspector'
 import { SentinelSignalGraph } from '@/components/SentinelSignalGraph'
-import { evaluateCheckInWithGemini } from '@/lib/gemini'
+import { triageCheckIn, Dialect, TriageEngineResult } from '@/lib/clientEdgeEngine'
 
-type ChatMessage = {
-  role: 'system' | 'user' | 'scorer'
+type Message = {
+  id: string
+  role: 'system' | 'user' | 'assistant'
   content: string
-  score?: number
-  risk_band?: string
-  factors?: string[]
-  guidance?: string
-  prevention_methods?: string[]
-  mindguard_class?: string
-  crisis_router?: {
-    tier1_status?: string
-    latency_ms?: number
-    negation_aware?: boolean
-  }
+  result?: TriageEngineResult
+  timestamp: string
 }
 
 function EmotionAvatar({ tier, score }: { tier: number, score: number }) {
-  const getTierStyles = () => {
-    switch(tier) {
-      case 3: return "from-red-500/80 via-indigo-600/80 to-purple-800/80 blob-fast"
-      case 2: return "from-orange-400/70 via-purple-500/70 to-pink-500/70 blob-med"
-      default: return "from-teal-400/60 via-emerald-500/60 to-cyan-500/60 blob-slow"
+  const getTierColor = () => {
+    switch (tier) {
+      case 3: return "text-[#DC2626] bg-[#DC2626]/10 border-[#DC2626]/30"
+      case 2: return "text-[#D97706] bg-[#D97706]/10 border-[#D97706]/30"
+      default: return "text-[#0D9488] bg-[#0D9488]/10 border-[#0D9488]/30"
     }
   }
-  
-  const getGlowStyles = () => {
-    switch(tier) {
-      case 3: return "shadow-[0_0_80px_rgba(239,68,68,0.6)]"
-      case 2: return "shadow-[0_0_60px_rgba(249,115,22,0.4)]"
-      default: return "shadow-[0_0_40px_rgba(45,212,191,0.3)]"
+
+  const getTierLabel = () => {
+    switch (tier) {
+      case 3: return "Critical Crisis (Tier 3)"
+      case 2: return "Elevated Restlessness (Tier 2)"
+      default: return "Stable Baseline (Tier 1)"
+    }
+  }
+
+  const getBlobGradient = () => {
+    switch (tier) {
+      case 3: return "from-red-500/70 via-rose-600/70 to-amber-700/70 shadow-[0_0_60px_rgba(220,38,38,0.35)]"
+      case 2: return "from-amber-400/60 via-orange-500/60 to-rose-400/60 shadow-[0_0_50px_rgba(217,119,6,0.3)]"
+      default: return "from-teal-400/50 via-emerald-500/50 to-cyan-500/50 shadow-[0_0_40px_rgba(13,148,136,0.25)]"
     }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center relative min-h-[300px] w-full rounded-2xl border border-border/50 bg-background/40 backdrop-blur-md overflow-hidden shadow-sm">
-      <div className="absolute top-3.5 left-4 right-4 flex justify-between items-start z-20">
-        <div className="flex flex-col">
-          <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider font-mono">Live Emotion State</span>
-          <span className="text-[10px] text-muted-foreground">Sentinel Biometric Avatar</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono font-bold bg-primary/10 text-primary px-2.5 py-0.5 rounded-full border border-primary/20">
-            Distress: {score.toFixed(0)}/100
-          </span>
-          <Badge variant="outline" className="text-[9px] bg-primary/10 text-primary border-primary/20">
-            ZERO-EGRESS
-          </Badge>
-        </div>
+    <div className="flex flex-col items-center justify-center relative p-6 w-full rounded-2xl border border-[#E2E8E4] bg-white shadow-xs">
+      <div className="w-full flex justify-between items-center mb-4">
+        <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider font-mono">
+          Biometric Emotion Avatar
+        </span>
+        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${getTierColor()}`}>
+          {getTierLabel()}
+        </span>
       </div>
-      
-      <div className="relative w-40 h-40 sm:w-48 sm:h-48 flex items-center justify-center z-10 transition-all duration-1000 ease-in-out my-4">
-        <div className={`absolute inset-0 bg-gradient-to-tr ${getTierStyles()} mix-blend-multiply filter blur-md ${getGlowStyles()} transition-colors duration-1000`} 
-             style={{ borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%' }}
+
+      {/* Organic Pulsing Blob */}
+      <div className="relative w-36 h-36 sm:w-40 sm:h-40 flex items-center justify-center my-2">
+        <div 
+          className={`absolute inset-0 bg-gradient-to-tr ${getBlobGradient()} rounded-full filter blur-sm transition-all duration-700 ${
+            tier === 3 ? 'animate-pulse' : ''
+          }`}
+          style={{ borderRadius: tier === 3 ? '38% 62% 63% 37% / 41% 44% 56% 59%' : '48% 52% 58% 42% / 46% 54% 46% 54%' }}
         />
-        <div className={`absolute inset-2 bg-gradient-to-bl ${getTierStyles()} mix-blend-screen filter blur-sm opacity-80 transition-colors duration-1000`} 
-             style={{ borderRadius: '60% 40% 30% 70% / 50% 60% 50% 40%' }}
-        />
-        <div className="absolute w-12 h-12 bg-white/20 rounded-full backdrop-blur-md border border-white/30 flex items-center justify-center shadow-inner">
-           <div className={`w-4 h-4 rounded-full transition-colors duration-1000 ${tier === 3 ? 'bg-red-500 animate-ping' : tier === 2 ? 'bg-orange-400 animate-pulse' : 'bg-teal-300'}`} />
-        </div>
-      </div>
-      
-      <div className="text-center z-20 px-4 pb-3.5">
-        <div className={`text-xs font-bold tracking-wide transition-colors duration-500 ${tier === 3 ? 'text-red-700 dark:text-red-400' : tier === 2 ? 'text-orange-700 dark:text-orange-400' : 'text-teal-700 dark:text-teal-400'}`}>
-          {tier === 3 ? "CRITICAL CRISIS (TIER 3)" : tier === 2 ? "ROUGH WEEK / ELEVATED (TIER 2)" : "STABLE RESILIENCE (TIER 1)"} • {score.toFixed(0)}/100
-        </div>
-        <div className="text-[11px] text-muted-foreground mt-1 max-w-[280px] mx-auto leading-relaxed">
-          {tier === 3 
-            ? "Immediate Tier-1 Router lock-in engaged. Bypassing generative LLM for direct Tele-MANAS (14416) safety dispatch." 
-            : tier === 2 
-              ? "Circadian rest shift and restlessness detected. 4-Line SOAP-Lite card generated for Tele-MANAS support." 
-              : "Optimal biological baseline. Cognitive resilience and circadian alignment are high."}
+        <div className="absolute w-20 h-20 rounded-full bg-white/80 backdrop-blur-md border border-white/60 flex flex-col items-center justify-center shadow-xs">
+          <span className="text-[10px] uppercase font-bold text-muted-foreground">Score</span>
+          <span className="text-xl font-bold font-mono text-[#0F2E27]">{score.toFixed(0)}</span>
+          <span className="text-[9px] font-mono text-muted-foreground">±7.5</span>
         </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{__html: `
-        .blob-slow { animation: blob-slow 8s infinite alternate ease-in-out; }
-        .blob-med { animation: blob-med 4s infinite alternate ease-in-out; }
-        .blob-fast { animation: blob-fast 1.5s infinite alternate ease-in-out; }
-
-        @keyframes blob-slow {
-          0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg) scale(1); }
-          100% { border-radius: 60% 40% 30% 70% / 50% 60% 50% 40%; transform: rotate(180deg) scale(1.05); }
-        }
-        @keyframes blob-med {
-          0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg) scale(1); }
-          100% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; transform: rotate(180deg) scale(1.1); }
-        }
-        @keyframes blob-fast {
-          0% { border-radius: 20% 80% 20% 80% / 80% 20% 80% 20%; transform: rotate(0deg) scale(0.9); }
-          50% { border-radius: 80% 20% 80% 20% / 20% 80% 20% 80%; transform: rotate(90deg) scale(1.15); }
-          100% { border-radius: 20% 80% 20% 80% / 80% 20% 80% 20%; transform: rotate(0deg) scale(0.9); }
-        }
-      `}} />
+      {/* Description */}
+      <p className="text-xs text-muted-foreground text-center mt-3 max-w-xs leading-relaxed">
+        {tier === 3
+          ? "Immediate Tier 1 Router lock-in engaged. Bypassing cloud LLM for direct Tele-MANAS (14416) safety dispatch."
+          : tier === 2
+            ? "Circadian rest shift and elevated typing hesitation detected. 4-Line SOAP-Lite handoff ready."
+            : "Diurnal rhythm and typing dynamics within calibrated baseline. High cognitive resilience."}
+      </p>
     </div>
   )
 }
 
 export default function CheckInPage() {
-  // Day-0 Calibration state
-  const [showCalibration, setShowCalibration] = useState(false)
-  const [restWindow, setRestWindow] = useState('1:00 AM – 8:00 AM · College Student')
+  // Dialect state
   const [dialect, setDialect] = useState<DialectProfile>('Casual Hinglish')
   const [trustedContact, setTrustedContact] = useState('+917982350793')
+  const [restWindow, setRestWindow] = useState('1:00 AM – 8:00 AM · College Student')
 
-  // False-Alarm Budget State
+  // False Alarm / Advanced Drawer State
+  const [showAdvanced, setShowAdvanced] = useState(false)
   const [falseAlarmSnoozed, setFalseAlarmSnoozed] = useState(false)
   const [conformalAlpha, setConformalAlpha] = useState(0.10)
-  const [snoozeMessage, setSnoozeMessage] = useState<string | null>(null)
 
   // Live BiAffect Keystroke Dynamics
   const [keyLatencies, setKeyLatencies] = useState<number[]>([185, 172, 194, 168, 180])
@@ -127,32 +99,30 @@ export default function CheckInPage() {
   const [totalKeyCount, setTotalKeyCount] = useState(48)
   const lastKeyTimeRef = useRef<number>(Date.now())
 
-  // Floating Call Overlay Modal
+  // Telemetry Preset State
+  const [telemetryPreset, setTelemetryPreset] = useState<'baseline' | 'exam' | 'crisis'>('exam')
+
+  // Score & State
+  const [currentScore, setCurrentScore] = useState<number>(42)
+  const [currentTier, setCurrentTier] = useState<1 | 2 | 3>(2)
+
+  // Floating Call Modal
   const [callModalOpen, setCallModalOpen] = useState(false)
 
-  // Academic Data Provenance State
-  const [activeAlgorithm1, setActiveAlgorithm1] = useState<any>(null)
-  const [activeFeatures, setActiveFeatures] = useState<any>(null)
-
-  // Chat state
-  const [messages, setMessages] = useState<ChatMessage[]>([{
-    role: 'system',
-    content: "Welcome to your Sentinel Zero-Egress Digital Rhythm Check-in. How are your days and sleep feeling?"
-  }])
+  // Conversation history
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 'init-1',
+      role: 'assistant',
+      content: "Namaste. I'm your Sentinel private health guardian. How are your days and sleep feeling lately?",
+      timestamp: 'Just now'
+    }
+  ])
   const [loading, setLoading] = useState(false)
   const [inputText, setInputText] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
-
-  // Track keystrokes for BiAffect Group D
+  // Live typing delay tracking
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const now = Date.now()
     const delta = now - lastKeyTimeRef.current
@@ -168,615 +138,460 @@ export default function CheckInPage() {
     }
   }
 
-  const avgLatency = Math.round(keyLatencies.length > 0 ? (keyLatencies.reduce((a, b) => a + b, 0) / keyLatencies.length) : 154)
-  const backspaceRatio = Math.round((totalKeyCount > 0 ? (backspaceCount / totalKeyCount) : 0.04) * 100)
+  const avgLatency = Math.round(
+    keyLatencies.length > 0
+      ? keyLatencies.reduce((a, b) => a + b, 0) / keyLatencies.length
+      : 178
+  )
+  const backspaceRatio = Math.round(
+    (totalKeyCount > 0 ? backspaceCount / totalKeyCount : 0.04) * 100
+  )
 
-  // Handle False Alarm Budget Buttons
-  const handleJustBusy = () => {
-    setConformalAlpha(0.06)
-    setFalseAlarmSnoozed(true)
-    setSnoozeMessage("False-Alarm Budget Updated: Exam-week cadence learned (alpha_t 0.10 ➔ 0.06); alert fatigue suppressed.")
+  // Apply Presets
+  const applyPreset = (preset: 'baseline' | 'exam' | 'crisis') => {
+    setTelemetryPreset(preset)
+    if (preset === 'baseline') {
+      setCurrentScore(24)
+      setCurrentTier(1)
+    } else if (preset === 'exam') {
+      setCurrentScore(48)
+      setCurrentTier(2)
+    } else {
+      setCurrentScore(86)
+      setCurrentTier(3)
+    }
   }
 
-  const handleRoughWeekClick = () => {
-    sendCheckIn("I've been feeling very anxious lately. My sleep is disrupted and I feel exhausted.")
-    inputRef.current?.focus()
-  }
+  // Handle Check-in Submission via standalone client Edge Engine
+  const handleCheckIn = async (textToSubmit: string) => {
+    const cleanText = textToSubmit.trim()
+    if (!cleanText || loading) return
 
-  // Unified Check-in Engine (Backend -> Gemini Cloud -> Deterministic Edge)
-  const sendCheckIn = async (text: string) => {
-    if (!text || !text.trim() || loading) return
-    const userMsg = text.trim()
-    setMessages(prev => [...prev, { role: 'user', content: userMsg }])
+    setInputText('')
+    const userMsgId = 'user-' + Date.now()
+    const userMsg: Message = {
+      id: userMsgId,
+      role: 'user',
+      content: cleanText,
+      timestamp: 'Just now'
+    }
+    setMessages(prev => [...prev, userMsg])
     setLoading(true)
 
-    const apiBase = getApiBase()
-    let data: any = null
-
-    const telemetryPayload = {
-      session_id: "sess_local_" + Date.now().toString(36),
-      rest_proxy_duration_hours: 3.9,
-      bedtime_drift_hours: 2.8,
-      nocturnal_micro_unlocks: 3.8,
-      daily_total_unlocks: 72,
-      social_burst_entropy: 0.65,
-      biaffect_interkey_ms: avgLatency || 154,
-      biaffect_backspace_ratio: (backspaceRatio / 100) || 0.12,
-      is_simulated: false
-    }
-
-    // 1. Try FastAPI Backend if available
-    if (apiBase) {
-      try {
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 3500)
-        const res = await fetch(`${apiBase}/scorer/`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            case_id: 'TELEMANAS-STUDENT-01', 
-            message: userMsg,
-            telemetry: telemetryPayload
-          }),
-          signal: controller.signal
-        })
-        clearTimeout(timeoutId)
-        if (res.ok) {
-          data = await res.json()
-        }
-      } catch (e1) {
-        console.warn("Backend API not reachable, switching to client Gemini/Edge cascade.", e1)
-      }
-    }
-
-    if (data) {
-      if (data.algorithm_1) setActiveAlgorithm1(data.algorithm_1)
-      if (data.features) setActiveFeatures(data.features)
-      setMessages(prev => {
-        const newMsgs = [...prev]
-        if (newMsgs.length > 0 && newMsgs[newMsgs.length - 1].role === 'user') {
-          newMsgs[newMsgs.length - 1] = { ...newMsgs[newMsgs.length - 1], mindguard_class: data.mindguard_class }
-        }
-        return [...newMsgs, {
-          role: 'scorer',
-          content: data.response || "I hear you, and your feelings are completely valid. We are standing by to support you.",
-          score: data.current_score,
-          risk_band: data.risk_band,
-          factors: data.factors,
-          guidance: data.guidance,
-          prevention_methods: data.prevention_methods,
-          mindguard_class: data.mindguard_class,
-          crisis_router: data.crisis_router
-        }]
-      })
-      setLoading(false)
-      return
-    }
-
-    // 2. Direct Client-Side Gemini Bridge (Netlify Cloud Triage with ProKnow RAG)
     try {
-      const geminiResult = await evaluateCheckInWithGemini(userMsg)
-      const rawScore = geminiResult.raw_score ?? 40
-      
-      // Algorithm 1: 70/30 Exponential Moving Average
-      const newSmoothed = Number((0.70 * rawScore + 0.30 * latestScore).toFixed(0))
-      const riskBand = newSmoothed >= 75 ? 'High' : newSmoothed >= 40 ? 'Medium' : 'Low'
+      const result = await triageCheckIn(
+        cleanText,
+        currentScore,
+        dialect as Dialect
+      )
 
-      setActiveAlgorithm1({
-        isolation_forest_score_s_IF: rawScore,
-        rolling_z_score_s_z: latestScore,
-        disagreement_delta: Math.abs(rawScore - latestScore),
-        disagreement_threshold_tau: 28.0,
-        disagreement_gate_triggered: Math.abs(rawScore - latestScore) > 28.0,
-        confidence_status: Math.abs(rawScore - latestScore) > 28.0 ? "DISAGREEMENT_HOLD" : "HIGH_CONFIDENCE",
-        conformal_score_q_90: 7.5,
-        conformal_interval_90: [Math.max(0, newSmoothed - 7.5), Math.min(100, newSmoothed + 7.5)]
-      })
+      setCurrentScore(result.smoothed_score)
+      setCurrentTier(result.tier)
 
-      setMessages(prev => {
-        const newMsgs = [...prev]
-        if (newMsgs.length > 0 && newMsgs[newMsgs.length - 1].role === 'user') {
-          newMsgs[newMsgs.length - 1] = { ...newMsgs[newMsgs.length - 1], mindguard_class: geminiResult.mindguard_class }
-        }
-        return [...newMsgs, {
-          role: 'scorer',
-          content: geminiResult.response,
-          score: newSmoothed,
-          risk_band: riskBand,
-          factors: geminiResult.factors,
-          guidance: geminiResult.guidance,
-          prevention_methods: geminiResult.prevention_methods,
-          mindguard_class: geminiResult.mindguard_class,
-          crisis_router: geminiResult.crisis_router
-        }]
-      })
+      const assistantMsg: Message = {
+        id: 'ast-' + Date.now(),
+        role: 'assistant',
+        content: result.response,
+        result: result,
+        timestamp: 'Just now'
+      }
+
+      setMessages(prev => [...prev, assistantMsg])
     } catch (err) {
-      console.error("Client triage error:", err)
+      console.error("Triage execution error:", err)
     } finally {
       setLoading(false)
     }
   }
 
-  const latestScorerMsg = [...messages].reverse().find(m => m.role === 'scorer')
-  const latestScore = latestScorerMsg?.score ?? 34
-  const currentTier = latestScore >= 75 ? 3 : latestScore >= 40 ? 2 : 1
+  const latestAssistantMsg = [...messages].reverse().find(m => m.role === 'assistant' && m.result)
 
   return (
-    <div className={`min-h-screen flex flex-col p-3 md:p-6 font-sans relative overflow-x-hidden transition-colors duration-1000 ${currentTier === 3 ? 'bg-red-950/10' : currentTier === 2 ? 'bg-orange-950/10' : 'bg-teal-950/10'}`}>
-      
-      {/* Background Motifs */}
-      <img alt="" aria-hidden="true" className="fixed -bottom-48 -right-24 w-[800px] max-w-none opacity-[0.12] z-0 pointer-events-none grayscale" src="https://lh3.googleusercontent.com/aida/AEtjO1XiCYoEezvi1vQeVwLJLMJh385gEORaqFKsIbP49hinIKA9gkD-iPOcnW36ZDF4oPANl7_pHKLr0EqYVyO2p0jDJe11lJmgldVnR-U4nZeIRXLBf41b39bIaHYY16NocivtwEX-0CEadApwAFgf6wU0arYDLwym8Gej-2iYUR37XqMFLUjbm0reK6pck2wTNp0KDMtbsA2wNPwAN7oHhjGfqsliNzX2RyLC9J8scsZIrAMdhmNVEhHlU7Q" />
-      <div className={`fixed inset-0 z-[1] pointer-events-none transition-colors duration-1000 ${currentTier === 3 ? 'bg-red-500/5' : currentTier === 2 ? 'bg-orange-500/5' : 'bg-teal-500/5'} mix-blend-multiply`} />
-      <div className="fixed inset-0 bg-background/70 z-[1] pointer-events-none" />
+    <div className="min-h-screen bg-[#F6F4EE] flex flex-col font-sans">
+      {/* Top Navigation */}
+      <TopNav currentPath="/check-in" />
 
-      <div className="max-w-7xl w-full mx-auto flex flex-col gap-4 relative z-10 flex-1">
-        
-        {/* TOP BAR: Clean, Minimal Navigation */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-1">
-          <div className="flex items-center gap-3">
-            <a href="/" className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors bg-card/80 backdrop-blur px-3 py-1.5 rounded-lg border border-border/60">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-              <span>Hub</span>
-            </a>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs font-bold font-heading text-foreground">
-                SENTINEL
+      {/* Main Container */}
+      <main className="max-w-7xl w-full mx-auto p-4 md:p-6 lg:p-8 flex-1">
+        {/* Header Title & Subtitle */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E2E8E4] pb-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#0D9488] bg-[#0D9488]/10 px-2.5 py-0.5 rounded-full border border-[#0D9488]/20 font-mono">
+                Real-Time Triage Engine
               </span>
-              <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">
-                TELE-MANAS 14416
-              </Badge>
+              <span className="text-xs text-muted-foreground font-mono">
+                Negation-Aware Aho-Corasick &lt;0.1ms
+              </span>
             </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-[#0F2E27]">
+              Zero-Egress Check-In
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+              Dual-source sensing with instant client-side fallback — zero telemetry egress.
+            </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Segmented Preset Bar */}
+          <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-[#E2E8E4] self-start sm:self-auto shadow-xs">
+            <span className="text-[11px] font-bold text-muted-foreground px-2 font-mono">Preset:</span>
             <button
-              onClick={() => setShowCalibration(!showCalibration)}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground bg-card/90 hover:bg-sidebar px-3 py-1.5 rounded-lg border border-border transition-colors"
+              onClick={() => applyPreset('baseline')}
+              className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+                telemetryPreset === 'baseline'
+                  ? 'bg-[#0F2E27] text-white font-semibold shadow-xs'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
-              <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
-              <span>Day-0 Baseline & Dialect</span>
-              {showCalibration ? <ChevronUp className="w-3 h-3 text-muted-foreground" /> : <ChevronDown className="w-3 h-3 text-muted-foreground" />}
+              Baseline
             </button>
-            <a href="/dashboard/counsellor?case=case_002" className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20">
-              <span>Counsellor Review</span>
-            </a>
+            <button
+              onClick={() => applyPreset('exam')}
+              className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+                telemetryPreset === 'exam'
+                  ? 'bg-[#0F2E27] text-white font-semibold shadow-xs'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Exam Stress
+            </button>
+            <button
+              onClick={() => applyPreset('crisis')}
+              className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+                telemetryPreset === 'crisis'
+                  ? 'bg-[#DC2626] text-white font-semibold shadow-xs'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Acute Crisis
+            </button>
           </div>
         </div>
 
-        {/* 5-Step AI Value Chain Banner */}
-        <div className="w-full bg-zinc-950 text-white rounded-2xl p-3 sm:p-3.5 border border-zinc-800 shadow-md">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-2.5">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-400 font-mono">
-                BUILD FOR BHARAT 2026 · PS 1 & PS 3
-              </span>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 w-full lg:w-auto text-[10px]">
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-1.5">
-                <span className="text-emerald-400 font-bold block">1. Problem</span>
-                <span className="text-zinc-300">63% Hide Distress</span>
-              </div>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-1.5">
-                <span className="text-emerald-400 font-bold block">2. Passive Data</span>
-                <span className="text-zinc-300">OS Unlock Logs (0-Daemon)</span>
-              </div>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-1.5">
-                <span className="text-emerald-400 font-bold block">3. Edge AI</span>
-                <span className="text-zinc-300">&lt;0.2ms Trie + Gemini Cascade</span>
-              </div>
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-1.5">
-                <span className="text-emerald-400 font-bold block">4. Output</span>
-                <span className="text-zinc-300">4-Line SOAP-Lite Card</span>
-              </div>
-              <div className="bg-emerald-950/60 border border-emerald-500/40 rounded-lg p-1.5 col-span-2 sm:col-span-1">
-                <span className="text-emerald-300 font-bold block">5. Gov Impact</span>
-                <span className="text-emerald-100">1-Tap 14416 @ ₹0 BOM</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Expandable Day-0 Baseline & Dialect Drawer */}
-        {showCalibration && (
-          <div className="w-full bg-card border border-border rounded-2xl shadow-md p-4 grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in duration-200">
-            <div>
-              <label className="text-xs font-bold text-foreground uppercase tracking-wider block mb-1">
-                1. Typical Rest Window & Role
-              </label>
-              <select
-                value={restWindow}
-                onChange={(e) => setRestWindow(e.target.value)}
-                className="w-full p-2 rounded-lg border border-border bg-background text-foreground text-xs focus:ring-2 focus:ring-primary focus:outline-none"
-              >
-                <option value="1:00 AM – 8:00 AM · College Student">1:00 AM – 8:00 AM · College Student (Default)</option>
-                <option value="11:00 PM – 6:30 AM · Working Adult">11:00 PM – 6:30 AM · Working Adult</option>
-                <option value="2:00 AM – 9:30 AM · Shift Worker">2:00 AM – 9:30 AM · Shift Worker</option>
-              </select>
-              <span className="text-[10px] text-muted-foreground mt-1 block">
-                Anchors Day-0 baseline prior to eliminate 14-day cold start.
-              </span>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-foreground uppercase tracking-wider block mb-1">
-                2. Dialect & Tone Profile
-              </label>
-              <div className="flex flex-wrap gap-1">
-                {(['Casual Hinglish', 'Formal Hindi', 'English', 'Tamil'] as DialectProfile[]).map(d => (
-                  <button
-                    key={d}
-                    onClick={() => setDialect(d)}
-                    className={`text-xs px-2.5 py-1.5 rounded-lg font-medium transition-all ${
-                      dialect === d
-                        ? 'bg-primary text-primary-foreground font-bold shadow-sm'
-                        : 'bg-secondary/40 text-foreground hover:bg-secondary'
-                    }`}
-                  >
-                    {d}
-                  </button>
-                ))}
-              </div>
-              <span className="text-[10px] text-muted-foreground mt-1 block">
-                Adapts SOAP-Lite Intake Card & on-device prompts.
-              </span>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-foreground uppercase tracking-wider block mb-1">
-                3. Hardware Keystore Trusted Contact
-              </label>
-              <input
-                type="text"
-                value={trustedContact}
-                onChange={(e) => setTrustedContact(e.target.value)}
-                className="w-full p-2 rounded-lg border border-border bg-background text-foreground text-xs font-mono focus:ring-2 focus:ring-primary focus:outline-none"
-              />
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" />
-                Encrypted in Android Keystore · Never Messaged Without Your Tap
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* MAIN 2-COLUMN VIEWPORT */}
-        <div className="flex flex-col lg:flex-row gap-5">
+        {/* 2-Column Responsive Viewport */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          {/* LEFT PANEL: Visual Biometrics & Signal Graph */}
-          <div className="w-full lg:w-1/3 flex flex-col gap-4">
-            
-            {/* Biometric Emotion Avatar */}
-            <EmotionAvatar tier={currentTier} score={latestScore} />
+          {/* LEFT COLUMN (~38% = 5 cols out of 12) */}
+          <div className="lg:col-span-5 flex flex-col gap-5">
+            {/* 1. Biometric Emotion Avatar */}
+            <EmotionAvatar tier={currentTier} score={currentScore} />
 
-            {/* Longitudinal Signal Graph with 90% Split-Conformal Band */}
-            <SentinelSignalGraph currentScore={latestScore} conformalBand={7.5} />
+            {/* 2. Sentinel Signal Graph with 90% Split-Conformal Band */}
+            <SentinelSignalGraph currentScore={currentScore} conformalBand={7.5} />
 
-            {/* Compact Real-Time Telemetry Card */}
-            <Card className="border-border shadow-sm bg-card">
-              <CardHeader className="py-2.5 px-3.5 bg-sidebar border-b border-border rounded-t-lg">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                    <span>📡</span> Passive Behavioral Telemetry
-                  </span>
-                  <Badge variant="outline" className="text-[9px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
-                    ZERO-DAEMON
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="p-3 space-y-2.5 text-xs">
-                {/* Live Keystroke Dynamics */}
-                <div className="p-2.5 rounded-xl bg-background border border-primary/25 space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] font-bold text-foreground">
-                    <span className="text-primary flex items-center gap-1 font-mono">
-                      <span>⌨️</span> Live BiAffect Keystrokes
-                    </span>
-                    <span className="text-[9px] text-muted-foreground font-mono">First-Party RAM</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-center font-mono">
-                    <div className="bg-sidebar p-1.5 rounded-lg border border-border">
-                      <span className="text-[9px] text-muted-foreground block">Inter-Key Delay</span>
-                      <span className="font-bold text-foreground text-xs">{avgLatency} ms</span>
-                    </div>
-                    <div className="bg-sidebar p-1.5 rounded-lg border border-border">
-                      <span className="text-[9px] text-muted-foreground block">Revision Ratio</span>
-                      <span className="font-bold text-foreground text-xs">{backspaceRatio}%</span>
-                    </div>
-                  </div>
-                </div>
+            {/* 3. 3 Compact Passive Signal Tiles */}
+            <div className="grid grid-cols-3 gap-2.5">
+              <div className="bg-white border border-[#E2E8E4] p-3 rounded-xl shadow-xs">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Sleep Drift</span>
+                <span className="text-base font-bold font-mono text-[#D97706] block mt-0.5">-2.8h</span>
+                <span className="text-[9px] text-muted-foreground">vs 7d median</span>
+              </div>
 
-                {/* Circadian & Micro-Unlocks in a 2-col grid */}
-                <div className="grid grid-cols-2 gap-2 text-[11px]">
-                  <div className="p-2 rounded-xl bg-background border border-border space-y-1">
-                    <span className="text-[10px] text-muted-foreground block">Circadian Rest</span>
-                    <span className="font-bold font-mono text-orange-500 text-xs">4.2 hrs</span>
-                    <span className="text-[9px] text-muted-foreground block">-2.8h shift</span>
-                  </div>
-                  <div className="p-2 rounded-xl bg-background border border-border space-y-1">
-                    <span className="text-[10px] text-muted-foreground block">Micro-Unlocks</span>
-                    <span className="font-bold font-mono text-red-500 text-xs">28 / hr</span>
-                    <span className="text-[9px] text-muted-foreground block">z = +2.6σ</span>
-                  </div>
-                </div>
-                <span className="text-[9px] text-muted-foreground block text-center pt-0.5">
-                  Metadata Only · No Custom IME · ACTION_USER_PRESENT
-                </span>
-              </CardContent>
-            </Card>
+              <div className="bg-white border border-[#E2E8E4] p-3 rounded-xl shadow-xs">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">Night Unlocks</span>
+                <span className="text-base font-bold font-mono text-[#DC2626] block mt-0.5">28 / hr</span>
+                <span className="text-[9px] text-muted-foreground">z = +2.6σ</span>
+              </div>
+
+              <div className="bg-white border border-[#E2E8E4] p-3 rounded-xl shadow-xs">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase block">BiAffect Hesitation</span>
+                <span className="text-base font-bold font-mono text-[#0F2E27] block mt-0.5">{avgLatency} ms</span>
+                <span className="text-[9px] text-muted-foreground">Rev: {backspaceRatio}%</span>
+              </div>
+            </div>
+
+            {/* Micro Tagline */}
+            <div className="bg-[#FAF9F5] border border-[#E2E8E4] p-3 rounded-xl text-center">
+              <p className="text-[11px] text-muted-foreground">
+                <strong className="text-[#0F2E27]">Zero-Daemon OS Sourcing:</strong> Querying Android UsageStats &amp; Sleep API with zero background daemons.
+              </p>
+            </div>
           </div>
 
-          {/* RIGHT PANEL: Chat, Quick Presets, Crisis Router & SOAP Card */}
-          <div className="w-full lg:w-2/3 flex flex-col gap-4">
+          {/* RIGHT COLUMN (~62% = 7 cols out of 12) */}
+          <div className="lg:col-span-7 flex flex-col gap-5">
             
-            {/* False-Alarm Budget Notification Bar */}
-            {!falseAlarmSnoozed ? (
-              <div className="bg-gradient-to-r from-orange-500/15 via-amber-500/10 to-transparent border border-orange-500/30 p-3 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                  <div>
-                    <span className="text-xs font-bold text-foreground block">
-                      Multi-day circadian drift detected. How is your week feeling?
-                    </span>
-                    <span className="text-[10px] text-muted-foreground font-mono">
-                      Conformal Budget: alpha_t = {conformalAlpha.toFixed(2)} · Zero-Daemon Ring Log
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={handleJustBusy}
-                    className="text-xs h-7 border-orange-500/30 hover:bg-orange-500/10 text-orange-700 dark:text-orange-300"
-                  >
-                    [Just Busy / Exams]
-                  </Button>
-                  <Button
-                    size="sm"
-                    onClick={handleRoughWeekClick}
-                    className="text-xs h-7 bg-orange-600 hover:bg-orange-700 text-white font-semibold"
-                  >
-                    [Rough Week Check-In]
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-emerald-500/10 border border-emerald-500/30 p-2.5 rounded-2xl flex items-center justify-between text-xs text-emerald-700 dark:text-emerald-300">
-                <span className="flex items-center gap-2 text-[11px]">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{snoozeMessage}</span>
+            {/* Quick-Test Judge Chips Directly Above The Input */}
+            <div className="bg-white border border-[#E2E8E4] p-3.5 rounded-2xl shadow-xs">
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#0D9488]" />
+                <span className="text-xs font-bold text-[#0F2E27] uppercase tracking-wider font-mono">
+                  Quick-Test Scenarios for Judges
                 </span>
-                <button 
-                  onClick={() => { setFalseAlarmSnoozed(false); setConformalAlpha(0.10); }}
-                  className="text-[10px] underline hover:text-emerald-900 dark:hover:text-emerald-100"
+                <span className="text-[10px] text-muted-foreground ml-auto">Click to auto-triage</span>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleCheckIn("Stressed about exams, don't want to die or hurt myself, just overwhelmed")}
+                  disabled={loading}
+                  className="text-xs px-3 py-1.5 rounded-lg bg-[#FAF9F5] hover:bg-[#EFECE6] border border-[#E2E8E4] text-[#0F2E27] font-medium transition-colors text-left"
                 >
-                  Reset
+                  🛡️ <strong>Test Negation:</strong> &quot;...don&apos;t want to die&quot;
+                </button>
+
+                <button
+                  onClick={() => handleCheckIn("sab khatam karna hai tonight, ab aur nahi sah sakta")}
+                  disabled={loading}
+                  className="text-xs px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 text-red-800 font-medium transition-colors text-left"
+                >
+                  🔴 <strong>Acute Hinglish:</strong> &quot;sab khatam karna hai&quot;
+                </button>
+
+                <button
+                  onClick={() => handleCheckIn("Haven't slept in 3 days, feeling trapped under continuous exam burnout")}
+                  disabled={loading}
+                  className="text-xs px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-medium transition-colors text-left"
+                >
+                  🟠 <strong>Academic Burnout:</strong> &quot;Haven&apos;t slept in 3 days...&quot;
                 </button>
               </div>
-            )}
-
-            {/* Quick Test Scenarios Bar for Judges */}
-            <div className="p-2.5 bg-card border border-border/80 rounded-2xl shadow-sm flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider font-mono mr-1 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-primary" /> Test:
-              </span>
-              <button 
-                onClick={() => sendCheckIn("I'm doing okay today. Getting ready for exams, keeping up with regular study sessions.")}
-                disabled={loading}
-                className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20 border border-emerald-500/20 transition-colors"
-              >
-                🟢 Normal Baseline
-              </button>
-              <button 
-                onClick={() => sendCheckIn("I've been feeling very anxious lately. My sleep is disrupted and I feel exhausted.")}
-                disabled={loading}
-                className="px-2.5 py-1 rounded-lg text-xs font-medium bg-orange-500/10 text-orange-700 dark:text-orange-300 hover:bg-orange-500/20 border border-orange-500/20 transition-colors"
-              >
-                🟠 Rough Week
-              </button>
-              <button 
-                onClick={() => sendCheckIn("I'm feeling stressed about exams, but I don't want to die or hurt myself. Just need to manage my time better.")}
-                disabled={loading}
-                className="px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-700 dark:text-blue-300 hover:bg-blue-500/20 border border-blue-500/20 transition-colors"
-              >
-                🛡️ Safe Negation Test
-              </button>
-              <button 
-                onClick={() => sendCheckIn("sab khatam karna hai tonight, ab aur nahi sah sakta.")}
-                disabled={loading}
-                className="px-2.5 py-1 rounded-lg text-xs font-medium bg-red-500/10 text-red-700 dark:text-red-300 hover:bg-red-500/20 border border-red-500/20 transition-colors"
-              >
-                🔴 Acute Crisis
-              </button>
             </div>
 
-            {/* Check-in Interface Card */}
-            <Card className="flex flex-col shadow-md border-border bg-card overflow-hidden">
-              <CardHeader className="bg-sidebar border-b border-border py-2.5 px-4 flex flex-col gap-1.5">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-heading font-bold text-foreground">
-                      Interactive Triage Interface
-                    </span>
-                    <Badge variant="outline" className="text-[9px] bg-primary/10 text-primary border-primary/20">
-                      LIVE AI
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-foreground">
-                      Distress Score: <span className="font-mono text-primary font-bold text-xs">{latestScore.toFixed(0)}/100</span>
-                    </span>
-                  </div>
-                </div>
-
-                {/* Tier 1 Crisis Router (<0.2ms) Diagnostic Badge */}
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-border/40 text-[10px]">
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-bold text-muted-foreground font-mono">Tier 1 Safety Router:</span>
-                    <span className={`font-mono font-bold px-2 py-0.5 rounded-full ${
-                      latestScorerMsg?.crisis_router?.tier1_status?.includes('ACUTE')
-                        ? 'bg-red-500/20 text-red-700 dark:text-red-400 border border-red-500/40 animate-pulse'
-                        : latestScorerMsg?.crisis_router?.tier1_status?.includes('Negation')
-                          ? 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-500/30'
-                          : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
-                    }`}>
-                      {latestScorerMsg?.crisis_router?.tier1_status || 'CLEAR (Aho-Corasick Trie)'}
-                    </span>
-                  </div>
-                  <span className="text-muted-foreground font-mono text-[10px]">
-                    Latency: {latestScorerMsg?.crisis_router?.latency_ms ?? 0.12} ms (Negation-Aware)
-                  </span>
-                </div>
-              </CardHeader>
-
-              {/* Chat Messages Log */}
-              <CardContent className="flex-1 overflow-y-auto p-3.5 space-y-3 bg-background max-h-[340px]">
-                {messages.map((m, i) => (
-                  <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end pl-8' : 'items-start pr-8'}`}>
-                    <span className="text-[9px] text-muted-foreground mb-1 px-1 font-mono">
-                      {m.role === 'user' ? 'Citizen' : m.role === 'system' ? 'Sentinel' : 'Sentinel Triage Engine'}
-                    </span>
-                    <div className={`w-fit max-w-full rounded-2xl px-3.5 py-2.5 shadow-sm ${
-                      m.role === 'user' 
-                        ? 'bg-[#d7e3da] text-[#2c3e35] dark:bg-emerald-950/60 dark:text-emerald-200 rounded-tr-sm font-medium text-xs' 
-                        : m.role === 'system'
-                          ? 'bg-sidebar border border-border text-foreground rounded-tl-sm text-xs'
-                          : 'bg-background border border-primary/30 text-foreground w-full rounded-sm text-xs'
-                    }`}>
-                      <p className="text-[13px] leading-relaxed">{m.content}</p>
-                      
-                      {/* Scorer Telemetry Summary */}
-                      {m.role === 'scorer' && m.risk_band && (
-                        <div className="mt-2.5 pt-2.5 border-t border-border/60 space-y-2">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <div className="flex items-center gap-1.5">
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                                m.risk_band === 'High'
-                                  ? 'bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/40'
-                                  : m.risk_band === 'Medium'
-                                    ? 'bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-500/40'
-                                    : 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border-emerald-500/40'
-                              }`}>
-                                Signal: {m.risk_band}
-                              </span>
-                              {m.mindguard_class && (
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                                  m.mindguard_class.includes('Self-Harm') 
-                                    ? 'bg-red-600 text-white animate-pulse' 
-                                    : 'bg-primary/10 text-primary'
-                                }`}>
-                                  MindGuard: {m.mindguard_class}
-                                </span>
-                              )}
-                            </div>
-                            <span className="font-mono text-xs font-bold text-foreground">
-                              Score: {m.score !== undefined ? m.score.toFixed(0) : latestScore.toFixed(0)} / 100
-                            </span>
-                          </div>
-
-                          {/* Distress Progress Bar */}
-                          <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full transition-all duration-500 rounded-full ${
-                                (m.score || latestScore) >= 75 ? 'bg-red-500' : (m.score || latestScore) >= 40 ? 'bg-orange-500' : 'bg-emerald-500'
-                              }`} 
-                              style={{ width: `${Math.min(100, Math.max(5, m.score || latestScore))}%` }} 
-                            />
-                          </div>
-
-                          {/* Extracted Factors */}
-                          {m.factors && m.factors.length > 0 && (
-                            <div className="text-[11px]">
-                              <span className="font-bold text-foreground block mb-0.5">Extracted Factors:</span>
-                              <ul className="list-disc pl-3.5 text-muted-foreground space-y-0.5 text-[10px]">
-                                {m.factors.map((f: string, j: number) => <li key={j}>{f}</li>)}
-                              </ul>
-                            </div>
-                          )}
-
-                          {/* Guidance */}
-                          {m.guidance && (
-                            <div className="p-2 rounded-lg bg-sidebar border border-border text-[11px] text-muted-foreground italic">
-                              <span className="font-bold text-primary not-italic block uppercase text-[9px]">
-                                ProKnow Clinical Guidance:
-                              </span>
-                              &quot;{m.guidance}&quot;
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                {loading && (
-                  <div className="flex items-center gap-2 text-muted-foreground text-xs italic p-2.5 bg-sidebar rounded-lg w-fit animate-pulse border border-border shadow-sm">
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
-                    Evaluating check-in via ProKnow RAG & MindGuard...
-                  </div>
-                )}
-                <div ref={messagesEndRef} />
-              </CardContent>
-
-              {/* Chat Input Box */}
-              <form 
+            {/* Input Form */}
+            <Card className="border border-[#E2E8E4] bg-white shadow-xs rounded-2xl overflow-hidden">
+              <form
                 onSubmit={(e) => {
                   e.preventDefault()
-                  const msg = inputText.trim()
-                  if (msg && !loading) {
-                    setInputText('')
-                    sendCheckIn(msg)
-                  }
+                  handleCheckIn(inputText)
                 }}
-                className="p-2.5 border-t border-border bg-sidebar flex gap-2 rounded-b-lg"
+                className="p-3 flex gap-2 items-center"
               >
-                <input 
+                <input
                   ref={inputRef}
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Type a check-in (e.g. 'Stressed about exams, but managing okay')..."
-                  className="flex-1 p-2 rounded-lg border border-border bg-background text-foreground text-xs focus:ring-2 focus:ring-primary focus:outline-none"
+                  placeholder="Share what you are feeling (e.g. 'Stressed about exams, but trying to manage')..."
+                  className="flex-1 p-2.5 rounded-xl border border-[#E2E8E4] bg-[#FAF9F5] text-xs sm:text-sm text-[#0F2E27] placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#0D9488]"
                 />
-                <Button 
+                <Button
                   type="submit"
-                  className="h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs flex items-center gap-1.5 shrink-0"
                   disabled={loading || !inputText.trim()}
+                  className="h-10 bg-[#0F2E27] hover:bg-[#1A453B] text-white text-xs px-4 font-semibold rounded-xl shrink-0"
                 >
                   {loading ? (
                     <>
-                      <Loader2 className="w-3 h-3 animate-spin" />
-                      <span>Analyzing...</span>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
+                      <span>Triaging...</span>
                     </>
                   ) : (
-                    <span>Send</span>
+                    <span>Evaluate</span>
                   )}
                 </Button>
               </form>
             </Card>
 
-            {/* 'Say It For Me' 4-Line Clinical Intake Card (SOAP-Lite) */}
+            {/* Single Unified Triage Response Card (No Nested Scrollbox!) */}
+            {latestAssistantMsg?.result ? (
+              <Card className="border border-[#E2E8E4] bg-white shadow-xs rounded-2xl overflow-hidden animate-in fade-in duration-300">
+                <CardHeader className="bg-[#FAF9F5] border-b border-[#E2E8E4] py-3 px-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#0D9488] animate-pulse" />
+                    <span className="text-xs font-bold text-[#0F2E27] font-mono">
+                      {latestAssistantMsg.result.inference_source}
+                    </span>
+                    <Badge variant="outline" className="text-[10px] bg-white text-[#0F2E27] border-[#E2E8E4]">
+                      {latestAssistantMsg.result.crisis_router.latency_ms} ms
+                    </Badge>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-muted-foreground">Distress:</span>
+                    <span className="font-mono font-bold text-[#0F2E27]">
+                      {latestAssistantMsg.result.smoothed_score}/100
+                    </span>
+                    <span className="text-[10px] text-muted-foreground font-mono">
+                      [{latestAssistantMsg.result.conformal_interval[0]} - {latestAssistantMsg.result.conformal_interval[1]}] (90% Conf)
+                    </span>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="p-5 space-y-4">
+                  {/* Status Banner */}
+                  <div className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+                    latestAssistantMsg.result.tier === 3
+                      ? 'bg-red-50 border-red-200 text-red-900'
+                      : latestAssistantMsg.result.tier === 2
+                        ? 'bg-amber-50 border-amber-200 text-amber-900'
+                        : 'bg-teal-50 border-teal-200 text-teal-900'
+                  }`}>
+                    <span className="font-semibold flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4" />
+                      Router Status: {latestAssistantMsg.result.crisis_router.tier1_status}
+                    </span>
+                    <span className="font-mono text-[11px]">
+                      MindGuard: {latestAssistantMsg.result.mindguard_class}
+                    </span>
+                  </div>
+
+                  {/* Compassionate Response */}
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block mb-1">
+                      Compassionate Guidance
+                    </span>
+                    <p className="text-sm text-[#0F2E27] leading-relaxed bg-[#FAF9F5] p-3.5 rounded-xl border border-[#E2E8E4]">
+                      {latestAssistantMsg.result.response}
+                    </p>
+                  </div>
+
+                  {/* Clinical Factors & Grounding */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div className="bg-[#FAF9F5] p-3 rounded-xl border border-[#E2E8E4]">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase block mb-1.5">
+                        Identified Clinical Factors
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {latestAssistantMsg.result.factors.map((f, i) => (
+                          <span key={i} className="bg-white border border-[#E2E8E4] px-2 py-0.5 rounded-md text-[11px] text-[#0F2E27]">
+                            • {f}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="bg-[#FAF9F5] p-3 rounded-xl border border-[#E2E8E4]">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase block mb-1.5">
+                        ProKnow Grounding
+                      </span>
+                      <p className="text-[11px] text-muted-foreground italic">
+                        &quot;{latestAssistantMsg.result.guidance}&quot;
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="bg-white border border-[#E2E8E4] p-5 rounded-2xl shadow-xs text-center text-xs text-muted-foreground">
+                <p>Welcome! Click any test chip above or type a thought in the box to see instant triage.</p>
+              </div>
+            )}
+
+            {/* "Say It For Me" 4-Line SOAP-Lite Card */}
             <SoapLiteCard
               dialect={dialect}
               mode="telemanas"
               tier={currentTier}
-              score={latestScore}
+              score={currentScore}
               onTriggerCall={() => setCallModalOpen(true)}
               trustedContact={trustedContact}
             />
 
-            {/* Academic Data Provenance & Algorithm 1 Audit Drawer (Collapsed by default) */}
-            <DataProvenanceInspector
-              currentFeatures={activeFeatures}
-              activeAlgorithm1={activeAlgorithm1}
-            />
+            {/* Collapsible Advanced Controls Drawer */}
+            <div className="border border-[#E2E8E4] rounded-2xl bg-white shadow-xs overflow-hidden">
+              <button
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                className="w-full py-3 px-5 flex items-center justify-between text-xs font-bold text-[#0F2E27] bg-[#FAF9F5] hover:bg-[#EFECE6] transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4 text-[#0D9488]" />
+                  <span>Advanced Controls &amp; Data Provenance</span>
+                </div>
+                {showAdvanced ? (
+                  <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                )}
+              </button>
+
+              {showAdvanced && (
+                <div className="p-5 space-y-5 border-t border-[#E2E8E4] bg-white animate-in fade-in duration-200">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider block mb-1">
+                        1. Rest Window &amp; Role
+                      </label>
+                      <select
+                        value={restWindow}
+                        onChange={(e) => setRestWindow(e.target.value)}
+                        className="w-full p-2 rounded-lg border border-[#E2E8E4] bg-[#FAF9F5] text-xs text-[#0F2E27] focus:outline-none focus:ring-1 focus:ring-[#0D9488]"
+                      >
+                        <option value="1:00 AM – 8:00 AM · College Student">1:00 AM – 8:00 AM · College Student (Default)</option>
+                        <option value="11:00 PM – 6:30 AM · Working Adult">11:00 PM – 6:30 AM · Working Adult</option>
+                        <option value="2:00 AM – 9:30 AM · Shift Worker">2:00 AM – 9:30 AM · Shift Worker</option>
+                      </select>
+                      <span className="text-[10px] text-muted-foreground mt-1 block">
+                        Anchors Day-0 baseline prior to eliminate 14-day cold start.
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider block mb-1">
+                        2. Dialect Profile
+                      </label>
+                      <div className="flex flex-wrap gap-1">
+                        {(['English', 'Casual Hinglish', 'Formal Hindi', 'Tamil'] as DialectProfile[]).map(d => (
+                          <button
+                            key={d}
+                            onClick={() => setDialect(d)}
+                            className={`text-[11px] px-2.5 py-1 rounded-md font-medium transition-all ${
+                              dialect === d
+                                ? 'bg-[#0F2E27] text-white font-semibold'
+                                : 'bg-[#FAF9F5] border border-[#E2E8E4] text-muted-foreground hover:text-[#0F2E27]'
+                            }`}
+                          >
+                            {d === 'Casual Hinglish' ? 'Hinglish' : d === 'Formal Hindi' ? 'Hindi' : d}
+                          </button>
+                        ))}
+                      </div>
+                      <span className="text-[10px] text-muted-foreground mt-1 block">
+                        Adapts SOAP-Lite Intake Card &amp; prompts.
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider block mb-1">
+                        3. Trusted Support Contact
+                      </label>
+                      <input
+                        type="text"
+                        value={trustedContact}
+                        onChange={(e) => setTrustedContact(e.target.value)}
+                        className="w-full p-2 rounded-lg border border-[#E2E8E4] bg-[#FAF9F5] text-xs font-mono text-[#0F2E27] focus:outline-none focus:ring-1 focus:ring-[#0D9488]"
+                      />
+                      <span className="text-[10px] text-[#0D9488] mt-1 flex items-center gap-1 font-medium">
+                        <ShieldCheck className="w-3 h-3" />
+                        Encrypted in Android Keystore
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* False Alarm Budget */}
+                  <div className="pt-3 border-t border-[#E2E8E4] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold text-[#0F2E27] block">
+                        False-Alarm Cadence Adaptation
+                      </span>
+                      <span className="text-[11px] text-muted-foreground">
+                        Conformal Alpha: {conformalAlpha.toFixed(2)} (Alert fatigue suppression during exams)
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setFalseAlarmSnoozed(true)
+                        setConformalAlpha(0.06)
+                      }}
+                      className="text-xs border-[#E2E8E4] hover:bg-[#FAF9F5] text-[#0F2E27]"
+                    >
+                      {falseAlarmSnoozed ? 'Cadence Adapted (α = 0.06)' : 'Snooze [Just Busy / Exams]'}
+                    </Button>
+                  </div>
+
+                  {/* Data Provenance Inspector Component */}
+                  <div className="pt-3 border-t border-[#E2E8E4]">
+                    <DataProvenanceInspector />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
 
-      {/* Floating Call Overlay Simulator Modal */}
+      {/* Floating Call Modal */}
       <FloatingCallOverlay
         isOpen={callModalOpen}
         onClose={() => setCallModalOpen(false)}
