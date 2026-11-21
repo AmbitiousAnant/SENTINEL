@@ -149,7 +149,7 @@ export function generateSoapLite(
   return {
     subjective: "Citizen reports stable academic pacing with normal, manageable situational workload.",
     objective: "Circadian rest window intact (6.8h); typing kinematics at normative baseline (154ms); zero crisis keywords.",
-    assessment: `Distress Score: ${score}/100 · Stable Resilience (Tier 1) · Optimal biological rhythm.",
+    assessment: `Distress Score: ${score}/100 · Stable Resilience (Tier 1) · Optimal biological rhythm.`,
     plan: "Reinforce sleep hygiene and schedule brief restorative daylight walks between study blocks."
   }
 }
